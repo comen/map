@@ -21,14 +21,6 @@ public class MongoDB {
 	private static MongoDB instance;
 	private DB db;
 
-	public DB getDb() {
-		return db;
-	}
-
-	public void setDb(DB db) {
-		this.db = db;
-	}
-
 	private MongoDB() {
 		try {
 			MongoClient mongoClient = new MongoClient(Config.getInstance()
