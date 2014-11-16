@@ -18,14 +18,6 @@ public class Repository {
 	private static Repository instance;
 	private ServletFileUpload sfu;
 
-	public ServletFileUpload getSfu() {
-		return sfu;
-	}
-
-	public void setSfu(ServletFileUpload sfu) {
-		this.sfu = sfu;
-	}
-
 	private Repository() {
 		Config config = Config.getInstance();
 		DiskFileItemFactory factory = new DiskFileItemFactory();
