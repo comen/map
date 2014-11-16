@@ -70,8 +70,6 @@ public class UploadHandler implements IHandler {
 				System.out.println(Grid.findOne(grid.toString()));
 				grid.update("{'GRID_CODE':'BQ-PS-SD-5043','GRID_NAME':'上海市体育运动学校','GRID_MANAGER':'钱惠平','GRID_ADDRESS':'上海市虹口区广中路406号','GRID_COORDINATES':[{'LATITUDE':31.25214,'LONGTITUDE':121.46386},{'LATITUDE':31.25313,'LONGTITUDE':121.46892}]}");
 				System.out.println(Grid.findOne(grid.toString()));
-				
-				Config.getInstance().setValue("threshold", "10");
 				// --------------------Test MongoDB End--------------------
 			}
 		}
