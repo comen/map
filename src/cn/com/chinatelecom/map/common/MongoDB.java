@@ -28,7 +28,7 @@ public class MongoDB {
 					.getValue("dbport")));
 			db = mongoClient.getDB(Config.getInstance().getValue("dbname"));
 		} catch (Exception e) {
-			System.out.println(e.getClass() + ":" + e.getMessage());
+			System.out.println(e.getClass() + "\t:\t" + e.getMessage());
 		}
 	}
 
