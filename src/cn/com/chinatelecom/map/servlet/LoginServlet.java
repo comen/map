@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.com.chinatelecom.map.handle.IHandler;
-import cn.com.chinatelecom.map.handle.UserHandler;
+import cn.com.chinatelecom.map.handle.LoginHandler;
 import cn.com.chinatelecom.map.process.IProcessor;
-import cn.com.chinatelecom.map.process.PageProcessor;
+import cn.com.chinatelecom.map.process.DataProcessor;
 
 /**
- * Servlet implementation class UserServlet
+ * Servlet implementation class LoginServlet
  */
-@WebServlet(description = "Upload file", urlPatterns = { "/upload" })
-public class UserServlet extends HttpServlet {
+@WebServlet(description = "User Login", urlPatterns = { "/login" })
+public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;
@@ -26,10 +26,10 @@ public class UserServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public UserServlet() {
+	public LoginServlet() {
 		super();
-		processor = new PageProcessor();
-		handler = new UserHandler();
+		processor = new DataProcessor();
+		handler = new LoginHandler();
 	}
 
 	/**
@@ -49,5 +49,5 @@ public class UserServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		processor.process(request, handler, response);
 	}
-
+	
 }

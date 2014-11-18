@@ -42,6 +42,10 @@ public class User {
 		return role;
 	}
 	
+	public User() {
+		
+	}
+
 	public User(String json) {
 		DBObject dbo = (DBObject) JSON.parse(json);
 		setUser(dbo);
