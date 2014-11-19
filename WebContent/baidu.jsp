@@ -133,6 +133,8 @@ body {
 			strokeOpacity : 0.5,
 			enableEditing : true
 		});
+		polygon.setFillColor("#CCE0EF");
+		polygon.setFillOpacity(0.3);
 		map.addOverlay(polygon);
 
 		var infoWindow = new BMap.InfoWindow("经纬度：(" + center.lng + ","
