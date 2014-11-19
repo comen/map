@@ -97,6 +97,7 @@ public class Grid {
 				coordinates.add(coordinate);
 			}
 		}
+		MongoDB.getInstance().indexOn("grid", "GRID_CODE");
 	}
 
 	public boolean exist() {
