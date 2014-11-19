@@ -3,6 +3,7 @@ package cn.com.chinatelecom.map.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -28,7 +29,7 @@ public class MongoDB {
 					.getValue("dbport")));
 			db = mongoClient.getDB(Config.getInstance().getValue("dbname"));
 		} catch (Exception e) {
-			System.out.println(e.getClass() + ":" + e.getMessage());
+			System.out.println(e.getClass() + "\t:\t" + e.getMessage());
 		}
 	}
 
@@ -37,6 +38,11 @@ public class MongoDB {
 			instance = new MongoDB();
 		}
 		return instance;
+	}
+
+	public void indexOn(String table, String index) {
+		DBCollection coll = db.getCollection(table);
+		coll.ensureIndex(new BasicDBObject(index, 1), index, true);
 	}
 
 	public boolean insert(String table, String json) {
