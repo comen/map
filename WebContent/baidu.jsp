@@ -43,6 +43,14 @@ body {
 			document.getElementById("info").innerHTML = "("
 					+ point.lng.toFixed(5) + "," + point.lat.toFixed(5) + ")";
 		});
+        map.addEventListener("zoomend", function(event) {
+			var zoomLevel = map.getZoom();
+			if (zoomLevel == 13 || zoomLevel == 14) {
+				map.addOverlay(polygon);
+			} else {
+				map.removeOverlay(polygon);
+			}
+		});
 
 		var polygon = new BMap.Polygon([ new BMap.Point(121.40850,31.34395),
 				new BMap.Point(121.40584,31.34146),
@@ -150,28 +158,27 @@ body {
 			message : message,
             enableCloseOnClick : true
 		});
-		polygon.addEventListener("mouseover", function(event) {
-			map.openInfoWindow(infoWindow, center);
-		});
-		polygon.addEventListener("mouseout", function(event) {
-			map.closeInfoWindow();
-		});
+        function mouseover(event) {
+            map.openInfoWindow(infoWindow, center);
+        }
+        function mouseout(event) {
+            map.closeInfoWindow();
+        }
+        polygon.addEventListener("mouseover", mouseover);
+        polygon.addEventListener("mouseout", mouseout);
+        
 		polygon.addEventListener("rightclick", function(event) {
             if (editable) {
                 editable = false;
                 polygon.disableEditing();
+                polygon.addEventListener("mouseover", mouseover);
+                polygon.addEventListener("mouseout", mouseout);
             } else {
                 editable = true;
                 polygon.enableEditing();
+                polygon.removeEventListener("mouseover", mouseover);
+                polygon.removeEventListener("mouseout", mouseout);
             }
-		});
-		map.addEventListener("zoomend", function(event) {
-			var zoomLevel = map.getZoom();
-			if (zoomLevel == 13 || zoomLevel == 14) {
-				map.addOverlay(polygon);
-			} else {
-				map.removeOverlay(polygon);
-			}
 		});
 	</script>
 	<div style="width: 100%;" id="info"></div>
