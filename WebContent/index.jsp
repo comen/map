@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>简单实用国产jQuery UI框架 - DWZ富客户端框架(J-UI.com)</title>
+<title>上海电信北区局用户数据信息化系统</title>
 
 <link href="./dwz/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="./dwz/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
@@ -13,7 +13,6 @@
 <!--[if IE]>
 <link href="./dwz/themes/css/ieHack.css" rel="stylesheet" type="text/css" media="screen"/>
 <![endif]-->
-
 <!--[if lte IE 9]>
 <script src="./dwz/js/speedup.js" type="text/javascript"></script>
 <![endif]-->
@@ -75,7 +74,7 @@
 $(function(){
 	DWZ.init("./dwz/dwz.frag.xml", {
 		loginUrl:"./dwz/login_dialog.html", loginTitle:"登录",	// 弹出登录对话框
-//		loginUrl:"login.html",	// 跳到登录页面
+		//loginUrl:"login.jsp",	// 跳到登录页面
 		statusCode:{ok:200, error:300, timeout:301}, //【可选】
 		pageInfo:{pageNum:"pageNum", numPerPage:"numPerPage", orderField:"orderField", orderDirection:"orderDirection"}, //【可选】
 		debug:false,	// 调试模式 【true|false】
@@ -95,23 +94,10 @@ $(function(){
 			<div class="headerNav">
 				<a class="logo" href="http://j-ui.com">标志</a>
 				<ul class="nav">
-					<li id="switchEnvBox"><a href="javascript:">（<span>北京</span>）切换城市</a>
-						<ul>
-							<li><a href="./dwz/sidebar_1.html">北京</a></li>
-							<li><a href="./dwz/sidebar_2.html">上海</a></li>
-							<li><a href="./dwz/sidebar_2.html">南京</a></li>
-							<li><a href="./dwz/sidebar_2.html">深圳</a></li>
-							<li><a href="./dwz/sidebar_2.html">广州</a></li>
-							<li><a href="./dwz/sidebar_2.html">天津</a></li>
-							<li><a href="./dwz/sidebar_2.html">杭州</a></li>
-						</ul>
-					</li>
-					<li><a href="https://me.alipay.com/dwzteam" target="_blank">捐赠</a></li>
 					<li><a href="./dwz/changepwd.html" target="dialog" width="600">设置</a></li>
 					<li><a href="http://www.cnblogs.com/dwzjs" target="_blank">博客</a></li>
 					<li><a href="http://weibo.com/dwzui" target="_blank">微博</a></li>
-					<li><a href="http://bbs.dwzjs.com" target="_blank">论坛</a></li>
-					<li><a href="login.html">退出</a></li>
+					<li><a href="login.jsp">退出</a></li>
 				</ul>
 				<ul class="themeList" id="themeList">
 					<li theme="./dwz/default"><div class="selected">蓝色</div></li>

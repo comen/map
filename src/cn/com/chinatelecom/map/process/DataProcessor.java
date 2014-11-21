@@ -35,15 +35,18 @@ public class DataProcessor implements IProcessor {
 		response.setContentType("text/html;charset="
 				+ Config.getInstance().getValue("charset"));
 		PrintWriter out = response.getWriter();
-
-		HttpSession session = request.getSession();
 		
+		HttpSession session = request.getSession();
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
 		
-		for (Entry<String, Object> eso : result.entrySet()) {
-			session.setAttribute(eso.getKey(), eso.getValue());
-			out.println(eso.getKey() + ":" + eso.getValue());
+		if(result != null) { //µÇÂ¼³É¹¦
+			for (Entry<String, Object> eso : result.entrySet()) {
+				session.setAttribute(eso.getKey(), eso.getValue());
+			}
+			out.print("1");
+		} else {
+			out.print("0");
 		}
 		
 		out.flush();
