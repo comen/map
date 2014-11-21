@@ -19,7 +19,6 @@ public class LoginHandler implements IHandler {
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		
-		Map<String, Object> result = new HashMap<String, Object>();
 		User user = new User();
 		
 		for (FileItem item : items) {
@@ -45,13 +44,15 @@ public class LoginHandler implements IHandler {
 		}
 		
 		if(user.exist()) {
+			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("username", user.getUserName());
+			result.put("password", user.getPassword());
 			result.put("role", user.getRole());
+			return result;
 		} else {
-			result.put("-1", "Login Falied");
+			return null;
 		}
 		
-		return result;
 	}
 	
 }
