@@ -10,6 +10,7 @@ import org.apache.commons.fileupload.FileItem;
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.utils.FileUtils;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author joseph
@@ -32,9 +33,8 @@ public class UploadHandler implements IHandler {
 				result.put(fieldName, string);
 			} else {
 				String filename = item.getName().trim();
-				int index = filename.lastIndexOf("//");
-				filename = filename.substring(index + 1, filename.length());
-				if (filename.equals("") || !filename.endsWith(".xls")) {
+				filename = FileUtils.getFileName(filename);
+				if (!StringUtils.isLegal(filename, ".xls$")) {
 					result.put("info", "文件格式错误！");
 					return result;
 				}
