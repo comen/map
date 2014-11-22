@@ -26,14 +26,13 @@
 	function upload() {
 		createXmlHttp();
 		xmlHttp.onreadystatechange = callBack;
-
+		xmlHttp.open("post", "upload", true);
+		xmlHttp.setRequestHeader("Content-Type",
+				"multipart/form-data;boundary=index");
+		
 		var formData = new FormData();
 		var file = document.getElementById("uploadfile");
 		formData.append("file", file.files[0]);
-
-		xmlHttp.open("post", "upload", true);
-		xmlHttp.setRequestHeader("Content-Type",
-				"multipart/form-data;boundary=map");
 		xmlHttp.send(formData);
 	}
 </script>

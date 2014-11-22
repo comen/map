@@ -50,7 +50,6 @@ public class MongoDB {
 		DBObject q = (DBObject) JSON.parse(json);
 		WriteResult wr = coll.save(q, WriteConcern.NORMAL);
 		if (wr.getError() != null) {
-			System.out.println(wr.getError());
 			return false;
 		}
 		return true;
