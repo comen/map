@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>风险管理平台</title>
+<title>上海</title>
 <link href="./dwz/themes/css/login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 	var xmlHttp;
@@ -53,7 +53,7 @@
 	<div id="login">
 		<div id="login_header">
 			<h1 class="login_logo">
-				<a href="http://demo.dwzjs.com"><img src="./dwz/themes/default/images/login_logo.gif" /></a>
+				<img src="./dwz/themes/default/images/login_logo.gif" />
 			</h1>
 			<div class="login_headerContent">
 				<div class="navList">
@@ -63,12 +63,12 @@
 						<li><a href="./dwz/doc/dwz-user-guide.pdf" target="_blank">帮助</a></li>
 					</ul>
 				</div>
-				<h2 class="login_title"><img src="./dwz/themes/default/images/login_title.png" /></h2>
+				<h2 class="login_title"><img src="./dwz/themes/default/images/login_title.jpg" /></h2>
 			</div>
 		</div>
 		<div id="login_content">
 			<div class="loginForm">
-				<form>
+				<form action="index.jsp">
 					<p>
 						<label>用户名：</label>
 						<input type="text" name="username" id="username" size="20" class="login_input" />
@@ -107,7 +107,7 @@
 			</div>
 		</div>
 		<div id="login_footer">
-			Copyright &copy; 2009 www.dwzjs.com Inc. All Rights Reserved.
+			Copyright &copy; 2014 上海电信北区局 沪ICP备05019125号-10
 		</div>
 	</div>
 </body>

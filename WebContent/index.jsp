@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>上海电信北区局用户数据信息化系统</title>
 
@@ -25,56 +26,14 @@
 <script src="./dwz/xheditor/xheditor_lang/zh-cn.js" type="text/javascript"></script>
 <script src="./dwz/uploadify/scripts/jquery.uploadify.js" type="text/javascript"></script>
 
-<!-- svg图表  supports Firefox 3.0+, Safari 3.0+, Chrome 5.0+, Opera 9.5+ and Internet Explorer 6.0+ -->
-<script type="./dwz/text/javascript" src="chart/raphael.js"></script>
-<script type="./dwz/text/javascript" src="chart/g.raphael.js"></script>
-<script type="./dwz/text/javascript" src="chart/g.bar.js"></script>
-<script type="./dwz/text/javascript" src="chart/g.line.js"></script>
-<script type="./dwz/text/javascript" src="chart/g.pie.js"></script>
-<script type="./dwz/text/javascript" src="chart/g.dot.js"></script>
-
-<script src="./dwz/js/dwz.core.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.util.date.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.validate.method.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.regional.zh.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.barDrag.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.drag.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.tree.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.accordion.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.ui.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.theme.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.switchEnv.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.alertMsg.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.contextmenu.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.navTab.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.tab.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.resize.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.dialog.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.dialogDrag.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.sortDrag.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.cssTable.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.stable.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.taskBar.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.ajax.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.pagination.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.database.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.datepicker.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.effects.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.panel.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.checkbox.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.history.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.combox.js" type="text/javascript"></script>
-<script src="./dwz/js/dwz.print.js" type="text/javascript"></script>
-<!--
 <script src="./dwz/bin/dwz.min.js" type="text/javascript"></script>
--->
 <script src="./dwz/js/dwz.regional.zh.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 $(function(){
 	DWZ.init("./dwz/dwz.frag.xml", {
-		loginUrl:"./dwz/login_dialog.html", loginTitle:"登录",	// 弹出登录对话框
-		//loginUrl:"login.jsp",	// 跳到登录页面
+		//loginUrl:"./dwz/login_dialog.html", loginTitle:"登录",	// 弹出登录对话框
+		loginUrl:"login.jsp",	// 跳到登录页面
 		statusCode:{ok:200, error:300, timeout:301}, //【可选】
 		pageInfo:{pageNum:"pageNum", numPerPage:"numPerPage", orderField:"orderField", orderDirection:"orderDirection"}, //【可选】
 		debug:false,	// 调试模式 【true|false】
@@ -84,29 +43,43 @@ $(function(){
 		}
 	});
 });
-
 </script>
+
+<!-- 百度地图API -->
+<script type="text/javascript" src="js/HashMap.js"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=1.5&ak=msbblC5TGVpnQnafevVen547"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+<link rel="stylesheet"
+	href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+<style type="text/css">
+	#mapcontainer {
+		height: 100%;
+	}
+</style>
 </head>
 
 <body scroll="no">
 	<div id="layout">
 		<div id="header">
 			<div class="headerNav">
-				<a class="logo" href="http://j-ui.com">标志</a>
+				<!-- <a class="logo" href="http://j-ui.com">标志</a> -->
+				<img src="./dwz/themes/default/images/logo.png" />
 				<ul class="nav">
-					<li><a href="./dwz/changepwd.html" target="dialog" width="600">设置</a></li>
-					<li><a href="http://www.cnblogs.com/dwzjs" target="_blank">博客</a></li>
-					<li><a href="http://weibo.com/dwzui" target="_blank">微博</a></li>
+					<li><span style="color:#ddd">系统管理员</span><span style="color:red">&nbsp;admin&nbsp;</span><span style="color:#ddd">, 欢迎你！</span></a></li>
+					<li><a href="changepwd.jsp" target="dialog" width="600">修改密码</a></li>
 					<li><a href="login.jsp">退出</a></li>
 				</ul>
+				<!-- 
 				<ul class="themeList" id="themeList">
-					<li theme="./dwz/default"><div class="selected">蓝色</div></li>
-					<li theme="./dwz/green"><div>绿色</div></li>
-					<!--<li theme="./dwz/red"><div>红色</div></li>-->
-					<li theme="./dwz/purple"><div>紫色</div></li>
-					<li theme="./dwz/silver"><div>银色</div></li>
-					<li theme="./dwz/azure"><div>天蓝</div></li>
+					<li theme="default"><div class="selected">蓝色</div></li>
+					<li theme="green"><div>绿色</div></li>
+					<li theme="purple"><div>紫色</div></li>
+					<li theme="silver"><div>银色</div></li>
+					<li theme="azure"><div>天蓝</div></li>
 				</ul>
+				 -->
 			</div>
 
 			<!-- navMenu -->
@@ -124,110 +97,73 @@ $(function(){
 
 				<div class="accordion" fillSpace="sidebar">
 					<div class="accordionHeader">
-						<h2><span>Folder</span>界面组件</h2>
+						<h2><span>Folder</span>用户数据管理</h2>
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a href="tabsPage.html" target="navTab">主框架面板</a>
+							<li><a>系统管理员</a>
 								<ul>
-									<li><a href="./dwz/main.html" target="navTab" rel="main">我的主页</a></li>
-									<li><a href="http://www.baidu.com" target="navTab" rel="page1">页面一(外部页面)</a></li>
-									<li><a href="./dwz/demo_page2.html" target="navTab" rel="external" external="true">iframe navTab页面</a></li>
-									<li><a href="./dwz/demo_page1.html" target="navTab" rel="page1" fresh="false">替换页面一</a></li>
-									<li><a href="./dwz/demo_page2.html" target="navTab" rel="page2">页面二</a></li>
-									<li><a href="./dwz/demo_page4.html" target="navTab" rel="page3" title="页面三（自定义标签名）">页面三</a></li>
-									<li><a href="./dwz/demo_page4.html" target="navTab" rel="page4" fresh="false">测试页面（fresh="false"）</a></li>
-									<li><a href="./dwz/w_editor.html" target="navTab">表单提交会话超时</a></li>
-									<li><a href="./dwz/demo/common/ajaxTimeout.html" target="navTab">navTab会话超时</a></li>
-									<li><a href="./dwz/demo/common/ajaxTimeout.html" target="dialog">dialog会话超时</a></li>
-									<li><a href="./dwz/index_menu.html" target="_blank">横向导航条</a></li>
+									<li><a href="userlist.jsp" target="navTab" rel="userlist1" title="系统管理员">浏览</a></li>
+									<li><a href="useradd.jsp" target="navTab" rel="useradd1" title="系统管理员">新建</a></li>
 								</ul>
 							</li>
-							
-							<li><a>常用组件</a>
+							<li><a>网格数据管理员</a>
 								<ul>
-									<li><a href="./dwz/w_panel.html" target="navTab" rel="w_panel">面板</a></li>
-									<li><a href="./dwz/w_tabs.html" target="navTab" rel="w_tabs">选项卡面板</a></li>
-									<li><a href="./dwz/w_dialog.html" target="navTab" rel="w_dialog">弹出窗口</a></li>
-									<li><a href="./dwz/w_alert.html" target="navTab" rel="w_alert">提示窗口</a></li>
-									<li><a href="./dwz/w_list.html" target="navTab" rel="w_list">CSS表格容器</a></li>
-									<li><a href="./dwz/demo_page1.html" target="navTab" rel="w_table">表格容器</a></li>
-									<li><a href="./dwz/w_removeSelected.html" target="navTab" rel="w_table">表格数据库排序+批量删除</a></li>
-									<li><a href="./dwz/w_tree.html" target="navTab" rel="w_tree">树形菜单</a></li>
-									<li><a href="./dwz/w_accordion.html" target="navTab" rel="w_accordion">滑动菜单</a></li>
-									<li><a href="./dwz/w_editor.html" target="navTab" rel="w_editor">编辑器</a></li>
-									<li><a href="./dwz/w_datepicker.html" target="navTab" rel="w_datepicker">日期控件</a></li>
-									<li><a href="./dwz/demo/database/db_widget.html" target="navTab" rel="db">suggest+lookup+主从结构</a></li>
-									<li><a href="./dwz/demo/database/treeBringBack.html" target="navTab" rel="db">tree查找带回</a></li>
-									<li><a href="./dwz/demo/sortDrag/1.html" target="navTab" rel="sortDrag">单个sortDrag示例</a></li>
-									<li><a href="./dwz/demo/sortDrag/2.html" target="navTab" rel="sortDrag">多个sortDrag示例</a></li>
+									<li><a href="userlist.jsp" target="navTab" rel="userlist2" title="网格数据管理员">浏览</a></li>
+									<li><a href="useradd.jsp" target="navTab" rel="useradd2" title="网格数据管理员">新建</a></li>
 								</ul>
 							</li>
-									
-							<li><a>表单组件</a>
+							<li><a>营销数据管理员</a>
 								<ul>
-									<li><a href="./dwz/w_validation.html" target="navTab" rel="w_validation">表单验证</a></li>
-									<li><a href="./dwz/w_button.html" target="navTab" rel="w_button">按钮</a></li>
-									<li><a href="./dwz/w_textInput.html" target="navTab" rel="w_textInput">文本框/文本域</a></li>
-									<li><a href="./dwz/w_combox.html" target="navTab" rel="w_combox">下拉菜单</a></li>
-									<li><a href="./dwz/w_checkbox.html" target="navTab" rel="w_checkbox">多选框/单选框</a></li>
-									<li><a href="./dwz/demo_upload.html" target="navTab" rel="demo_upload">iframeCallback表单提交</a></li>
-									<li><a href="./dwz/w_uploadify.html" target="navTab" rel="w_uploadify">uploadify多文件上传</a></li>
+									<li><a href="userlist.jsp" target="navTab" rel="userlist3" title="营销数据管理员">浏览</a></li>
+									<li><a href="useradd.jsp" target="navTab" rel="useradd3" title="营销数据管理员">新建</a></li>
 								</ul>
 							</li>
-							<li><a>组合应用</a>
+							<li><a>普通用户</a>
 								<ul>
-									<li><a href="./dwz/demo/pagination/layout1.html" target="navTab" rel="pagination1">局部刷新分页1</a></li>
-									<li><a href="./dwz/demo/pagination/layout2.html" target="navTab" rel="pagination2">局部刷新分页2</a></li>
+									<li><a href="userlist.jsp" target="navTab" rel="userlist4" title="普通用户">浏览</a></li>
+									<li><a href="useradd.jsp" target="navTab" rel="useradd4" title="普通用户">新建</a></li>
 								</ul>
 							</li>
-							<li><a>图表</a>
-								<ul>
-									<li><a href="./dwz/chart/test/barchart.html" target="navTab" rel="chart">柱状图(垂直)</a></li>
-									<li><a href="./dwz/chart/test/hbarchart.html" target="navTab" rel="chart">柱状图(水平)</a></li>
-									<li><a href="./dwz/chart/test/linechart.html" target="navTab" rel="chart">折线图</a></li>
-									<li><a href="./dwz/chart/test/linechart2.html" target="navTab" rel="chart">曲线图</a></li>
-									<li><a href="./dwz/chart/test/linechart3.html" target="navTab" rel="chart">曲线图(自定义X坐标)</a></li>
-									<li><a href="./dwz/chart/test/piechart.html" target="navTab" rel="chart">饼图</a></li>
-								</ul>
-							</li>
-							<li><a href="./dwz/dwz.frag.xml" target="navTab" external="true">dwz.frag.xml</a></li>
 						</ul>
 					</div>
 					<div class="accordionHeader">
-						<h2><span>Folder</span>典型页面</h2>
+						<h2><span>Folder</span>网格数据管理</h2>
 					</div>
 					<div class="accordionContent">
-						<ul class="tree treeFolder treeCheck">
-							<li><a href="./dwz/demo_page1.html" target="navTab" rel="demo_page1">查询我的客户</a></li>
-							<li><a href="./dwz/demo_page1.html" target="navTab" rel="demo_page2">表单查询页面</a></li>
-							<li><a href="./dwz/demo_page4.html" target="navTab" rel="demo_page4">表单录入页面</a></li>
-							<li><a href="./dwz/demo_page5.html" target="navTab" rel="demo_page5">有文本输入的表单</a></li>
-							<li><a href="javascript:;">有提示的表单输入页面</a>
-								<ul>
-									<li><a href="javascript:;">页面一</a></li>
-									<li><a href="javascript:;">页面二</a></li>
-								</ul>
-							</li>
-							<li><a href="javascript:;">选项卡和图形的页面</a>
-								<ul>
-									<li><a href="javascript:;">页面一</a></li>
-									<li><a href="javascript:;">页面二</a></li>
-								</ul>
-							</li>
-							<li><a href="javascript:;">选项卡和图形切换的页面</a></li>
-							<li><a href="javascript:;">左右两个互动的页面</a></li>
-							<li><a href="javascript:;">列表输入的页面</a></li>
-							<li><a href="javascript:;">双层栏目列表的页面</a></li>
+						<ul class="tree treeFolder">
+							<li><a href="gridlist.jsp" target="navTab" rel="gridlist">浏览</a></li>
+							<li><a href="gridadd.jsp" target="navTab" rel="gridadd">新建</a></li>
+							<li><a href="gridupload.jsp" target="navTab" rel="gridadd">通过Excel文件上传</a></li>
 						</ul>
 					</div>
 					<div class="accordionHeader">
-						<h2><span>Folder</span>流程演示</h2>
+						<h2><span>Folder</span>营销数据管理</h2>
 					</div>
 					<div class="accordionContent">
-						<ul class="tree">
-							<li><a href="./dwz/newPage1.html" target="dialog" rel="dlg_page">列表</a></li>
-							<li><a href="./dwz/newPage1.html" target="dialog" rel="dlg_page2">列表</a></li>
+						<ul class="tree treeFolder">
+							<li><a href="salesdataupload.jsp" target="navTab" rel="salesdataupload">通过Excel文件上传</a></li>
+							<li><a>按日显示</a>
+								<ul>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="day_office" title="按日 北区局级">北区局级</a></li>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="day_suboffice" title="按日 分局级">分局级</a></li>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="day_grid" title="按日 网格级">网格级</a></li>
+								</ul>
+							</li>
+							<li><a>按周显示</a>
+								<ul>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="week_office" title="按周 北区局级">北区局级</a></li>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="week_suboffice" title="按周 分局级">分局级</a></li>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="week_grid" title="按周 网格级">网格级</a></li>
+								</ul>
+							</li>
+							<li><a>按月显示</a>
+								<ul>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="month_office" title="按月 北区局级">北区局级</a></li>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="month_suboffice" title="按月 分局级">分局级</a></li>
+									<li><a href="salesdatafields.jsp" target="navTab" rel="month_grid" title="按月 网格级">网格级</a></li>
+								</ul>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -251,51 +187,12 @@ $(function(){
 				<div class="navTab-panel tabsPageContent layoutBox">
 					<div class="page unitBox">
 						<div class="accountInfo">
-							<div class="alertInfo">
-								<h2><a href="./dwz/doc/dwz-user-guide.pdf" target="_blank">DWZ框架使用手册(PDF)</a></h2>
-								<a href="./dwz/doc/dwz-user-guide.swf" target="_blank">DWZ框架演示视频</a>
-							</div>
-							<div class="right">
-								<p><a href="./dwz/doc/dwz-user-guide.zip" target="_blank" style="line-height:19px">DWZ框架使用手册(CHM)</a></p>
-								<p><a href="./dwz/doc/dwz-ajax-develop.swf" target="_blank" style="line-height:19px">DWZ框架Ajax开发视频教材</a></p>
-							</div>
-							<p><span>DWZ富客户端框架</span></p>
-							<p>DWZ官方微博:<a href="http://weibo.com/dwzui" target="_blank">http://weibo.com/dwzui</a></p>
+							<p>这里用来实时地图参数信息...</p>
 						</div>
-						<div class="pageFormContent" layoutH="80" style="margin-right:230px">
-							
-							<p style="color:red">DWZ官方微博 <a href="http://weibo.com/dwzui" target="_blank">http://weibo.com/dwzui</a></p>
-							<p style="color:red">DWZ官方微群 <a href="http://q.weibo.com/587328/invitation=11TGXSt-148c2" target="_blank">http://q.weibo.com/587328/invitation=11TGXSt-148c2</a></p>
-
-<div class="divider"></div>
-<h2>dwz v1.2视频教程:</h2>
-<p><a href="http://www.u-training.com/thread-57-1-1.html" target="_blank">http://www.u-training.com/thread-57-1-1.html</a></p>
-
-<div class="divider"></div>
-<h2>DWZ系列开源项目:</h2>
-<div class="unit"><a href="http://code.google.com/p/dwz/" target="_blank">dwz富客户端框架 - jUI</a></div>
-<div class="unit"><a href="http://code.google.com/p/dwz4j" target="_blank">dwz4j(Java Web)快速开发框架 + jUI整合应用</a></div>
-<div class="unit"><a href="http://code.google.com/p/dwz4php" target="_blank">ThinkPHP + jUI整合应用</a></div>
-<div class="unit"><a href="http://code.google.com/p/dwz4php" target="_blank">Zend Framework + jUI整合应用</a></div>
-<div class="unit"><a href="http://www.yiiframework.com/extension/dwzinterface/" target="_blank">YII + jUI整合应用</a></div>
-
-<div class="divider"></div>
-<h2>常见问题及解决:</h2>
-<pre style="margin:5px;line-height:1.4em">
-Error loading XML document: dwz.frag.xml
-直接用IE打开index.html弹出一个对话框：Error loading XML document: dwz.frag.xml
-原因：没有加载成功dwz.frag.xml。IE ajax laod本地文件有限制, 是ie安全级别的问题, 不是框架的问题。
-解决方法：部署到apache 等 Web容器下。
-</pre>
-
-<div class="divider"></div>
-<h2>有偿服务请联系:</h2>
-<pre style="margin:5px;line-height:1.4em;">
-定制化开发，公司培训，技术支持
-合作电话：010-52897073
-邮箱：support@dwzjs.com
-</pre>
-						</div>
+						
+						<!-- 导入百度地图 -->
+						<div id="mapcontainer" style="height:600px"></div>
+						<%@ include file="map.jsp" %>
 						
 						<div style="width:230px;position: absolute;top:60px;right:0" layoutH="80">
 							<iframe width="100%" height="430" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?width=0&height=430&fansRow=2&ptype=1&skin=1&isTitle=0&noborder=1&isWeibo=1&isFans=0&uid=1739071261&verifier=c683dfe7"></iframe>
@@ -308,20 +205,7 @@ Error loading XML document: dwz.frag.xml
 
 	</div>
 
-	<div id="footer">Copyright &copy; 2010 <a href="demo_page2.html" target="dialog">DWZ团队</a> 京ICP备05019125号-10</div>
-
-<!-- 注意此处js代码用于google站点统计，非DWZ代码，请删除 -->
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-16716654-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? ' https://ssl' : ' http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
+	<div id="footer">Copyright &copy; 2014 上海电信北区局 沪ICP备05019125号-10</div>
 
 </body>
 </html>
