@@ -1,6 +1,5 @@
 package cn.com.chinatelecom.map.common;
 
-import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +21,6 @@ public class Repository {
 		Config config = Config.getInstance();
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(Integer.parseInt(config.getValue("cacheSize")));
-		factory.setRepository(new File(config.getValue("tempPath")));
-
 		sfu = new ServletFileUpload(factory);
 		sfu.setSizeMax((int) Math.pow(
 				Integer.parseInt(config.getValue("cacheSize")), 2));

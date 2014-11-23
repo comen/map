@@ -149,9 +149,8 @@ public class Grid {
 		if (coordinates != null && !coordinates.isEmpty()) {
 			sb.append(",'GRID_COORDINATES':[");
 			for (Coordinate coordinate : coordinates) {
-				sb.append("{'LATITUDE':'" + coordinate.getLatitude()
-						+ "','LONGTITUDE':'" + coordinate.getLongtitude()
-						+ "'},");
+				sb.append("{'LATITUDE':" + coordinate.getLatitude()
+						+ ",'LONGTITUDE':" + coordinate.getLongtitude() + "},");
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			sb.append("]");

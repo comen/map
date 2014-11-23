@@ -37,6 +37,9 @@ public class PageProcessor implements IProcessor {
 
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
+		if (result == null) {
+			return;
+		}
 		for (Entry<String, Object> eso : result.entrySet()) {
 			out.println(eso.getKey() + "-->" + eso.getValue());
 		}

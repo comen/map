@@ -113,6 +113,7 @@ $(function(){
 			
 		</div>
 
+<<<<<<< HEAD
 		<div id="leftside">
 			<div id="sidebar_s">
 				<div class="collapse">
@@ -321,6 +322,20 @@ Error loading XML document: dwz.frag.xml
     ga.src = ('https:' == document.location.protocol ? ' https://ssl' : ' http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
+=======
+	function upload() {
+		createXmlHttp();
+		xmlHttp.onreadystatechange = callBack;
+		xmlHttp.open("post", "upload", true);
+		xmlHttp.setRequestHeader("Content-Type",
+				"multipart/form-data;boundary=index");
+		
+		var formData = new FormData();
+		var file = document.getElementById("uploadfile");
+		formData.append("file", file.files[0]);
+		xmlHttp.send(formData);
+	}
+>>>>>>> 0c521acfea37c5e2084e8e9f80a5c2daf7cc6a19
 </script>
 
 </body>

@@ -26,4 +26,16 @@ public class StringUtils {
 		}
 	}
 
+	public static String getFileName(String path) {
+		if (path == null)
+			return null;
+		int index = path.lastIndexOf("/");
+		if (index > 0)
+			return path.substring(index);
+		index = path.lastIndexOf("\\");
+		if (index > 0)
+			return path.substring(index);
+		return null;
+	}
+
 }
