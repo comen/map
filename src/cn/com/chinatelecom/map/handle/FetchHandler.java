@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.commons.fileupload.FileItem;
 
-import cn.com.chinatelecom.map.entity.Coordinate;
 import cn.com.chinatelecom.map.entity.Grid;
 
 /**
@@ -27,20 +26,15 @@ public class FetchHandler implements IHandler {
 			return null;
 		}
 		for (FileItem item : items) {
-			if (item.isFormField() && item.getFieldName().equals("grid_code")) {
-				String code = item.getString();
-				Grid grid = new Grid("{'GRID_CODE':'" + code + "'}");
-				grid = Grid.findOne(grid.toString());
-				List<Coordinate> coordinates = grid.getCoordinates();
-				int size = coordinates.size();
-				double[] latitudes = new double[size];
-				double[] longtitudes = new double[size];
-				for (int i = 0; i < size; i++) {
-					latitudes[i] = coordinates.get(i).getLatitude();
-					longtitudes[i] = coordinates.get(i).getLongtitude();
+			if (item.isFormField() && item.getFieldName().equals("zoom")) {
+				int zoom = Integer.parseInt(item.getString());
+				if (zoom > 10 && zoom < 14) {
+					Grid grid = new Grid("{'GRID_CODE':'0'}");
+					grid = Grid.findOne(grid.toString());
+					if (grid != null) {
+						result.put("grids", "[" + grid.toString() + "]");
+					}
 				}
-				result.put("latitudes", latitudes);
-				result.put("longtitudes", longtitudes);
 			}
 		}
 		return result;

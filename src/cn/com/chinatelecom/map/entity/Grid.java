@@ -122,12 +122,18 @@ public class Grid {
 	}
 
 	public static Grid findOne(String json) {
+		if (MongoDB.getInstance().findOne("grid", json) == null) {
+			return null;
+		}
 		return new Grid(MongoDB.getInstance().findOne("grid", json));
 	}
 
 	public static List<Grid> findList(String json) {
 		List<Grid> gl = new ArrayList<Grid>();
 		List<DBObject> dbl = MongoDB.getInstance().findList("grid", json);
+		if (dbl == null || dbl.isEmpty()) {
+			return null;
+		}
 		for (DBObject dbo : dbl) {
 			gl.add(new Grid(dbo));
 		}
@@ -136,21 +142,21 @@ public class Grid {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("{'GRID_CODE':'" + code + "'");
+		StringBuffer sb = new StringBuffer("{GRID_CODE:'" + code + "'");
 		if (name != null) {
-			sb.append(",'GRID_NAME':'" + name + "'");
+			sb.append(",GRID_NAME:'" + name + "'");
 		}
 		if (manager != null) {
-			sb.append(",'GRID_MANAGER':'" + manager + "'");
+			sb.append(",GRID_MANAGER:'" + manager + "'");
 		}
 		if (address != null) {
-			sb.append(",'GRID_ADDRESS':'" + address + "'");
+			sb.append(",GRID_ADDRESS:'" + address + "'");
 		}
 		if (coordinates != null && !coordinates.isEmpty()) {
-			sb.append(",'GRID_COORDINATES':[");
+			sb.append(",GRID_COORDINATES:[");
 			for (Coordinate coordinate : coordinates) {
-				sb.append("{'LATITUDE':" + coordinate.getLatitude()
-						+ ",'LONGTITUDE':" + coordinate.getLongtitude() + "},");
+				sb.append("{LATITUDE:" + coordinate.getLatitude()
+						+ ",LONGTITUDE:" + coordinate.getLongtitude() + "},");
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			sb.append("]");
