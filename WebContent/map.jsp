@@ -57,6 +57,16 @@ body {
 						+ point.lng.toFixed(5) + "," + point.lat.toFixed(5)
 						+ ")";
 			});
+
+			map.addEventListener("zoomend", function(event) {
+				var zoomLevel = map.getZoom();
+				document.getElementById("info").innerHTML = zoomLevel;
+				map.closeInfoWindow();
+				map.clearOverlays();
+				if (zoomLevel > 11) {
+					fetch();
+				}
+			});
 		}
 
 		function fetch() {
@@ -104,10 +114,10 @@ body {
 						fillOpacity : 0.5
 					});
 					polygons.put(code, polygon);
-					polygons.foreach(function(index, code, polygon) {
-						map.addOverlay(polygon);
-					});
+				}
 
+				polygons.foreach(function(index, code, polygon) {
+					map.addOverlay(polygon);
 					var path = polygon.getPath();
 					var message = "Path:(" + path[0].lng.toFixed(5) + ","
 							+ path[0].lat.toFixed(5) + ")";
@@ -158,7 +168,7 @@ body {
 					polygon.addEventListener("mouseover", openInfo);
 					polygon.addEventListener("mouseout", closeInfo);
 					polygon.addEventListener("rightclick", switchEdit);
-				}
+				});
 			}
 		}
 	</script>
