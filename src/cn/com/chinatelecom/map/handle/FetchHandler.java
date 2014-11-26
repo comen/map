@@ -43,13 +43,14 @@ public class FetchHandler implements IHandler {
 				case 14:
 				case 15:
 					sb = new StringBuffer("[");
-					for (int i = 1; i <= 4; i++, sb.append(",")) {
+					for (int i = 1; i <= 4; i++) {
 						grid = new Grid("{'GRID_CODE':'" + i + "'}");
 						grid = Grid.findOne(grid.toString());
 						if (null != grid) {
-							sb.append(grid.toString());
+							sb.append(grid.toString() + ",");
 						}
 					}
+					sb.deleteCharAt(sb.length() - 1);
 					sb.append("]");
 					break;
 				// 网格级别16-19

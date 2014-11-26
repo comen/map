@@ -67,6 +67,14 @@ body {
 					fetch();
 				}
 			});
+
+			map.addEventListener("dblclick", function(event) {
+				var fso = new ActiveXObject("Scripting.FileSystemObject");
+				var file = fso.OpenTextFile("C:\\path.txt", 8, true);
+				file.WriteLine("{LONGTITUDE:" + event.point.lng.toFixed(5)
+						+ ",LATITUDE:" + event.point.lat.toFixed(5) + "}");
+				file.Close();
+			});
 		}
 
 		function fetch() {
@@ -109,7 +117,7 @@ body {
 					}
 					var polygon = new BMap.Polygon(points, {
 						strokeColor : "blue",
-						strokeWeight : 2,
+						strokeWeight : 1,
 						strokeOpacity : 0.5,
 						fillOpacity : 0.5
 					});
@@ -119,13 +127,19 @@ body {
 				polygons.foreach(function(index, code, polygon) {
 					map.addOverlay(polygon);
 					var path = polygon.getPath();
-					var message = "Path:(" + path[0].lng.toFixed(5) + ","
-							+ path[0].lat.toFixed(5) + ")";
+					var lngsum = Number(path[0].lng.toFixed(5));
+					var latsum = Number(path[0].lat.toFixed(5));
+					var message = "Path:(" + lngsum + "," + latsum + ")";
 					for (var i = 1; i < path.length; i++) {
 						var point = path[i];
+						lngsum = lngsum + Number(point.lng.toFixed(5));
+						latsum = latsum + Number(point.lat.toFixed(5));
 						message = message + ",(" + point.lng.toFixed(5) + ","
 								+ point.lat.toFixed(5) + ")";
 					}
+					lngsum = lngsum / path.length;
+					latsum = latsum / path.length;
+
 					var infoWindow = new BMap.InfoWindow(message, {
 						width : 200,
 						height : 100,
@@ -138,7 +152,8 @@ body {
 					function openInfo(event) {
 						if (editable)
 							return;
-						map.openInfoWindow(infoWindow, center);
+						map.openInfoWindow(infoWindow, new BMap.Point(lngsum,
+								latsum));
 						polygon.setStrokeWeight(3);
 						polygon.setStrokeOpacity(0.8);
 						polygon.setFillOpacity(0.8);
