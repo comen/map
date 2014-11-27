@@ -19,6 +19,7 @@ public class LoginHandler implements IHandler {
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		
+		Map<String, Object> result = new HashMap<String, Object>();
 		User user = new User();
 		
 		for (FileItem item : items) {
@@ -38,20 +39,20 @@ public class LoginHandler implements IHandler {
 						user.setRole(string);
 						break;
 					}
-				}catch (java.io.UnsupportedEncodingException e) {
-				}
+				} catch (java.io.UnsupportedEncodingException e) {}
 			}
 		}
 		
 		if(user.exist()) {
-			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("loginstate", "S");
 			result.put("username", user.getUserName());
 			result.put("password", user.getPassword());
 			result.put("role", user.getRole());
-			return result;
 		} else {
-			return null;
+			result.put("loginstate", "F");
 		}
+		
+		return result;
 		
 	}
 	

@@ -14,9 +14,11 @@ import com.mongodb.util.JSON;
  */
 public class User {
 	
-	private String userName;
-	private String password;
-	private String role; // 1 - System Administrator; 2 - Grid Data Administrator; 3 - Sales Data Administrator; 4 - Normal User
+	protected String userName;
+	protected String password;
+	protected String role; /* 1 - System Administrator; 2 - Grid Data Administrator; 3 - Sales Data Administrator; 4 - Normal User */
+	protected String realName;
+	protected String department;
 	
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -44,6 +46,14 @@ public class User {
 	
 	public User() {
 		
+	}
+	
+	public User(User user) {
+		this.userName = user.userName;
+		this.password = user.password;
+		this.role = user.role;
+		this.realName = user.realName;
+		this.department = user.department;
 	}
 
 	public User(String json) {
@@ -110,7 +120,7 @@ public class User {
 			sb.append(",'password':'" + password + "'");
 		}
 		if (role != null) {
-			sb.append(",'role':'" + role + "'");
+			sb.append(",'role':" + role);
 		}
 		sb.append("}");
 		return sb.toString();

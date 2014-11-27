@@ -33,5 +33,12 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/jar/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="C:/jar/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/jar/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="C:/jar/commons-logging.jar"/>
+	<classpathentry kind="lib" path="C:/jar/ezmorph-1.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/jar/json-lib-2.1-jdk15.jar"/>
+	<classpathentry kind="lib" path="C:/jar/xom-1.0d10.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

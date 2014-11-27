@@ -16,11 +16,16 @@ function validateCallback(form, callback, confirmMsg) {
 		return false;
 	}
 	
+	var $formData = new FormData(form);
+	
 	var _submitFn = function(){
 		$.ajax({
 			type: form.method || 'POST',
 			url:$form.attr("action"),
-			data:$form.serializeArray(),
+			contentType:false,
+			processData:false,
+			data:$formData,
+//			data:$form.serializeArray(),
 			dataType:"json",
 			cache: false,
 			success: callback || DWZ.ajaxDone,

@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-    
+
+<%-- Validate if user login successfully. --%>
+<%@include file="validate.jsp" %>
+
 <div class="pageContent">
-	
-	<form method="post" action="ajaxDone.jsp" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
+
+	<form method="post" action="changePwd" enctype="multipart/form-data;boundary=AAA" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)"> 
 		<div class="pageFormContent" layoutH="58">
 
+			<input type="hidden" name="username" value="<%=userName%>" />
+			<input type="hidden" name="role" value="<%=role%>" />
 			<div class="unit">
 				<label>旧密码：</label>
 				<input type="password" name="oldPassword" size="30" minlength="6" maxlength="20" class="required" />

@@ -10,25 +10,29 @@
 </form>
 
 <div class="pageContent">
-	<table class="table" width="600" layoutH="138">
+	<table class="table" width="900" layoutH="138">
 		<thead>
 			<tr>
+				<th align="center" width="100">编号</th>
 				<th align="center" width="200">营销数据字段</th>
-				<th align="center" width="200">警示阈值 (0 代表不设警示阈值)</th>
+				<th align="center" width="200">环比阈值 (0 代表不设警示阈值)</th>
+				<th align="center" width="200">同比阈值 (0 代表不设警示阈值)</th>
 				<th align="center" width="100">状态</th>
 				<th align="center" width="100">操作</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr target="sid_user" rel="18900838601">
+			<tr target="sid_user" rel="field1">
+				<td>1</td>
 				<td>固话到达数</td>
-				<td>0</td>
+				<td><input id="field1_threshold1" class="digits" style="text-align:center" type="text" size="5" value="0" /></td>
+				<td><input id="field1_threshold2" class="digits" type="text" size="5" value="0" /></td>
 				<td>正常</td>
 				<td>
 					<a title="编辑" target="dialog" href="salesdatafieldsedit.jsp?id=xxx" width="550" height="200" class="btnEdit">编辑</a>
 				</td>
 			</tr>
-			<tr target="sid_user" rel="18900838602">
+			<tr target="sid_user" rel="field2">
 				<td>宽带到达数</td>
 				<td>100</td>
 				<td>正常</td>
@@ -36,7 +40,7 @@
 					<a title="编辑" target="dialog" href="salesdatafieldsedit.jsp?id=xxx" width="550" height="200" class="btnEdit">编辑</a>
 				</td>
 			</tr>
-			<tr target="sid_user" rel="18900838602">
+			<tr target="sid_user" rel="field3">
 				<td>宽带到达数</td>
 				<td>100</td>
 				<td>正常</td>
@@ -44,7 +48,7 @@
 					<a title="编辑" target="dialog" href="salesdatafieldsedit.jsp?id=xxx" width="550" height="200" class="btnEdit">编辑</a>
 				</td>
 			</tr>
-			<tr target="sid_user" rel="18900838603">
+			<tr target="sid_user" rel="field4">
 				<td>宽带新装</td>
 				<td>100</td>
 				<td>正常</td>
@@ -52,7 +56,7 @@
 					<a title="编辑" target="dialog" href="salesdatafieldsedit.jsp?id=xxx" width="550" height="200" class="btnEdit">编辑</a>
 				</td>
 			</tr>
-			<tr target="sid_user" rel="18900838604">
+			<tr target="sid_user" rel="field5">
 				<td>宽带拆机</td>
 				<td>100</td>
 				<td>正常</td>
@@ -60,7 +64,7 @@
 					<a title="编辑" target="dialog" href="salesdatafieldsedit.jsp?id=xxx" width="550" height="200" class="btnEdit">编辑</a>
 				</td>
 			</tr>
-			<tr target="sid_user" rel="18900838605">
+			<tr target="sid_user" rel="field6">
 				<td>宽带移机（装）</td>
 				<td>100</td>
 				<td>已删除</td>
@@ -68,7 +72,7 @@
 					<a title="编辑" target="dialog" href="salesdatafieldsedit.jsp?id=xxx" width="550" height="200" class="btnEdit">编辑</a>
 				</td>
 			</tr>
-			<tr target="sid_user" rel="18900838606">
+			<tr target="sid_user" rel="field7">
 				<td>宽带移机（拆）</td>
 				<td>100</td>
 				<td>已删除</td>
@@ -76,7 +80,7 @@
 					<a title="编辑" target="dialog" href="salesdatafieldsedit.jsp?id=xxx" width="550" height="200" class="btnEdit">编辑</a>
 				</td>
 			</tr>
-			<tr target="sid_user" rel="1890083867">
+			<tr target="sid_user" rel="field8">
 				<td>宽带在途订单</td>
 				<td>100</td>
 				<td>正常</td>

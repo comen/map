@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    
+ <%@include file="validate.jsp" %>
 
 <div class="pageContent">
 	<form method="post" action="ajaxDone.jsp" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">

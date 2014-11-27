@@ -9,45 +9,46 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.com.chinatelecom.map.handle.IHandler;
-import cn.com.chinatelecom.map.handle.LoginHandler;
+import cn.com.chinatelecom.map.handle.ChangePwdHandler;
 import cn.com.chinatelecom.map.process.IProcessor;
-import cn.com.chinatelecom.map.process.PageProcessor;
+import cn.com.chinatelecom.map.process.DataProcessor;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class ChangePwdServlet
  */
-@WebServlet(description = "User Login", urlPatterns = { "/jsp/login" })
-public class LoginServlet extends HttpServlet {
-
+@WebServlet(description = "Change password", urlPatterns = { "/jsp/changePwd" })
+public class ChangePwdServlet extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;
 	private IHandler handler;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public LoginServlet() {
-		super();
-		processor = new PageProcessor();
-		handler = new LoginHandler();
-	}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ChangePwdServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+        processor = new DataProcessor();
+		handler = new ChangePwdHandler();
+    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		processor.process(request, handler, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		processor.process(request, handler, response);
 	}
-	
+
 }

@@ -18,11 +18,11 @@ body {
 	font: 12px/16px Verdana, Helvetica, Arial, '微软雅黑';
 }
 
-#container {
+#mapcontainer {
 	height: 100%;
 }
 </style>
-<script type="text/javascript" src="js/HashMap.js"></script>
+<script type="text/javascript" src="../js/HashMap.js"></script>
 <script type="text/javascript"
 	src="http://api.map.baidu.com/api?v=1.5&ak=msbblC5TGVpnQnafevVen547"></script>
 <script type="text/javascript"
@@ -31,9 +31,9 @@ body {
 	href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
 </head>
 <body>
-	<div id="container"></div>
+	<div id="mapcontainer"></div>
 	<script type="text/javascript">
-		var map = new BMap.Map("container");
+		var map = new BMap.Map("mapcontainer");
 		var center = new BMap.Point(121.42000, 31.29336);
 		map.centerAndZoom(center, 13);
 		map.addControl(new BMap.OverviewMapControl());
