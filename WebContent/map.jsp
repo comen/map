@@ -36,6 +36,7 @@ body {
 		var map;
 		var center = new BMap.Point(121.42000, 31.29336);
 		var xmlHttp;
+		var message;
 
 		setMap();
 		fetch();
@@ -67,26 +68,6 @@ body {
 					fetch();
 				}
 			});
-
-			map.addEventListener("dblclick", function(event) {
-				var fso = new ActiveXObject("Scripting.FileSystemObject");
-				var file = fso.OpenTextFile("C:\\path.txt", 8, true);
-				file.WriteLine("{LONGTITUDE:" + event.point.lng.toFixed(5)
-						+ ",LATITUDE:" + event.point.lat.toFixed(5) + "}");
-				file.Close();
-			});
-		}
-
-		function fetch() {
-			createXmlHttp();
-			xmlHttp.onreadystatechange = callBack;
-			xmlHttp.open("post", "fetch", true);
-			xmlHttp.setRequestHeader("Content-Type",
-					"multipart/form-data;boundary=map");
-
-			var formData = new FormData();
-			formData.append("zoom", map.getZoom());
-			xmlHttp.send(formData);
 		}
 
 		function createXmlHttp() {
@@ -97,7 +78,39 @@ body {
 			}
 		}
 
-		function callBack() {
+		function fetch() {
+			createXmlHttp();
+			xmlHttp.onreadystatechange = showGrid;
+			xmlHttp.open("post", "fetch", true);
+			xmlHttp.setRequestHeader("Content-Type",
+					"multipart/form-data;boundary=map");
+
+			var formData = new FormData();
+			formData.append("zoom", map.getZoom());
+			xmlHttp.send(formData);
+		}
+
+		function info(point) {
+			createXmlHttp();
+			xmlHttp.onreadystatechange = showInfo;
+			xmlHttp.open("post", "info", true);
+			xmlHttp.setRequestHeader("Content-Type",
+					"multipart/form-data;boundary=map");
+
+			var formData = new FormData();
+			formData.append("zoom", map.getZoom());
+			formData.append("longtitude", point.lng.toFixed(5));
+			formData.append("latitude", point.lat.toFixed(5));
+			xmlHttp.send(formData);
+		}
+
+		function showInfo() {
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+				message = xmlHttp.responseText;
+			}
+		}
+
+		function showGrid() {
 			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 				var grids = xmlHttp.responseText;
 				grids = eval(grids);
@@ -129,31 +142,28 @@ body {
 					var path = polygon.getPath();
 					var lngsum = Number(path[0].lng.toFixed(5));
 					var latsum = Number(path[0].lat.toFixed(5));
-					var message = "Path:(" + lngsum + "," + latsum + ")";
 					for (var i = 1; i < path.length; i++) {
 						var point = path[i];
 						lngsum = lngsum + Number(point.lng.toFixed(5));
 						latsum = latsum + Number(point.lat.toFixed(5));
-						message = message + ",(" + point.lng.toFixed(5) + ","
-								+ point.lat.toFixed(5) + ")";
 					}
 					lngsum = lngsum / path.length;
 					latsum = latsum / path.length;
 
-					var infoWindow = new BMap.InfoWindow(message, {
-						width : 200,
-						height : 100,
-						title : "北区局",
-						enableMessage : true,
-						message : message,
-						enableCloseOnClick : true
-					});
 					var editable = false;
 					function openInfo(event) {
 						if (editable)
 							return;
-						map.openInfoWindow(infoWindow, new BMap.Point(lngsum,
-								latsum));
+						info(event.point);
+						if (message.length == 0)
+							return;
+						map.openInfoWindow(new BMap.InfoWindow(message, {
+							width : 200,
+							height : 100,
+							title : "网格数据",
+							message: message,
+							enableCloseOnClick : true
+						}), new BMap.Point(lngsum, latsum));
 						polygon.setStrokeWeight(3);
 						polygon.setStrokeOpacity(0.8);
 						polygon.setFillOpacity(0.8);
@@ -165,6 +175,7 @@ body {
 						polygon.setFillOpacity(0.5);
 					}
 					function switchEdit(event) {
+						closeInfo(event);
 						if (editable) {
 							editable = false;
 							polygon.disableEditing();
