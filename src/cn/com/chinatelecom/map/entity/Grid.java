@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javafx.scene.shape.Polygon;
 import cn.com.chinatelecom.map.common.MongoDB;
 
 import com.mongodb.BasicDBList;
@@ -138,6 +139,36 @@ public class Grid {
 			gl.add(new Grid(dbo));
 		}
 		return gl;
+	}
+
+	public boolean contains(Coordinate coordinate) {
+		if (coordinates == null || coordinates.isEmpty()) {
+			return false;
+		}
+
+		int size = coordinates.size();
+		double[] points = new double[size * 2];
+		for (int i = 0; i < size; i++) {
+			points[i * 2] = coordinates.get(i).getLongtitude();
+			points[i * 2 + 1] = coordinates.get(i).getLatitude();
+		}
+		Polygon polygon = new Polygon(points);
+		if (polygon.contains(coordinate.getLongtitude(),
+				coordinate.getLatitude())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public String toInfo() {
+		StringBuffer sb = new StringBuffer("网格名称:" + name + "<br/>");
+		if (1 != code.length()) {
+			sb.append("网格编号:" + code + "<br/>");
+			sb.append("网格经理:" + manager + "<br/>");
+			sb.append("网格地址:" + address);
+		}
+		return sb.toString();
 	}
 
 	@Override
