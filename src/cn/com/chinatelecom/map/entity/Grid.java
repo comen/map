@@ -164,7 +164,7 @@ public class Grid {
 	public String toInfo() {
 		StringBuffer sb = new StringBuffer("网格名称:" + name + "<br/>");
 		if (1 != code.length()) {
-			sb.append("网格ID:" + code + "<br/>");
+			sb.append("网格编号:" + code + "<br/>");
 			sb.append("网格经理:" + manager + "<br/>");
 			sb.append("网格地址:" + address);
 		}

@@ -66,7 +66,7 @@ public class InfoHandler implements IHandler {
 			for (int i = 1; i <= 4; i++) {
 				grid = new Grid("{GRID_CODE:'" + i + "'}");
 				grid = Grid.findOne(grid.toString());
-				if (grid.contains(coordinate)) {
+				if (null != grid && grid.contains(coordinate)) {
 					result.put("grid", grid.toInfo());
 					break;
 				}
