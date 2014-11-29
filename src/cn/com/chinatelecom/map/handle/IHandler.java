@@ -12,6 +12,5 @@ import org.apache.commons.fileupload.FileItem;
 public interface IHandler {
 
 	public Map<String, Object> handle(List<FileItem> items);
-//	public Object handle(Object object);
 
 }

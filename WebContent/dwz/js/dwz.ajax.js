@@ -16,16 +16,22 @@ function validateCallback(form, callback, confirmMsg) {
 		return false;
 	}
 	
+//	{ Added by Shelwin
 	var $formData = new FormData(form);
+//	} End
 	
 	var _submitFn = function(){
 		$.ajax({
 			type: form.method || 'POST',
 			url:$form.attr("action"),
+//			{ Added by Shelwin
 			contentType:false,
 			processData:false,
 			data:$formData,
+//			} End
+//			{ Deleted by Shelwin
 //			data:$form.serializeArray(),
+//			} End
 			dataType:"json",
 			cache: false,
 			success: callback || DWZ.ajaxDone,
@@ -180,7 +186,11 @@ function dialogAjaxDone(json){
 function navTabSearch(form, navTabId){
 	var $form = $(form);
 	if (form[DWZ.pageInfo.pageNum]) form[DWZ.pageInfo.pageNum].value = 1;
-	navTab.reload($form.attr('action'), {data: $form.serializeArray(), navTabId:navTabId});
+	var $formData = new FormData(form);
+//	{ Modified by Shelwin
+//	navTab.reload($form.attr('action'), {data: $form.serializeArray(), navTabId:navTabId});
+	navTab.reload($form.attr('action'), {contentType: false, processData: false, data: $formData, navTabId:navTabId});
+//	} End
 	return false;
 }
 /**
@@ -289,6 +299,11 @@ function ajaxTodo(url, callback){
 	$.ajax({
 		type:'POST',
 		url:url,
+//		{ Added by Shelwin
+//		contentType:false,
+//		processData:false,
+//		data:$formData,
+//		} End
 		dataType:"json",
 		cache: false,
 		success: $callback,

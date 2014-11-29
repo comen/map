@@ -9,16 +9,17 @@ import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
 /**
- * @author joseph
+ * @author Shelwin
  * 
  */
 public class User {
 	
-	protected String userName;
-	protected String password;
-	protected String role; /* 1 - System Administrator; 2 - Grid Data Administrator; 3 - Sales Data Administrator; 4 - Normal User */
-	protected String realName;
-	protected String department;
+	private String userName;
+	private String password;
+	private String role; /* 1 - System Administrator; 2 - Grid Data Administrator; 3 - Sales Data Administrator; 4 - Normal User */
+	private String realName;
+	private String department;
+	private String createDate;
 	
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -30,6 +31,18 @@ public class User {
 	
 	public void setRole(String role) {
 		this.role = role;
+	}
+	
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+	
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+	
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 	
 	public String getUserName() {
@@ -44,6 +57,18 @@ public class User {
 		return role;
 	}
 	
+	public String getRealName() {
+		return realName;
+	}
+	
+	public String getDepartment() {
+		return department;
+	}
+	
+	public String getCreateDate() {
+		return createDate;
+	}
+	
 	public User() {
 		
 	}
@@ -54,6 +79,7 @@ public class User {
 		this.role = user.role;
 		this.realName = user.realName;
 		this.department = user.department;
+		this.createDate = user.createDate;
 	}
 
 	public User(String json) {
@@ -76,6 +102,15 @@ public class User {
 		}
 		if (dbo.get("role") != null) {
 			role = dbo.get("role").toString();
+		}
+		if (dbo.get("realname") != null) {
+			realName = dbo.get("realname").toString();
+		}
+		if (dbo.get("department") != null) {
+			department = dbo.get("department").toString();
+		}
+		if (dbo.get("createdate") != null) {
+			createDate = dbo.get("createdate").toString();
 		}
 	}
 	
@@ -121,6 +156,15 @@ public class User {
 		}
 		if (role != null) {
 			sb.append(",'role':" + role);
+		}
+		if (realName != null) {
+			sb.append(",'realname':'" + realName + "'");
+		}
+		if (department != null) {
+			sb.append(",'department':'" + department + "'");
+		}
+		if (createDate != null) {
+			sb.append(",'createdate':'" + createDate + "'");
 		}
 		sb.append("}");
 		return sb.toString();

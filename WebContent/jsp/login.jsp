@@ -1,30 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 
-<%@ page import="cn.com.chinatelecom.map.common.CurrentUser" %>
-<%-- Check if user click logout. --%>
 <%
-	String status = request.getParameter("status");
+	String loginState = "F"; 	
+	String userName = "";
+	int role = 0;
+	String errMsg = "";
 	
+	/* Check if user click logout. */
+	String status = request.getParameter("status");
 	if (status != null && status.equals("logout")) {
 		session.invalidate();
-	}
-%>
-
-<%-- Validate if user login successfully. --%>
-<%@include file="validate.jsp" %>
-
-<%-- If login successfully, then go to index page; Else show error message. --%>
-<%
-	String errMsg = "";
-	try {
-	if (loginState.equals("S")) {
-		String path = "index.jsp";
-		response.sendRedirect(path);
 	} else {
-		session.invalidate();
-		errMsg = "用户名或密码错误！";
-	}} catch (Exception e) {}
+		/* Validate if user login successfully. */
+		try {
+			loginState = (String)session.getAttribute("loginstate");
+			if (loginState.equals("S")) {
+				//userName = (String)session.getAttribute("username");
+				//role = Integer.parseInt((String)session.getAttribute("role"));
+				/* Login successfully, go to index page */
+				String path = "index.jsp";
+				response.sendRedirect(path);
+			} else {
+				session.invalidate();
+				errMsg = "用户名或密码错误！";
+			}
+		} catch (Exception e) {
+			System.out.println(e.getClass() + "\t:\t" + e.getMessage());
+		}
+	}
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -33,48 +37,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>中国电信上海分公司北区局用户数据信息化系统</title>
 <link href="../dwz/themes/css/login.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript">
-	function validateRequired(field, alerttxt) {
-		with (field) {
-			if (value == null || value == "") {
-				alert(alerttxt);
-				return false;
-			}
-			else {
-				return true;
-			}
-		}
-	}
-	
-	function validateSelected(field, alerttxt) {
-		with (field) {
-			if (value == null || value == "0") {
-				alert(alerttxt);
-				return false;
-			}
-			else {
-				return true;
-			}
-		}
-	}
-	
-	function validateForm(thisform) {
-		with (thisform) {
-			if (validateRequired(username, "请输入用户名！") == false) {
-				username.focus();
-				return false;
-			}
-			if (validateRequired(password, "请输入密码！") == false) {
-				password.focus();
-				return false;
-			}
-			if (validateSelected(role, "请选择角色！") == false) {
-				role.focus();
-				return false;
-			}
-		}
-	}
-</script>
+<script src="../js/Utility.js" type="text/javascript"></script>
 </head>
 
 <body>

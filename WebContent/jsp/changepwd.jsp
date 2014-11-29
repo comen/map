@@ -6,7 +6,7 @@
 
 <div class="pageContent">
 
-	<form method="post" action="changePwd" enctype="multipart/form-data;boundary=AAA" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)"> 
+	<form method="post" action="changePwd" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)"> 
 		<div class="pageFormContent" layoutH="58">
 
 			<input type="hidden" name="username" value="<%=userName%>" />

@@ -1,35 +1,44 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%-- Validate if user login successfully. --%>
-<%@include file="validate.jsp" %>
-
-<%-- If login successfully, then prepare to show; Else go to login page. --%>
 <%
+	String loginState = "F"; 	
+	String userName = "";
+	int role = 0;
 	String roleText = "";
+	
+	/* Validate if user login successfully. */
 	try {
-	if (loginState.equals("F")) {
+		loginState = (String)session.getAttribute("loginstate");
+		if (loginState.equals("S")) {
+			userName = (String)session.getAttribute("username");
+			role = Integer.parseInt((String)session.getAttribute("role"));
+			switch (role) {
+			case 1:
+				roleText = "系统管理员";
+				break;
+			case 2:
+				roleText = "网格数据管理员";
+				break;
+			case 3:
+				roleText = "营销数据管理员";
+				break;
+			case 4:
+				roleText = "普通用户";
+				break;
+			default:
+				roleText = "未知角色";
+				break;
+			}
+		} else {
+			String path = "login.jsp";
+			response.sendRedirect(path);
+		}
+	} catch (Exception e) {
+		System.out.println(e.getClass() + "\t:\t" + e.getMessage());
 		String path = "login.jsp";
 		response.sendRedirect(path);
-	} else {
-		switch (role) {
-		case 1:
-			roleText = "系统管理员";
-			break;
-		case 2:
-			roleText = "网格数据管理员";
-			break;
-		case 3:
-			roleText = "营销数据管理员";
-			break;
-		case 4:
-			roleText = "普通用户";
-			break;
-		default:
-			roleText = "未知角色";
-			break;
-		}
-	}}catch (Exception e) {}
+	}
 %>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -95,6 +104,8 @@
 -->
 <script src="../dwz/js/dwz.regional.zh.js" type="text/javascript"></script>
 
+<script src="../js/Utility.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 $(function(){
 	DWZ.init("../dwz/dwz.frag.xml", {
@@ -156,26 +167,26 @@ $(function(){
 						<ul class="tree treeFolder">
 							<li><a>系统管理员</a>
 								<ul>
-									<li><a href="userlist.jsp" target="navTab" rel="userlist1" title="系统管理员">浏览</a></li>
-									<li><a href="useradd.jsp" target="navTab" rel="useradd1" title="系统管理员">新建</a></li>
+									<li><a href="userlist.jsp?role=1" target="navTab" rel="userlist1" title="系统管理员">浏览</a></li>
+									<li><a href="useradd.jsp?role=1" target="navTab" rel="useradd1" title="系统管理员">新建</a></li>
 								</ul>
 							</li>
 							<li><a>网格数据管理员</a>
 								<ul>
-									<li><a href="userlist.jsp" target="navTab" rel="userlist2" title="网格数据管理员">浏览</a></li>
-									<li><a href="useradd.jsp" target="navTab" rel="useradd2" title="网格数据管理员">新建</a></li>
+									<li><a href="userlist.jsp?role=2" target="navTab" rel="userlist2" title="网格数据管理员">浏览</a></li>
+									<li><a href="useradd.jsp?role=2" target="navTab" rel="useradd2" title="网格数据管理员">新建</a></li>
 								</ul>
 							</li>
 							<li><a>营销数据管理员</a>
 								<ul>
-									<li><a href="userlist.jsp" target="navTab" rel="userlist3" title="营销数据管理员">浏览</a></li>
-									<li><a href="useradd.jsp" target="navTab" rel="useradd3" title="营销数据管理员">新建</a></li>
+									<li><a href="userlist.jsp?role=3" target="navTab" rel="userlist3" title="营销数据管理员">浏览</a></li>
+									<li><a href="useradd.jsp?role=3" target="navTab" rel="useradd3" title="营销数据管理员">新建</a></li>
 								</ul>
 							</li>
 							<li><a>普通用户</a>
 								<ul>
-									<li><a href="userlist.jsp" target="navTab" rel="userlist4" title="普通用户">浏览</a></li>
-									<li><a href="useradd.jsp" target="navTab" rel="useradd4" title="普通用户">新建</a></li>
+									<li><a href="userlist.jsp?role=4" target="navTab" rel="userlist4" title="普通用户">浏览</a></li>
+									<li><a href="useradd.jsp?role=4" target="navTab" rel="useradd4" title="普通用户">新建</a></li>
 								</ul>
 							</li>
 						</ul>

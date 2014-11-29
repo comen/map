@@ -16,8 +16,13 @@ Else,
 		if (loginState.equals("S")) {
 			userName = (String)session.getAttribute("username");
 			role = Integer.parseInt((String)session.getAttribute("role"));
+		} else {
+			String path = "login.jsp";
+			response.sendRedirect(path);
 		}
 	} catch (Exception e) {
 		System.out.println(e.getClass() + "\t:\t" + e.getMessage());
+		String path = "login.jsp";
+		response.sendRedirect(path);
 	}
 %>
