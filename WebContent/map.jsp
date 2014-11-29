@@ -18,7 +18,7 @@ body {
 	font: 12px/16px Verdana, Helvetica, Arial, '微软雅黑';
 }
 
-#container {
+#mapcontainer {
 	height: 100%;
 }
 </style>
@@ -26,17 +26,14 @@ body {
 <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript"
 	src="http://api.map.baidu.com/api?v=1.5&ak=msbblC5TGVpnQnafevVen547"></script>
-<script type="text/javascript"
-	src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
-<link rel="stylesheet"
-	href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
 </head>
 <body>
-	<div id="container"></div>
+	<div id="mapcontainer"></div>
 	<script type="text/javascript">
+		var currAjax;
 		var map = (function() {
 			var center = new BMap.Point(121.42000, 31.29336);
-			map = new BMap.Map("container");
+			map = new BMap.Map("mapcontainer");
 			map.centerAndZoom(center, 13);
 			map.addControl(new BMap.OverviewMapControl());
 			map.addControl(new BMap.NavigationControl());
@@ -51,11 +48,27 @@ body {
 						+ point.lng.toFixed(5) + "," + point.lat.toFixed(5)
 						+ ")";
 			});
+			map.addEventListener("dragend", function(event) {
+				fetch();
+			});
 			map.addEventListener("zoomend", function(event) {
 				var zoomLevel = map.getZoom();
+				switch (zoomLevel) {
+				case 14:
+				case 15:
+					window.document.title = "分局信息";
+					break;
+				case 16:
+				case 17:
+				case 18:
+				case 19:
+					window.document.title = "网格信息";
+					break;
+				default:
+					window.document.title = "北区局信息";
+					break;
+				}
 				document.getElementById("info").innerHTML = zoomLevel;
-				map.closeInfoWindow();
-				map.clearOverlays();
 				if (zoomLevel > 11) {
 					fetch();
 				}
@@ -65,38 +78,61 @@ body {
 		})();
 
 		function fetch() {
+			if (currAjax) {
+				currAjax.abort();
+			}
+			map.closeInfoWindow();
+			map.clearOverlays();
+			
 			var formData = new FormData();
 			formData.append("zoom", map.getZoom());
-
-			$.ajax({
+			
+			currAjax = $.ajax({
 				url : 'fetch',
 				type : 'POST',
 				data : formData,
+				timeout: 3000,
 				async : true,
-				cache : false,
+				cache : true,
 				contentType : false,
 				processData : false,
 				success : function(respText) {
 					var grids = eval(respText);
 					var polygons = new HashMap();
+					var independ = new HashMap();
+					var zoom = map.getZoom();
 					for (var i = 0; i < grids.length; i++) {
-						var code = grids[i].GRID_CODE;
+						var code = grids[i].c;
 						var points = new Array();
-						if (grids[i].GRID_COORDINATES != null) {
-							var coordinates = grids[i].GRID_COORDINATES;
+						if (grids[i].p != null && grids[i].p.length > 2) {
+							var coordinates = grids[i].p;
 							for (var j = 0; j < coordinates.length; j++) {
-								var point = new BMap.Point(coordinates[j].LONGTITUDE, coordinates[j].LATITUDE);
+								var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
 								points.push(point);
 							}
+							var polygon = new BMap.Polygon(points, {
+								strokeColor : "blue",
+								strokeWeight : 1,
+								strokeOpacity : 0.5,
+								fillOpacity : 0.5
+							});
+							polygons.put(code, polygon);
+						} else if (zoom > 15) {
+							independ.put(code, grids[i].d);
 						}
-						var polygon = new BMap.Polygon(points, {
-							strokeColor : "blue",
-							strokeWeight : 1,
-							strokeOpacity : 0.5,
-							fillOpacity : 0.5
-						});
-						polygons.put(code, polygon);
 					}
+					
+					independ.foreach(function(index, code, address) {
+						var geo = new BMap.Geocoder();
+						geo.getPoint(address, function(point){
+							if (point && map.getBounds().containsPoint(point)) {
+								var marker = new BMap.Marker(point);
+								map.addOverlay(marker);
+								var label = new BMap.Label(code,{offset:new BMap.Size(20,-10)});
+								marker.setLabel(label);
+							}
+						}, "上海市");
+					});
 
 					polygons.foreach(function(index, code, polygon) {
 						map.addOverlay(polygon);

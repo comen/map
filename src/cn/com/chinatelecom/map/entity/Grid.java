@@ -160,6 +160,24 @@ public class Grid {
 			return false;
 		}
 	}
+	
+	public String toFetch() {
+		StringBuffer sb = new StringBuffer("{c:'" + code + "'");
+		if (address != null) {
+			sb.append(",d:'" + address + "'");
+		}
+		if (coordinates != null && !coordinates.isEmpty()) {
+			sb.append(",p:[");
+			for (Coordinate coordinate : coordinates) {
+				sb.append("{a:" + coordinate.getLatitude()
+						+ ",o:" + coordinate.getLongtitude() + "},");
+			}
+			sb.deleteCharAt(sb.length() - 1);
+			sb.append("]");
+		}
+		sb.append("}");
+		return sb.toString();
+	}
 
 	public String toInfo() {
 		StringBuffer sb = new StringBuffer("网格名称:" + name + "<br/>");
