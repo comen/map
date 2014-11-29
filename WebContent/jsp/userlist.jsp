@@ -36,6 +36,12 @@
 	}
 %>
 
+<script type="text/javascript">
+
+	
+
+</script>
+
 <form id="pagerForm" method="post" action="userlist.jsp?role=<%=roleSeleted%>">
 	<input type="hidden" name="status" value="${param.status}">
 	<input type="hidden" name="keywords" value="${param.keywords}" />
