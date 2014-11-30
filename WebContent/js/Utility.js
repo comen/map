@@ -6,6 +6,20 @@ function testAlert(txt) {
 	alert(txt);
 }
 
+function showTooltip(obj) {
+	
+}
+
+function changeState(obj) {
+	if(obj.textContent == '正常') {
+		obj.title = '确定要删除该字段吗?';
+		obj.textContent = '已删除';
+	} else {
+		obj.title = '确定要恢复该字段吗?';
+		obj.textContent = '正常';
+	}
+}
+
 function updateHref(thisRow, anchorId) {
 	var href = document.getElementById(anchorId).href;
 	var cells = thisRow.getElementsByTagName("td");

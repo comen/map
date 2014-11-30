@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta name="robots" content="noindex, nofollow" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -102,18 +102,34 @@ var callback= callback || function(v){
 <body>
 	<div id="upload">
 		<div id="buttonArea">
-			<div id="controlBtns" style="display:none;"><a href="javascript:void(0);" id="btnClear" onclick="removeFile();" class="btn" style="display:none;"><span><img src="img/clear.gif" /> 删除文件</span></a> <a href="javascript:void(0);" id="btnStart" onclick="startUploadFiles();" class="btn"><span><img src="img/start.gif" /> 开始上传</span></a></div>
-			<a href="javascript:void(0);" id="addFiles" class="btn"><span><div id="divAddFiles">添加文件</div></span></a>
+			<div id="controlBtns" style="display: none;">
+				<a href="javascript:void(0);" id="btnClear" onclick="removeFile();"
+					class="btn" style="display: none;"><span><img
+						src="img/clear.gif" /> 删除文件</span></a> <a href="javascript:void(0);"
+					id="btnStart" onclick="startUploadFiles();" class="btn"><span><img
+						src="img/start.gif" /> 开始上传</span></a>
+			</div>
+			<a href="javascript:void(0);" id="addFiles" class="btn"><span><div
+						id="divAddFiles">添加文件</div></span></a>
 		</div>
 		<div id="listArea">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<thead id="listTitle"><tr><td width="53%">文件名</td><td width="25%">大小</td><td width="22%">状态</td></tr></thead>
+				<thead id="listTitle">
+					<tr>
+						<td width="53%">文件名</td>
+						<td width="25%">大小</td>
+						<td width="22%">状态</td>
+					</tr>
+				</thead>
 				<tbody id="listBody">
 				</tbody>
 			</table>
 		</div>
 		<div id="progressArea">
-			<div id="progressBar"><span>0%</span><div id="progress" style="width:1px;"></div></div>
+			<div id="progressBar">
+				<span>0%</span>
+				<div id="progress" style="width: 1px;"></div>
+			</div>
 		</div>
 	</div>
 </body>

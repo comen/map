@@ -16,7 +16,7 @@ import cn.com.chinatelecom.map.process.PageProcessor;
 /**
  * Servlet implementation class UploadServlet
  */
-@WebServlet(description = "Upload file", urlPatterns = { "/upload" })
+@WebServlet(description = "Upload file", urlPatterns = { "/jsp/upload" })
 public class UploadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

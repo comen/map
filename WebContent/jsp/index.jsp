@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 <%
 	String loginState = "F"; 	
@@ -40,7 +40,7 @@
 		response.sendRedirect(path);
 	}
 %>
-    
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -48,10 +48,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>中国电信上海分公司北区局用户数据信息化系统</title>
 
-<link href="../dwz/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="../dwz/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="../dwz/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
-<link href="../dwz/uploadify/css/uploadify.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="../dwz/themes/default/style.css" rel="stylesheet"
+	type="text/css" media="screen" />
+<link href="../dwz/themes/css/core.css" rel="stylesheet" type="text/css"
+	media="screen" />
+<link href="../dwz/themes/css/print.css" rel="stylesheet"
+	type="text/css" media="print" />
+<link href="../dwz/uploadify/css/uploadify.css" rel="stylesheet"
+	type="text/css" media="screen" />
 <!--[if IE]>
 <link href="../dwz/themes/css/ieHack.css" rel="stylesheet" type="text/css" media="screen"/>
 <![endif]-->
@@ -63,9 +67,12 @@
 <script src="../dwz/js/jquery.cookie.js" type="text/javascript"></script>
 <script src="../dwz/js/jquery.validate.js" type="text/javascript"></script>
 <script src="../dwz/js/jquery.bgiframe.js" type="text/javascript"></script>
-<script src="../dwz/xheditor/xheditor-1.2.1.min.js" type="text/javascript"></script>
-<script src="../dwz/xheditor/xheditor_lang/zh-cn.js" type="text/javascript"></script>
-<script src="../dwz/uploadify/scripts/jquery.uploadify.js" type="text/javascript"></script>
+<script src="../dwz/xheditor/xheditor-1.2.1.min.js"
+	type="text/javascript"></script>
+<script src="../dwz/xheditor/xheditor_lang/zh-cn.js"
+	type="text/javascript"></script>
+<script src="../dwz/uploadify/scripts/jquery.uploadify.js"
+	type="text/javascript"></script>
 
 <script src="../dwz/js/dwz.core.js" type="text/javascript"></script>
 <script src="../dwz/js/dwz.util.date.js" type="text/javascript"></script>
@@ -131,8 +138,11 @@ $(function(){
 				<!-- <a class="logo" href="http://j-ui.com">标志</a> -->
 				<img src="../dwz/themes/default/images/logo.png" />
 				<ul class="nav">
-					<li><span style="color:#ddd"><%=roleText%></span><span style="color:red">&nbsp;<%=userName%>&nbsp;</span><span style="color:#ddd">, 欢迎你！</span></a></li>
-					<li><a href="changepwd.jsp" target="dialog" width="550" height="250">修改密码</a></li>
+					<li><span style="color: #ddd"><%=roleText%></span><span
+						style="color: red">&nbsp;<%=userName%>&nbsp;
+					</span><span style="color: #ddd">, 欢迎你！</span></a></li>
+					<li><a href="changepwd.jsp" target="dialog" width="550"
+						height="250">修改密码</a></li>
 					<li><a href="login.jsp?status=logout">退出</a></li>
 				</ul>
 				<!-- 
@@ -147,52 +157,77 @@ $(function(){
 			</div>
 
 			<!-- navMenu -->
-			
+
 		</div>
 
 		<div id="leftside">
 			<div id="sidebar_s">
 				<div class="collapse">
-					<div class="toggleCollapse"><div></div></div>
+					<div class="toggleCollapse">
+						<div></div>
+					</div>
 				</div>
 			</div>
 			<div id="sidebar">
-				<div class="toggleCollapse"><h2>主菜单</h2><div>收缩</div></div>
+				<div class="toggleCollapse">
+					<h2>主菜单</h2>
+					<div>收缩</div>
+				</div>
 
 				<div class="accordion" fillSpace="sidebar">
 					<div class="accordionHeader">
-						<h2><span>Folder</span>用户数据管理</h2>
+						<h2>
+							<span>Folder</span>地图数据展示
+						</h2>
+					</div>
+					<div class="accordionContent">
+						<ul class="tree treeFolder">
+							<li>
+								<a href="map.jsp" target="navTab" rel="map" title="百度地图" external="true">百度地图</a>
+							</li>
+						</ul>
+					</div>
+					<div class="accordionHeader">
+						<h2>
+							<span>Folder</span>用户数据管理
+						</h2>
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
 							<li><a>系统管理员</a>
 								<ul>
-									<li><a href="userlist.jsp?role=1" target="navTab" rel="userlist1" title="系统管理员">浏览</a></li>
-									<li><a href="useradd.jsp?role=1" target="navTab" rel="useradd1" title="系统管理员">新建</a></li>
-								</ul>
-							</li>
+									<li><a href="userlist.jsp?role=1" target="navTab"
+										rel="userlist1" title="系统管理员">浏览</a></li>
+									<li><a href="useradd.jsp?role=1" target="navTab"
+										rel="useradd1" title="系统管理员">新建</a></li>
+								</ul></li>
 							<li><a>网格数据管理员</a>
 								<ul>
-									<li><a href="userlist.jsp?role=2" target="navTab" rel="userlist2" title="网格数据管理员">浏览</a></li>
-									<li><a href="useradd.jsp?role=2" target="navTab" rel="useradd2" title="网格数据管理员">新建</a></li>
-								</ul>
-							</li>
+									<li><a href="userlist.jsp?role=2" target="navTab"
+										rel="userlist2" title="网格数据管理员">浏览</a></li>
+									<li><a href="useradd.jsp?role=2" target="navTab"
+										rel="useradd2" title="New 网格数据管理员">新建</a></li>
+								</ul></li>
 							<li><a>营销数据管理员</a>
 								<ul>
-									<li><a href="userlist.jsp?role=3" target="navTab" rel="userlist3" title="营销数据管理员">浏览</a></li>
-									<li><a href="useradd.jsp?role=3" target="navTab" rel="useradd3" title="营销数据管理员">新建</a></li>
-								</ul>
-							</li>
+									<li><a href="userlist.jsp?role=3" target="navTab"
+										rel="userlist3" title="营销数据管理员">浏览</a></li>
+									<li><a href="useradd.jsp?role=3" target="navTab"
+										rel="useradd3" title="营销数据管理员">新建</a></li>
+								</ul></li>
 							<li><a>普通用户</a>
 								<ul>
-									<li><a href="userlist.jsp?role=4" target="navTab" rel="userlist4" title="普通用户">浏览</a></li>
-									<li><a href="useradd.jsp?role=4" target="navTab" rel="useradd4" title="普通用户">新建</a></li>
-								</ul>
-							</li>
+									<li><a href="userlist.jsp?role=4" target="navTab"
+										rel="userlist4" title="普通用户">浏览</a></li>
+									<li><a href="useradd.jsp?role=4" target="navTab"
+										rel="useradd4" title="普通用户">新建</a></li>
+								</ul></li>
 						</ul>
 					</div>
 					<div class="accordionHeader">
-						<h2><span>Folder</span>网格数据管理</h2>
+						<h2>
+							<span>Folder</span>网格数据管理
+						</h2>
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
@@ -200,32 +235,16 @@ $(function(){
 						</ul>
 					</div>
 					<div class="accordionHeader">
-						<h2><span>Folder</span>营销数据管理</h2>
+						<h2>
+							<span>Folder</span>营销数据管理
+						</h2>
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a href="salesdataupload.jsp" target="navTab" rel="salesdataupload">通过Excel文件上传</a></li>
-							<li><a>按日显示</a>
-								<ul>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="day_office" title="按日 北区局级">北区局级</a></li>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="day_suboffice" title="按日 分局级">分局级</a></li>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="day_grid" title="按日 网格级">网格级</a></li>
-								</ul>
-							</li>
-							<li><a>按周显示</a>
-								<ul>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="week_office" title="按周 北区局级">北区局级</a></li>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="week_suboffice" title="按周 分局级">分局级</a></li>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="week_grid" title="按周 网格级">网格级</a></li>
-								</ul>
-							</li>
-							<li><a>按月显示</a>
-								<ul>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="month_office" title="按月 北区局级">北区局级</a></li>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="month_suboffice" title="按月 分局级">分局级</a></li>
-									<li><a href="salesdatafields.jsp" target="navTab" rel="month_grid" title="按月 网格级">网格级</a></li>
-								</ul>
-							</li>
+							<li><a href="salesdataupload.jsp" target="navTab"
+								rel="salesdataupload">营销数据上传</a></li>
+							<li><a href="salesdatafields.jsp" target="navTab"
+								rel="salesdatafields">营销字段管理</a></li>
 						</ul>
 					</div>
 				</div>
@@ -234,13 +253,17 @@ $(function(){
 		<div id="container">
 			<div id="navTab" class="tabsPage">
 				<div class="tabsPageHeader">
-					<div class="tabsPageHeaderContent"><!-- 显示左右控制时添加 class="tabsPageHeaderMargin" -->
+					<div class="tabsPageHeaderContent">
+						<!-- 显示左右控制时添加 class="tabsPageHeaderMargin" -->
 						<ul class="navTab-tab">
-							<li tabid="main" class="main"><a href="javascript:;"><span><span class="home_icon">我的主页</span></span></a></li>
+							<li tabid="main" class="main"><a href="javascript:;"><span><span
+										class="home_icon">我的主页</span></span></a></li>
 						</ul>
 					</div>
-					<div class="tabsLeft">left</div><!-- 禁用只需要添加一个样式 class="tabsLeft tabsLeftDisabled" -->
-					<div class="tabsRight">right</div><!-- 禁用只需要添加一个样式 class="tabsRight tabsRightDisabled" -->
+					<div class="tabsLeft">left</div>
+					<!-- 禁用只需要添加一个样式 class="tabsLeft tabsLeftDisabled" -->
+					<div class="tabsRight">right</div>
+					<!-- 禁用只需要添加一个样式 class="tabsRight tabsRightDisabled" -->
 					<div class="tabsMore">more</div>
 				</div>
 				<ul class="tabsMoreList">
@@ -249,17 +272,11 @@ $(function(){
 				<div class="navTab-panel tabsPageContent layoutBox">
 					<div class="page unitBox">
 						<div class="accountInfo">
-							<p>这里用来实时地图参数信息...</p>
+							<p>这里用来进行系统使用说明...</p>
 						</div>
 						
-						<!-- 导入百度地图 -->
-						<div id="baidumap" style="height:600px"><jsp:include page="map_original.jsp" /></div>
-						
-						<div style="width:230px;position: absolute;top:60px;right:0" layoutH="80">
-							<iframe width="100%" height="430" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?width=0&height=430&fansRow=2&ptype=1&skin=1&isTitle=0&noborder=1&isWeibo=1&isFans=0&uid=1739071261&verifier=c683dfe7"></iframe>
-						</div>
 					</div>
-					
+
 				</div>
 			</div>
 		</div>

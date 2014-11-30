@@ -1,16 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
 
 <style type="text/css" media="screen">
 .my-uploadify-button {
-	background:none;
+	background: none;
 	border: none;
 	text-shadow: none;
-	border-radius:0;
+	border-radius: 0;
 }
 
 .uploadify:hover .my-uploadify-button {
-	background:none;
+	background: none;
 	border: none;
 }
 
@@ -27,7 +27,7 @@
 
 <div class="pageContent" style="margin: 0 10px" layoutH="50">
 
-	<input id="testFileInput1" type="file" name="image2" 
+	<input id="testFileInput1" type="file" name="image2"
 		uploaderOption="{
 			swf:'./dwz/uploadify/scripts/uploadify.swf',
 			uploader:'./dwz/demo/common/ajaxDone.html',
@@ -40,13 +40,15 @@
 			width:102,
 			auto:false,
 			multi:true
-		}"
-	/>
-	<span class="inputInfo">仅支持 Microsoft Excel 97-2003 Worksheet (.xls)</span>
-	
+		}" />
+	<span class="inputInfo">仅支持 Microsoft Excel 97-2003 Worksheet
+		(.xls)</span>
+
 	<div id="fileQueue" class="fileQueue"></div>
-	
-	<input type="image" src="./dwz/uploadify/img/upload.jpg" onclick="$('#testFileInput2').uploadify('upload', '*');"/>
-	<input type="image" src="./dwz/uploadify/img/cancel.jpg" onclick="$('#testFileInput2').uploadify('cancel', '*');"/>
+
+	<input type="image" src="./dwz/uploadify/img/upload.jpg"
+		onclick="$('#testFileInput2').uploadify('upload', '*');" /> <input
+		type="image" src="./dwz/uploadify/img/cancel.jpg"
+		onclick="$('#testFileInput2').uploadify('cancel', '*');" />
 
 </div>

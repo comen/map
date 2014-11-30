@@ -18,7 +18,7 @@ body {
 	font: 12px/16px Verdana, Helvetica, Arial, '微软雅黑';
 }
 
-#container {
+#mapcontainer {
 	height: 100%;
 }
 </style>
@@ -32,11 +32,11 @@ body {
 	href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
 </head>
 <body>
-	<div id="container"></div>
+	<div id="mapcontainer"></div>
 	<script type="text/javascript">
 		var map = (function() {
 			var center = new BMap.Point(121.42000, 31.29336);
-			map = new BMap.Map("container");
+			map = new BMap.Map("mapcontainer");
 			map.centerAndZoom(center, 13);
 			map.addControl(new BMap.OverviewMapControl());
 			map.addControl(new BMap.NavigationControl());
@@ -153,7 +153,7 @@ body {
 							polygon.setFillOpacity(0.5);
 						}
 							
-	i					function switchEdit(event) {
+						function switchEdit(event) {
 							closeInfo(event);
 							if (editable) {
 								editable = false;

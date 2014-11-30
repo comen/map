@@ -24,25 +24,26 @@
 	}
 
 	function upload() {
-		createXmlHttp();
+ 		createXmlHttp();
 		xmlHttp.onreadystatechange = callBack;
 
 		var formData = new FormData();
-		var file = document.getElementById("uploadfile");
+		var file = document.getElementById("uploadfile2");
 		formData.append("file", file.files[0]);
 
 		xmlHttp.open("post", "upload", true);
 		xmlHttp.setRequestHeader("Content-Type",
-				"multipart/form-data;boundary=map");
+				"multipart/form-data;boundary=index");
 		xmlHttp.send(formData);
 	}
+	
 </script>
 </head>
 <body>
 	<form method="post" action="upload" enctype="multipart/form-data">
 		<input type="file" id="uploadfile" name="uploadfile" />
-		<input type="button" value="上传" onclick="upload()" />
-		<a href="map.jsp">地图</a><br /><span id="message"></span>
+		<input type="button" value="上传" onclick="upload()" /> <a href="map.jsp">地图</a><br />
+		<span id="message"></span>
 	</form>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
 
 <%
 	String loginState = "F"; 	
@@ -36,7 +36,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>中国电信上海分公司北区局用户数据信息化系统</title>
-<link href="../dwz/themes/css/login.css" rel="stylesheet" type="text/css" />
+<link href="../dwz/themes/css/login.css" rel="stylesheet"
+	type="text/css" />
 <script src="../js/Utility.js" type="text/javascript"></script>
 </head>
 
@@ -54,23 +55,25 @@
 						<li><a href="../dwz/doc/dwz-user-guide.pdf" target="_blank">帮助</a></li>
 					</ul>
 				</div>
-				<h2 class="login_title"><img src="../dwz/themes/default/images/login_title.jpg" /></h2>
+				<h2 class="login_title">
+					<img src="../dwz/themes/default/images/login_title.jpg" />
+				</h2>
 			</div>
 		</div>
 		<div id="login_content">
 			<div class="loginForm">
-				<form method="post" action="login" class="pageForm" onsubmit="return validateForm(this)" enctype="multipart/form-data">
+				<form method="post" action="login" class="pageForm"
+					onsubmit="return validateForm(this)" enctype="multipart/form-data">
 					<p>
-						<label>用户名：</label>
-						<input type="text" class="required" name="username" size="20" class="login_input" />
+						<label>用户名：</label> <input type="text" class="required"
+							name="username" size="20" class="login_input" />
 					</p>
 					<p>
-						<label>密码：</label>
-						<input type="password" name="password" size="20" class="login_input" />
+						<label>密码：</label> <input type="password" name="password"
+							size="20" class="login_input" />
 					</p>
 					<p>
-						<label>角色：</label>
-						<select name="role" id="role">
+						<label>角色：</label> <select name="role" id="role">
 							<option value="0">请选择</option>
 							<option value="1">系统管理员</option>
 							<option value="2">网格数据管理员</option>
@@ -81,10 +84,12 @@
 					<div class="login_bar">
 						<input class="sub" type="submit" value=" " />
 					</div>
-					<p style="color:red;text-align:center"><%=errMsg%></p>
+					<p style="color: red; text-align: center"><%=errMsg%></p>
 				</form>
 			</div>
-			<div class="login_banner"><img src="../dwz/themes/default/images/login_banner.jpg" /></div>
+			<div class="login_banner">
+				<img src="../dwz/themes/default/images/login_banner.jpg" />
+			</div>
 			<div class="login_main">
 				<ul class="helpList">
 					<li><a href="#">忘记密码怎么办？</a></li>
@@ -98,9 +103,8 @@
 				</div>
 			</div>
 		</div>
-		<div id="login_footer">
-			Copyright &copy; 2014 上海电信北区局 沪ICP备05019125号-10
-		</div>
+		<div id="login_footer">Copyright &copy; 2014 上海电信北区局
+			沪ICP备05019125号-10</div>
 	</div>
 </body>
 </html>

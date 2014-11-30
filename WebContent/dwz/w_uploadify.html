@@ -2,14 +2,14 @@
 
 <style type="text/css" media="screen">
 .my-uploadify-button {
-	background:none;
+	background: none;
 	border: none;
 	text-shadow: none;
-	border-radius:0;
+	border-radius: 0;
 }
 
 .uploadify:hover .my-uploadify-button {
-	background:none;
+	background: none;
 	border: none;
 }
 
@@ -23,8 +23,8 @@
 </style>
 
 <div class="pageContent" style="margin: 0 10px" layoutH="50">
-	
-	<input id="testFileInput" type="file" name="image" 
+
+	<input id="testFileInput" type="file" name="image"
 		uploaderOption="{
 			swf:'uploadify/scripts/uploadify.swf',
 			uploader:'demo/common/ajaxDone.html',
@@ -37,12 +37,11 @@
 			multi:true,
 			onUploadSuccess:uploadifySuccess,
 			onQueueComplete:uploadifyQueueComplete
-		}"
-	/>
+		}" />
 
 	<div class="divider"></div>
 
-	<input id="testFileInput2" type="file" name="image2" 
+	<input id="testFileInput2" type="file" name="image2"
 		uploaderOption="{
 			swf:'uploadify/scripts/uploadify.swf',
 			uploader:'demo/common/ajaxDone.html',
@@ -52,19 +51,23 @@
 			buttonClass:'my-uploadify-button',
 			width:102,
 			auto:false
-		}"
-	/>
-	
+		}" />
+
 	<div id="fileQueue" class="fileQueue"></div>
-	
-	<input type="image" src="uploadify/img/upload.jpg" onclick="$('#testFileInput2').uploadify('upload', '*');"/>
-	<input type="image" src="uploadify/img/cancel.jpg" onclick="$('#testFileInput2').uploadify('cancel', '*');"/>
+
+	<input type="image" src="uploadify/img/upload.jpg"
+		onclick="$('#testFileInput2').uploadify('upload', '*');" /> <input
+		type="image" src="uploadify/img/cancel.jpg"
+		onclick="$('#testFileInput2').uploadify('cancel', '*');" />
 
 
 	<div class="divider"></div>
-	<p style="margin:10px"><a href="http://www.uploadify.com/documentation/" target="_blank">Uploadify 在线文档</a></p>
-	
-<textarea cols="160" rows="10">
+	<p style="margin: 10px">
+		<a href="http://www.uploadify.com/documentation/" target="_blank">Uploadify
+			在线文档</a>
+	</p>
+
+	<textarea cols="160" rows="10">
 uploaderOption: http://www.uploadify.com/documentation/
 	auto            : true,               // Automatically upload files when added to the queue
 	buttonClass     : '',                 // A class name to add to the browse button DOM object

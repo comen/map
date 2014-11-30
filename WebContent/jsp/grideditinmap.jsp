@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
 
 <script type="text/javascript">
 	var map = new BMap.Map("mapcontainer2");
@@ -179,18 +179,28 @@
 
 <h2 class="contentTitle">请编辑网格在地图中的区域：</h2>
 
-<form action="demo/database/db_attachmentBrightBack.html" method="post" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this, $.bringBack)">
+<form action="demo/database/db_attachmentBrightBack.html" method="post"
+	enctype="multipart/form-data" class="pageForm required-validate"
+	onsubmit="return iframeCallback(this, $.bringBack)">
 
-<div class="pageContent">
-	<div class="pageFormContent" layoutH="97">
-		<div id="mapcontainer2" style="width:100%;height:460px"></div>
+	<div class="pageContent">
+		<div class="pageFormContent" layoutH="97">
+			<div id="mapcontainer2" style="width: 100%; height: 460px"></div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">确定</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button class="close" type="button">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
 	</div>
-	<div class="formBar">
-		<ul>
-			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
-			<li><div class="button"><div class="buttonContent"><button class="close" type="button">取消</button></div></div></li>
-		</ul>
-	</div>
-</div>
 
 </form>
