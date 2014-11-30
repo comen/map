@@ -3,12 +3,12 @@ package cn.com.chinatelecom.map.process;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.common.Repository;
 import cn.com.chinatelecom.map.handle.IHandler;
@@ -31,24 +31,40 @@ public class DataProcessor implements IProcessor {
 	public void process(HttpServletRequest request, IHandler handler,
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		JSONObject jsonObj;
-		
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
-		
 		if (result == null) {
 			return;
-		} else {
-			jsonObj = JSONObject.fromObject(result);
 		}
-		
+
 		response.setContentType("text/html;charset="
 				+ Config.getInstance().getValue("charset"));
 		PrintWriter out = response.getWriter();
-		
-		out.println(jsonObj.toString());
+		for (Entry<String, Object> eso : result.entrySet()) {
+			out.println(eso.getValue());
+			System.out.println(eso.getValue().toString());
+		}
 		out.flush();
 		out.close();
+		
+//		JSONObject jsonObj;
+//		
+//		Map<String, Object> result = handler.handle(Repository.getInstance()
+//				.parse(request));
+//		
+//		if (result == null) {
+//			return;
+//		} else {
+//			jsonObj = JSONObject.fromObject(result);
+//		}
+//		
+//		response.setContentType("text/html;charset="
+//				+ Config.getInstance().getValue("charset"));
+//		PrintWriter out = response.getWriter();
+//		
+//		out.println(jsonObj.toString());
+//		out.flush();
+//		out.close();
 
 	}
 

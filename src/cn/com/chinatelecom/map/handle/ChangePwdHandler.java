@@ -15,6 +15,7 @@ public class ChangePwdHandler implements IHandler {
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
+		StringBuffer sb = new StringBuffer();
 		User user = new User();
 		String newPassword = "";
 		
@@ -46,29 +47,54 @@ public class ChangePwdHandler implements IHandler {
 			User userTmp = new User(user);
 			userTmp.setPassword(newPassword);
 			if (user.update(userTmp.toString())) {
-				result.put("statusCode", "200");
-				result.put("message", "密码修改成功！");
-				result.put("navTabId", "");
-				result.put("rel", "");
-				result.put("callbackType", "closeCurrent");
-				result.put("forwardUrl", "");
+				sb.append("{");
+				sb.append("\"statusCode\":" + "\"200\"");
+				sb.append(",\"message\":" + "\"密码修改成功！\"");
+				sb.append(",\"navTabId\":" + "\"\"");
+				sb.append(",\"rel\":" + "\"\"");
+				sb.append(",\"callbackType\":" + "\"closeCurrent\"");
+				sb.append(",\"forwardUrl\":" + "\"\"");
+				sb.append("}");
+//				result.put("statusCode", "200");
+//				result.put("message", "密码修改成功！");
+//				result.put("navTabId", "");
+//				result.put("rel", "");
+//				result.put("callbackType", "closeCurrent");
+//				result.put("forwardUrl", "");
 			} else {
-				result.put("statusCode", "300");
-				result.put("message", "密码修改失败，请重新操作！");
-				result.put("navTabId", "");
-				result.put("rel", "");
-				result.put("callbackType", "");
-				result.put("forwardUrl", "");
+				sb.append("{");
+				sb.append("\"statusCode\":" + "\"300\"");
+				sb.append(",\"message\":" + "\"密码修改失败，请重新操作！\"");
+				sb.append(",\"navTabId\":" + "\"\"");
+				sb.append(",\"rel\":" + "\"\"");
+				sb.append(",\"callbackType\":" + "\"\"");
+				sb.append(",\"forwardUrl\":" + "\"\"");
+				sb.append("}");
+//				result.put("statusCode", "300");
+//				result.put("message", "密码修改失败，请重新操作！");
+//				result.put("navTabId", "");
+//				result.put("rel", "");
+//				result.put("callbackType", "");
+//				result.put("forwardUrl", "");
 			}
 		} else {
-			result.put("statusCode", "300");
-			result.put("message", "原密码输入有误，请重新操作！");
-			result.put("navTabId", "");
-			result.put("rel", "");
-			result.put("callbackType", "");
-			result.put("forwardUrl", "");
+			sb.append("{");
+			sb.append("\"statusCode\":" + "\"300\"");
+			sb.append(",\"message\":" + "\"原密码输入有误，请重新操作！\"");
+			sb.append(",\"navTabId\":" + "\"\"");
+			sb.append(",\"rel\":" + "\"\"");
+			sb.append(",\"callbackType\":" + "\"\"");
+			sb.append(",\"forwardUrl\":" + "\"\"");
+			sb.append("}");
+//			result.put("statusCode", "300");
+//			result.put("message", "原密码输入有误，请重新操作！");
+//			result.put("navTabId", "");
+//			result.put("rel", "");
+//			result.put("callbackType", "");
+//			result.put("forwardUrl", "");
 		}
 		
+		result.put("ChgPwdResult", sb.toString());
 		return result;
 	}
 

@@ -22,6 +22,7 @@ public class EditUserHandler implements IHandler {
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
+		StringBuffer sb = new StringBuffer();
 		User user = new User();
 		String userName = "";
 		String password = "";
@@ -69,29 +70,54 @@ public class EditUserHandler implements IHandler {
 			userTmp.setDepartment(department);
 			userTmp.setCreateDate(createDate);
 			if (user.update(userTmp.toString())) {
-				result.put("statusCode", "200");
-				result.put("message", "用户信息修改成功！");
-				result.put("navTabId", "");
-				result.put("rel", "");
-				result.put("callbackType", "");
-				result.put("forwardUrl", "");
+				sb.append("{");
+				sb.append("\"statusCode\":" + "\"200\"");
+				sb.append(",\"message\":" + "\"用户信息修改成功！\"");
+				sb.append(",\"navTabId\":" + "\"\"");
+				sb.append(",\"rel\":" + "\"\"");
+				sb.append(",\"callbackType\":" + "\"\"");
+				sb.append(",\"forwardUrl\":" + "\"\"");
+				sb.append("}");
+//				result.put("statusCode", "200");
+//				result.put("message", "用户信息修改成功！");
+//				result.put("navTabId", "");
+//				result.put("rel", "");
+//				result.put("callbackType", "");
+//				result.put("forwardUrl", "");
 			} else {
-				result.put("statusCode", "300");
-				result.put("message", "用户信息修改失败，请重新操作！");
-				result.put("navTabId", "");
-				result.put("rel", "");
-				result.put("callbackType", "");
-				result.put("forwardUrl", "");
+				sb.append("{");
+				sb.append("\"statusCode\":" + "\"300\"");
+				sb.append(",\"message\":" + "\"用户信息修改失败，请重新操作！\"");
+				sb.append(",\"navTabId\":" + "\"\"");
+				sb.append(",\"rel\":" + "\"\"");
+				sb.append(",\"callbackType\":" + "\"\"");
+				sb.append(",\"forwardUrl\":" + "\"\"");
+				sb.append("}");
+//				result.put("statusCode", "300");
+//				result.put("message", "用户信息修改失败，请重新操作！");
+//				result.put("navTabId", "");
+//				result.put("rel", "");
+//				result.put("callbackType", "");
+//				result.put("forwardUrl", "");
 			}
 		} else {
-			result.put("statusCode", "300");
-			result.put("message", "用户名 " + userName + " 不存在！");
-			result.put("navTabId", "");
-			result.put("rel", "");
-			result.put("callbackType", "");
-			result.put("forwardUrl", "");
+			sb.append("{");
+			sb.append("\"statusCode\":" + "\"300\"");
+			sb.append(",\"message\":" + "\"用户名 " + userName + " 不存在！\"");
+			sb.append(",\"navTabId\":" + "\"\"");
+			sb.append(",\"rel\":" + "\"\"");
+			sb.append(",\"callbackType\":" + "\"\"");
+			sb.append(",\"forwardUrl\":" + "\"\"");
+			sb.append("}");
+//			result.put("statusCode", "300");
+//			result.put("message", "用户名 " + userName + " 不存在！");
+//			result.put("navTabId", "");
+//			result.put("rel", "");
+//			result.put("callbackType", "");
+//			result.put("forwardUrl", "");
 		}
 		
+		result.put("EditUserResult", sb.toString());
 		return result;
 	}
 

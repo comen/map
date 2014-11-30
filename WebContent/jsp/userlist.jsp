@@ -38,7 +38,21 @@
 
 <script type="text/javascript">
 
-	
+	var formData = new FormData();
+	formData.append("role", <%=roleSeleted%>);
+
+ 	$.ajax({
+		url : 'searchUser',
+		type : 'POST',
+		data : formData,
+		async : true,
+		cache : false,
+		contentType : false,
+		processData : false,
+		success : function(respText) {
+			//var users = eval(respText);
+		}
+	});
 
 </script>
 

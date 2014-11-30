@@ -1,39 +1,34 @@
 package cn.com.chinatelecom.map.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.common.MongoDB;
 
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
 /**
- * @author joseph
+ * @author Shelwin
  *
  */
 public class Data {
 
-	private String office;					// 北区电信局 - 便于以后扩展，增加该字段
-	private String suboffice;				// 分局
-	private String gridCode;				// 网格
-	private String telephoneArrive;			// 固话到达数
-	private String broadbandArrive;			// 宽带到达数
-	private String broadbandNew;			// 宽带新装
-	private String broadbandRemove;			// 宽带拆机
-	private String broadbandMoveSetup;		// 宽带移机（装）
-	private String broadbandMoveUnload;		// 宽带移机（拆）
-	private String broadbandOrderInTransit;	// 宽带在途订单
-	private String calculatedDate;			// 统计日期
-	
-	
-	public void setOffice(String office) {
-		this.office = office;
-	}
-	
-	public void setSuboffice(String suboffice) {
-		this.suboffice = suboffice;
-	}
+	private String calculatedDate;
+	private String gridCode;
+	private String telephoneArrive;
+	private String broadbandArrive;
+	private String broadbandNew;
+	private String broadbandRemove;
+	private String broadbandMoveSetup;
+	private String broadbandMoveUnload;
+	private String broadbandOrderInTransit;
+	private String additional_1;
+	private String additional_2;
+	private String additional_3;
 	
 	public void setGridCode(String gridCode) {
 		this.gridCode = gridCode;
@@ -69,14 +64,6 @@ public class Data {
 	
 	public void setCalculatedDate(String calculatedDate) {
 		this.calculatedDate = calculatedDate;
-	}
-	
-	public String getOffice() {
-		return office;
-	}
-	
-	public String getSuboffice() {
-		return suboffice;
 	}
 	
 	public String getGridCode() {
@@ -115,6 +102,10 @@ public class Data {
 		return calculatedDate;
 	}
 	
+	public Data() {
+		
+	}
+	
 	public Data(String json) {
 		DBObject dbo = (DBObject) JSON.parse(json);
 		setData(dbo);
@@ -125,21 +116,11 @@ public class Data {
 	}
 	
 	private void setData(DBObject dbo) {
-		if (dbo.get("office") != null) {
-			office = dbo.get("office").toString();
-		} else {
+		if (dbo.get("calculated_date") == null || (dbo.get("grid_code") == null)) {
 			return;
 		}
-		if (dbo.get("suboffice") != null) {
-			suboffice = dbo.get("suboffice").toString();
-		} else {
-			return;
-		}
-		if (dbo.get("grid_code") != null) {
-			gridCode = dbo.get("grid_code").toString();
-		} else {
-			return;
-		}
+		calculatedDate = dbo.get("calculated_date").toString();
+		gridCode = dbo.get("grid_code").toString();
 		if (dbo.get("telephone_arrive") != null) {
 			telephoneArrive = dbo.get("telephone_arrive").toString();
 		}
@@ -160,9 +141,6 @@ public class Data {
 		}
 		if (dbo.get("broadband_order_in_transit") != null) {
 			broadbandOrderInTransit = dbo.get("broadband_order_in_transit").toString();
-		}
-		if (dbo.get("calculated_date") != null) {
-			calculatedDate = dbo.get("calculated_date").toString();
 		}
 	}
 	
@@ -200,11 +178,45 @@ public class Data {
 		return dl;
 	}
 	
+//	public static String getFieldSpecialDisplay(String calculatedDate, String gridCode) {
+//		if (calculatedDate == null || gridCode == null) {
+//			return null;
+//		}
+//		StringBuffer sb = new StringBuffer();
+//		sb.append("{");
+//		sb.append("'calculated_date':'" + calculatedDate + "'");
+//		sb.append(",'grid_code':'" + gridCode + "'");
+//		sb.append("}");
+//		
+//		Data data = Data.findOne(sb.toString());
+//		if (data.calculatedDate == null || data.gridCode == null) {
+//			return null;
+//		}
+//		
+//		Config config = Config.getInstance();
+//		Map<String, Object> result = new HashMap<String, Object>();
+//		if (data.telephoneArrive != null) {
+//			Map<String, Object> fieldAttr = (Map<String, Object>) JSON.parse(config.getValue("telephoneArrive"));
+//			String name = fieldAttr.get("name").toString();
+//			int onlyDay = Integer.parseInt(fieldAttr.get("onlyDay").toString());
+//			String huanbiThreshold = fieldAttr.get("huanbiThreshold").toString();
+//			String tongbiThreshold = fieldAttr.get("tongbiThreshold").toString();
+//			int status = Integer.parseInt(fieldAttr.get("status").toString());
+//			int category = Integer.parseInt(fieldAttr.get("category").toString());
+//			if (status == 1 && category == 1) {
+//				result.put(name, 1);
+//			}
+//		}
+//		
+//		return null;
+//	}
+	
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("{'office':'" + office + "'");
-		if (suboffice != null) {
-			sb.append(",'suboffice':'" + suboffice + "'");
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		if (calculatedDate != null) {
+			sb.append("'calculated_date':'" + calculatedDate + "'");
 		}
 		if (gridCode != null) {
 			sb.append(",'grid_code':'" + gridCode + "'");
