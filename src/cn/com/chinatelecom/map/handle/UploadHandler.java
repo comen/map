@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -27,6 +28,8 @@ public class UploadHandler implements IHandler {
 	public Map<String, Object> handle(List<FileItem> items) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (items == null) {
+			String log = StringUtils.getLogPrefix(Level.WARNING);
+			System.out.println("\n" + log + "\nThere is no request item!");
 			return null;
 		}
 		for (FileItem item : items) {
@@ -38,6 +41,8 @@ public class UploadHandler implements IHandler {
 				String filename = item.getName().trim();
 				filename = StringUtils.getFileName(filename);
 				if (!StringUtils.isLegal(filename, ".xls$")) {
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
+					System.out.println("\n" + log + "\n文件格式有误:" + filename);
 					result.put("info", "文件格式有误！");
 					return result;
 				}
@@ -47,7 +52,9 @@ public class UploadHandler implements IHandler {
 				try {
 					FileUtils.writeFile(item.getInputStream(), file);
 				} catch (Exception e) {
-					result.put("info", e.getClass() + ":" + e.getMessage());
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
 					return result;
 				}
 
@@ -62,6 +69,8 @@ public class UploadHandler implements IHandler {
 					}
 				}
 				file.delete();
+				String log = StringUtils.getLogPrefix(Level.INFO);
+				System.out.println("\n" + log + "\n文件上传成功！");
 				result.put("info", "文件上传成功！");
 
 				// --------------------Test MongoDB Start--------------------
@@ -85,16 +94,16 @@ public class UploadHandler implements IHandler {
 				// grid = new Grid(
 				// "{'GRID_CODE':'4','GRID_NAME':'和田分局','GRID_COORDINATES':[{LONGTITUDE:121.47796,LATITUDE:31.28509},{LONGTITUDE:121.47523,LATITUDE:31.28009},{LONGTITUDE:121.47710,LATITUDE:31.27812},{LONGTITUDE:121.47250,LATITUDE:31.27534},{LONGTITUDE:121.47005,LATITUDE:31.27707},{LONGTITUDE:121.46427,LATITUDE:31.27417},{LONGTITUDE:121.46581,LATITUDE:31.27139},{LONGTITUDE:121.45841,LATITUDE:31.26793},{LONGTITUDE:121.46017,LATITUDE:31.26484},{LONGTITUDE:121.45636,LATITUDE:31.26154},{LONGTITUDE:121.45582,LATITUDE:31.25932},{LONGTITUDE:121.47317,LATITUDE:31.25256},{LONGTITUDE:121.47724,LATITUDE:31.25359},{LONGTITUDE:121.48554,LATITUDE:31.25867},{LONGTITUDE:121.48723,LATITUDE:31.26145},{LONGTITUDE:121.48665,LATITUDE:31.26623},{LONGTITUDE:121.47983,LATITUDE:31.27375},{LONGTITUDE:121.48294,LATITUDE:31.27662},{LONGTITUDE:121.48482,LATITUDE:31.28166}]}");
 				// grid.insert();
-
-				grid = new Grid("{GRID_CODE:'BQ-PS-SD-5045'}");
-				System.out.println(grid.exist());
-				grid.delete();
-				System.out.println(grid.exist());
-
-				grid = new Grid("{GRID_CODE:'BQ-PS-SD-5043'}");
-				System.out.println(Grid.findOne(grid.toString()));
-				grid.update("{GRID_CODE:'BQ-PS-SD-5043',GRID_NAME:'上海市体育运动学校',GRID_MANAGER:'钱惠平',GRID_ADDRESS:'上海市虹口区广中路406号',GRID_COORDINATES:[{LATITUDE:31.25214,LONGTITUDE:121.46386},{LATITUDE:31.25313,LONGTITUDE:121.46892}]}");
-				System.out.println(Grid.findOne(grid.toString()));
+				//
+				// grid = new Grid("{GRID_CODE:'BQ-PS-SD-5045'}");
+				// System.out.println(grid.exist());
+				// grid.delete();
+				// System.out.println(grid.exist());
+				//
+				// grid = new Grid("{GRID_CODE:'BQ-PS-SD-5043'}");
+				// System.out.println(Grid.findOne(grid.toString()));
+				// grid.update("{GRID_CODE:'BQ-PS-SD-5043',GRID_NAME:'上海市体育运动学校',GRID_MANAGER:'钱惠平',GRID_ADDRESS:'上海市虹口区广中路406号',GRID_COORDINATES:[{LATITUDE:31.25214,LONGTITUDE:121.46386},{LATITUDE:31.25313,LONGTITUDE:121.46892}]}");
+				// System.out.println(Grid.findOne(grid.toString()));
 				// --------------------Test MongoDB End--------------------
 			}
 		}

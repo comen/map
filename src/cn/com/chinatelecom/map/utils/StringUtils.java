@@ -1,5 +1,9 @@
 package cn.com.chinatelecom.map.utils;
 
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +25,9 @@ public class StringUtils {
 			}
 			return true;
 		} catch (Exception e) {
-			System.out.println(e.getClass() + ":" + e.getMessage());
+			String log = getLogPrefix(Level.SEVERE);
+			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+					+ e.getMessage());
 			return false;
 		}
 	}
@@ -36,6 +42,18 @@ public class StringUtils {
 		if (index > 0)
 			return path.substring(index);
 		return null;
+	}
+
+	public static String getLogPrefix(Level level) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[" + level + "]");
+		DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
+				DateFormat.MEDIUM, Locale.CHINA);
+		Date date = new Date();
+		sb.append("[" + df.format(date) + "]");
+		StackTraceElement ste = new Throwable().getStackTrace()[1];
+		sb.append("[" + ste.toString() + "]");
+		return sb.toString();
 	}
 
 }
