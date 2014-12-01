@@ -3,11 +3,13 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 public class ChangePwdHandler implements IHandler {
 
@@ -35,16 +37,17 @@ public class ChangePwdHandler implements IHandler {
 					case "newPassword":
 						newPassword = string;
 						break;
-					case "role":
-						user.setRole(string);
-						break;
 					}
-				} catch (java.io.UnsupportedEncodingException e) {}
+				} catch (java.io.UnsupportedEncodingException e) {
+					String log = StringUtils.getLogPrefix(Level.WARNING);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
+				}
 			}
 		}
 		
 		if(user.exist()) {
-			User userTmp = new User(user);
+			User userTmp = User.findOne(user.toString());
 			userTmp.setPassword(newPassword);
 			if (user.update(userTmp.toString())) {
 				sb.append("{");
@@ -54,13 +57,6 @@ public class ChangePwdHandler implements IHandler {
 				sb.append(",\"rel\":" + "\"\"");
 				sb.append(",\"callbackType\":" + "\"closeCurrent\"");
 				sb.append(",\"forwardUrl\":" + "\"\"");
-				sb.append("}");
-//				result.put("statusCode", "200");
-//				result.put("message", "密码修改成功！");
-//				result.put("navTabId", "");
-//				result.put("rel", "");
-//				result.put("callbackType", "closeCurrent");
-//				result.put("forwardUrl", "");
 			} else {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"300\"");
@@ -70,12 +66,6 @@ public class ChangePwdHandler implements IHandler {
 				sb.append(",\"callbackType\":" + "\"\"");
 				sb.append(",\"forwardUrl\":" + "\"\"");
 				sb.append("}");
-//				result.put("statusCode", "300");
-//				result.put("message", "密码修改失败，请重新操作！");
-//				result.put("navTabId", "");
-//				result.put("rel", "");
-//				result.put("callbackType", "");
-//				result.put("forwardUrl", "");
 			}
 		} else {
 			sb.append("{");
@@ -86,12 +76,6 @@ public class ChangePwdHandler implements IHandler {
 			sb.append(",\"callbackType\":" + "\"\"");
 			sb.append(",\"forwardUrl\":" + "\"\"");
 			sb.append("}");
-//			result.put("statusCode", "300");
-//			result.put("message", "原密码输入有误，请重新操作！");
-//			result.put("navTabId", "");
-//			result.put("rel", "");
-//			result.put("callbackType", "");
-//			result.put("forwardUrl", "");
 		}
 		
 		result.put("ChgPwdResult", sb.toString());

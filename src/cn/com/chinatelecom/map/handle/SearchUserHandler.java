@@ -6,11 +6,13 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
@@ -51,7 +53,11 @@ public class SearchUserHandler implements IHandler {
 						department = string;
 						break;
 					}
-				} catch (java.io.UnsupportedEncodingException e) {}
+				} catch (java.io.UnsupportedEncodingException e) {
+					String log = StringUtils.getLogPrefix(Level.WARNING);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
+				}
 			}
 		}
 		
@@ -59,7 +65,7 @@ public class SearchUserHandler implements IHandler {
 			user.setUserName(userName);
 		}
 		if (!role.equals("")) {
-			user.setRole(role);
+			user.setRole(Integer.parseInt(role));
 		}
 		if (!realName.equals("")) {
 			user.setRealName(realName);

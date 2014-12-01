@@ -6,12 +6,14 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
 import cn.com.chinatelecom.map.utils.DateUtils;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author swei019
@@ -54,7 +56,11 @@ public class AddUserHandler implements IHandler {
 						department = string;
 						break;
 					}
-				} catch (java.io.UnsupportedEncodingException e) {}
+				} catch (java.io.UnsupportedEncodingException e) {
+					String log = StringUtils.getLogPrefix(Level.WARNING);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
+				}
 			}
 		}
 		
@@ -68,15 +74,9 @@ public class AddUserHandler implements IHandler {
 			sb.append(",\"callbackType\":" + "\"\"");
 			sb.append(",\"forwardUrl\":" + "\"\"");
 			sb.append("}");
-//			result.put("statusCode", "300");
-//			result.put("message", "用户名 " + userName + " 已存在！");
-//			result.put("navTabId", "");
-//			result.put("rel", "");
-//			result.put("callbackType", "");
-//			result.put("forwardUrl", "");
 		} else {
 			user.setPassword(password);
-			user.setRole(role);
+			user.setRole(Integer.parseInt(role));
 			user.setRealName(realName);
 			user.setDepartment(department);
 			user.setCreateDate(DateUtils.getCurrentDate());
@@ -89,12 +89,6 @@ public class AddUserHandler implements IHandler {
 				sb.append(",\"callbackType\":" + "\"\"");
 				sb.append(",\"forwardUrl\":" + "\"\"");
 				sb.append("}");
-//				result.put("statusCode", "200");
-//				result.put("message", "用户添加成功！");
-//				result.put("navTabId", "");
-//				result.put("rel", "");
-//				result.put("callbackType", "");
-//				result.put("forwardUrl", "");
 			} else {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"300\"");
@@ -104,12 +98,6 @@ public class AddUserHandler implements IHandler {
 				sb.append(",\"callbackType\":" + "\"\"");
 				sb.append(",\"forwardUrl\":" + "\"\"");
 				sb.append("}");
-//				result.put("statusCode", "300");
-//				result.put("message", "用户添加失败，请重新操作！");
-//				result.put("navTabId", "");
-//				result.put("rel", "");
-//				result.put("callbackType", "");
-//				result.put("forwardUrl", "");
 			}
 		}
 		

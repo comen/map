@@ -1,12 +1,14 @@
 package cn.com.chinatelecom.map.entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.common.MongoDB;
+import cn.com.chinatelecom.map.utils.DateUtils;
+import cn.com.chinatelecom.map.utils.MathUtils;
 
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
@@ -17,89 +19,329 @@ import com.mongodb.util.JSON;
  */
 public class Data {
 
-	private String calculatedDate;
+	private Date calculatedDate;
 	private String gridCode;
-	private String telephoneArrive;
-	private String broadbandArrive;
-	private String broadbandNew;
-	private String broadbandRemove;
-	private String broadbandMoveSetup;
-	private String broadbandMoveUnload;
-	private String broadbandOrderInTransit;
-	private String additional_1;
-	private String additional_2;
-	private String additional_3;
+	private int telephoneArrive;
+	private int broadbandArrive;
+	private int broadbandNew;
+	private int broadbandRemove;
+	private int broadbandMoveSetup;
+	private int broadbandMoveUnload;
+	private int broadbandOrderInTransit;
+	private int additional_1;
+	private int additional_2;
+	private int additional_3;
+	private int additional_4;
+	private int additional_5;
+	private int additional_6;
+	private int additional_7;
+	private int additional_8;
+	private int additional_9;
+	private int additional_10;
+	private int additional_11;
+	private int additional_12;
+	private int additional_13;
+	
+	private static String[] getNameOfMemberVariables() {
+		String[] strArray = {
+				"calculatedDate",
+				"gridCode",
+				"telephoneArrive",
+				"broadbandArrive",
+				"broadbandNew",
+				"broadbandRemove",
+				"broadbandMoveSetup",
+				"broadbandMoveUnload",
+				"broadbandOrderInTransit",
+				"additional_1",
+				"additional_2",
+				"additional_3",
+				"additional_4",
+				"additional_5",
+				"additional_6",
+				"additional_7",
+				"additional_8",
+				"additional_9",
+				"additional_10",
+				"additional_11",
+				"additional_12",
+				"additional_13"
+		}; 
+		return strArray;
+	}
+	
+	public void setValue(String nameOfMemberVariable, Object value) {
+		if (nameOfMemberVariable.equalsIgnoreCase("calculatedDate")) {
+			setCalculatedDate((Date) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("gridCode")) {
+			setGridCode((String) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("telephoneArrive")) {
+			setTelephoneArrive((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandArrive")) {
+			setBroadbandArrive((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandNew")) {
+			setBroadbandNew((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandRemove")) {
+			setBroadbandRemove((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandMoveSetup")) {
+			setBroadbandMoveSetup((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandMoveUnload")) {
+			setBroadbandMoveUnload((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandOrderInTransit")) {
+			setBroadbandOrderInTransit((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_1")) {
+			setAdditional_1((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_2")) {
+			setAdditional_2((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_3")) {
+			setAdditional_3((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_4")) {
+			setAdditional_4((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_5")) {
+			setAdditional_5((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_6")) {
+			setAdditional_6((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_7")) {
+			setAdditional_7((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_8")) {
+			setAdditional_8((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_9")) {
+			setAdditional_9((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_10")) {
+			setAdditional_10((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_11")) {
+			setAdditional_11((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_12")) {
+			setAdditional_12((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_13")) {
+			setAdditional_13((int) value);
+		}
+	}
+	
+	public Object getValue(String nameOfMemberVariable) {
+		if (nameOfMemberVariable.equalsIgnoreCase("calculatedDate")) {
+			return getCalculatedDate();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("gridCode")) {
+			return getGridCode();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("telephoneArrive")) {
+			return getTelephoneArrive();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandArrive")) {
+			return getBroadbandArrive();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandNew")) {
+			return getBroadbandNew();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandRemove")) {
+			return getBroadbandRemove();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandMoveSetup")) {
+			return getBroadbandMoveSetup();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandMoveUnload")) {
+			return getBroadbandMoveUnload();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("broadbandOrderInTransit")) {
+			return getBroadbandOrderInTransit();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_1")) {
+			return getAdditional_1();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_2")) {
+			return getAdditional_2();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_3")) {
+			return getAdditional_3();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_4")) {
+			return getAdditional_4();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_5")) {
+			return getAdditional_5();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_6")) {
+			return getAdditional_6();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_7")) {
+			return getAdditional_7();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_8")) {
+			return getAdditional_8();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_9")) {
+			return getAdditional_9();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_10")) {
+			return getAdditional_10();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_11")) {
+			return getAdditional_11();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_12")) {
+			return getAdditional_12();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_13")) {
+			return getAdditional_13();
+		} else {
+			return null;
+		}
+	}
+	
+	public void setCalculatedDate(Date calculatedDate) {
+		this.calculatedDate = calculatedDate;
+	}
 	
 	public void setGridCode(String gridCode) {
 		this.gridCode = gridCode;
 	}
 	
-	public void setTelephoneArrive(String telephoneArrive) {
+	public void setTelephoneArrive(int telephoneArrive) {
 		this.telephoneArrive = telephoneArrive;
 	}
 	
-	public void setBroadbandArrive(String broadbandArrive) {
+	public void setBroadbandArrive(int broadbandArrive) {
 		this.broadbandArrive = broadbandArrive;
 	}
 	
-	public void setBroadbandNew(String broadbandNew) {
+	public void setBroadbandNew(int broadbandNew) {
 		this.broadbandNew = broadbandNew;
 	}
 	
-	public void setBroadbandRemove(String broadbandRemove) {
+	public void setBroadbandRemove(int broadbandRemove) {
 		this.broadbandRemove = broadbandRemove;
 	}
 	
-	public void setBroadbandMoveSetup(String broadbandMoveSetup) {
+	public void setBroadbandMoveSetup(int broadbandMoveSetup) {
 		this.broadbandMoveSetup = broadbandMoveSetup;
 	}
 	
-	public void setBroadbandMoveUnload(String broadbandMoveUnload) {
+	public void setBroadbandMoveUnload(int broadbandMoveUnload) {
 		this.broadbandMoveUnload = broadbandMoveUnload;
 	}
 	
-	public void setBroadbandOrderStringransit(String broadbandOrderInTransit) {
+	public void setBroadbandOrderInTransit(int broadbandOrderInTransit) {
 		this.broadbandOrderInTransit = broadbandOrderInTransit;
 	}
 	
-	public void setCalculatedDate(String calculatedDate) {
-		this.calculatedDate = calculatedDate;
+	public void setAdditional_1(int additional_1) {
+		this.additional_1 = additional_1;
+	}
+	
+	public void setAdditional_2(int additional_2) {
+		this.additional_2 = additional_2;
+	}
+	
+	public void setAdditional_3(int additional_3) {
+		this.additional_3 = additional_3;
+	}
+	
+	public void setAdditional_4(int additional_4) {
+		this.additional_4 = additional_4;
+	}
+	
+	public void setAdditional_5(int additional_5) {
+		this.additional_5 = additional_5;
+	}
+	
+	public void setAdditional_6(int additional_6) {
+		this.additional_6 = additional_6;
+	}
+	
+	public void setAdditional_7(int additional_7) {
+		this.additional_7 = additional_7;
+	}
+	
+	public void setAdditional_8(int additional_8) {
+		this.additional_8 = additional_8;
+	}
+	
+	public void setAdditional_9(int additional_9) {
+		this.additional_9 = additional_9;
+	}
+	
+	public void setAdditional_10(int additional_10) {
+		this.additional_10 = additional_10;
+	}
+	
+	public void setAdditional_11(int additional_11) {
+		this.additional_11 = additional_11;
+	}
+	
+	public void setAdditional_12(int additional_12) {
+		this.additional_12 = additional_12;
+	}
+	
+	public void setAdditional_13(int additional_13) {
+		this.additional_13 = additional_13;
+	}
+	
+	public Date getCalculatedDate() {
+		return calculatedDate;
 	}
 	
 	public String getGridCode() {
 		return gridCode;
 	}
 	
-	public String getTelephoneArrive() {
+	public int getTelephoneArrive() {
 		return telephoneArrive;
 	}
 	
-	public String getBroadbandArrive() {
+	public int getBroadbandArrive() {
 		return broadbandArrive;
 	}
 	
-	public String getBroadbandNew() {
+	public int getBroadbandNew() {
 		return broadbandNew;
 	}
 	
-	public String getBroadbandRemove() {
+	public int getBroadbandRemove() {
 		return broadbandRemove;
 	}
 	
-	public String getBroadbandMoveSetup() {
+	public int getBroadbandMoveSetup() {
 		return broadbandMoveSetup;
 	}
 	
-	public String getBroadbandMoveUnload() {
+	public int getBroadbandMoveUnload() {
 		return broadbandMoveUnload;
 	}
 	
-	public String getBroadbandOrderStringransit() {
+	public int getBroadbandOrderInTransit() {
 		return broadbandOrderInTransit;
 	}
 	
-	public String getCalculatedDate() {
-		return calculatedDate;
+	public int getAdditional_1() {
+		return additional_1;
+	}
+	
+	public int getAdditional_2() {
+		return additional_2;
+	}
+	
+	public int getAdditional_3() {
+		return additional_3;
+	}
+	
+	public int getAdditional_4() {
+		return additional_4;
+	}
+	
+	public int getAdditional_5() {
+		return additional_5;
+	}
+	
+	public int getAdditional_6() {
+		return additional_6;
+	}
+	
+	public int getAdditional_7() {
+		return additional_7;
+	}
+	
+	public int getAdditional_8() {
+		return additional_8;
+	}
+	
+	public int getAdditional_9() {
+		return additional_9;
+	}
+	
+	public int getAdditional_10() {
+		return additional_10;
+	}
+	
+	public int getAdditional_11() {
+		return additional_11;
+	}
+	
+	public int getAdditional_12() {
+		return additional_12;
+	}
+	
+	public int getAdditional_13() {
+		return additional_13;
 	}
 	
 	public Data() {
@@ -116,31 +358,9 @@ public class Data {
 	}
 	
 	private void setData(DBObject dbo) {
-		if (dbo.get("calculated_date") == null || (dbo.get("grid_code") == null)) {
-			return;
-		}
-		calculatedDate = dbo.get("calculated_date").toString();
-		gridCode = dbo.get("grid_code").toString();
-		if (dbo.get("telephone_arrive") != null) {
-			telephoneArrive = dbo.get("telephone_arrive").toString();
-		}
-		if (dbo.get("broadband_arrive") != null) {
-			broadbandArrive = dbo.get("broadband_arrive").toString();
-		}
-		if (dbo.get("broadband_new") != null) {
-			broadbandNew = dbo.get("broadband_new").toString();
-		}
-		if (dbo.get("broadband_remove") != null) {
-			broadbandRemove = dbo.get("broadband_remove").toString();
-		}
-		if (dbo.get("broadband_move_setup") != null) {
-			broadbandMoveSetup = dbo.get("broadband_move_setup").toString();
-		}
-		if (dbo.get("broadband_move_unload") != null) {
-			broadbandMoveUnload = dbo.get("broadband_move_unload").toString();
-		}
-		if (dbo.get("broadband_order_in_transit") != null) {
-			broadbandOrderInTransit = dbo.get("broadband_order_in_transit").toString();
+		String[] namesOfMemVar = getNameOfMemberVariables();
+		for (int i = 0; i < namesOfMemVar.length; i++) {
+			setValue(namesOfMemVar[i], dbo.get(namesOfMemVar[i]));
 		}
 	}
 	
@@ -178,73 +398,317 @@ public class Data {
 		return dl;
 	}
 	
-//	public static String getFieldSpecialDisplay(String calculatedDate, String gridCode) {
-//		if (calculatedDate == null || gridCode == null) {
-//			return null;
-//		}
-//		StringBuffer sb = new StringBuffer();
-//		sb.append("{");
-//		sb.append("'calculated_date':'" + calculatedDate + "'");
-//		sb.append(",'grid_code':'" + gridCode + "'");
-//		sb.append("}");
-//		
-//		Data data = Data.findOne(sb.toString());
-//		if (data.calculatedDate == null || data.gridCode == null) {
-//			return null;
-//		}
-//		
-//		Config config = Config.getInstance();
-//		Map<String, Object> result = new HashMap<String, Object>();
-//		if (data.telephoneArrive != null) {
-//			Map<String, Object> fieldAttr = (Map<String, Object>) JSON.parse(config.getValue("telephoneArrive"));
-//			String name = fieldAttr.get("name").toString();
-//			int onlyDay = Integer.parseInt(fieldAttr.get("onlyDay").toString());
-//			String huanbiThreshold = fieldAttr.get("huanbiThreshold").toString();
-//			String tongbiThreshold = fieldAttr.get("tongbiThreshold").toString();
-//			int status = Integer.parseInt(fieldAttr.get("status").toString());
-//			int category = Integer.parseInt(fieldAttr.get("category").toString());
-//			if (status == 1 && category == 1) {
-//				result.put(name, 1);
-//			}
-//		}
-//		
-//		return null;
-//	}
+	private static Object getValueOfMemberVariables(Data data, String memberVariable) {
+		return data.getValue(memberVariable);
+	}
+	
+	public static Data getDataOfDay(Date calculatedDate, String gridCode) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("'calculated_date':'" + calculatedDate.toString() + "'");
+		sb.append(",'grid_code':'" + gridCode + "'");
+		sb.append("}");
+		return Data.findOne(sb.toString());
+	}
+	
+	public static List<Data> getDataOfWeek(Date calculatedDate, String gridCode) {
+        Date firstDayOfWeek = DateUtils.getFirstDayOfThisWeek(calculatedDate);
+        Date lastDayOfWeek = DateUtils.getLastDayOfThisWeek(calculatedDate);
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("'calculated_date':{'$gte:" + firstDayOfWeek.getTime() + ",'$lte:'" + lastDayOfWeek.getTime() + "}");
+		sb.append(",'grid_code':'" + gridCode + "'");
+		sb.append("}");
+		return Data.findList(sb.toString());
+	}
+	
+	public static List<Data> getDataOfMonth(Date calculatedDate, String gridCode) {
+		Date firstDayOfMonth = DateUtils.getFirstDayOfThisMonth(calculatedDate);
+        Date lastDayOfMonth = DateUtils.getLastDayOfThisMonth(calculatedDate);
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("'calculated_date':{'$gte:" + firstDayOfMonth.getTime() + ",'$lte:'" + lastDayOfMonth.getTime() + "}");
+		sb.append(",'grid_code':'" + gridCode + "'");
+		sb.append("}");
+		return Data.findList(sb.toString());
+	}
+	
+	public static String getFieldSpecialDisplay(Date calculatedDate, String gridCode, String mode ) {
+		if (mode.equalsIgnoreCase("Day")) {
+			return getFieldSpecialDisplayInDay(calculatedDate, gridCode);
+		} else if (mode.equalsIgnoreCase("Week")) {
+			return getFieldSpecialDisplayInWeek(calculatedDate, gridCode);
+		} else if (mode.equalsIgnoreCase("Year")) {
+			return getFieldSpecialDisplayInMonth(calculatedDate, gridCode);
+		} else {
+			return null;
+		}
+	}
+	
+	public static String getFieldSpecialDisplayInDay(Date calculatedDate, String gridCode) {
+		Data data = getDataOfDay(calculatedDate, gridCode);
+		Config config = Config.getInstance();
+		String[] namesOfMemVar = getNameOfMemberVariables();
+		int red = 0;
+		int green = 0;
+		int normal = 0;
+		
+		for (int i = 0; i < namesOfMemVar.length; i++) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
+			
+			int status = Integer.parseInt(field.get("status").toString());
+			if (status < 0) { // field not in use
+				continue;
+			}
+			
+			int value = Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
+			if (onlyDay > 0) { // field should be only displayed in DAY
+				String jueduizhiThreshold = field.get("jueduizhiThreshold").toString();
+				try {
+					double toDouble = Double.parseDouble(jueduizhiThreshold);
+					if ( Double.parseDouble(Integer.toString(value)) > toDouble) {
+						green++;
+					} else {
+						normal++;
+					}
+				} catch (Exception e) { // jueduizhiThreshold = "*"
+					normal++;
+				}
+			} else {
+				String jueduizhiThreshold = field.get("jueduizhiThreshold").toString();
+				try {
+					double toDouble = Double.parseDouble(jueduizhiThreshold);
+					int category = Integer.parseInt(field.get("category").toString());
+					if (category > 0) { // good
+						if (Double.parseDouble(Integer.toString(value)) > toDouble) {
+							green++;
+						} else {
+							normal++;
+						}
+					} else { // bad
+						if (Double.parseDouble(Integer.toString(value)) > toDouble) {
+							red++;
+						} else {
+							normal++;
+						}
+					}
+				} catch (Exception e) { // jueduizhiThreshold = "*"
+					normal++;
+				}
+			}
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("'R':" + Integer.toString(red));
+		sb.append(",'G':" + Integer.toString(green));
+		sb.append(",'B':" + Integer.toString(normal));
+		sb.append("}");
+		
+		return sb.toString();
+	}
+	
+	public static String getFieldSpecialDisplayInWeek(Date calculatedDate, String gridCode) {
+		List<Data> dataListThisWeek = getDataOfWeek(calculatedDate, gridCode);
+		List<Data> dataListLastWeek = getDataOfWeek(DateUtils.getFirstDayOfLastWeek(calculatedDate), gridCode);
+		
+		Config config = Config.getInstance();
+		String[] namesOfMemVar = getNameOfMemberVariables();
+		int red = 0;
+		int green = 0;
+		int normal = 0;
+		
+		for (int i = 0; i < namesOfMemVar.length; i++) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
+			
+			int status = Integer.parseInt(field.get("status").toString());
+			if (status < 0) { // field not in use
+				continue;
+			}
+			
+			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
+			if (onlyDay > 0) { // field should be only displayed in DAY
+				continue;
+			} else {
+				/* Calculate Huanbi growth rate comparing this week with last week */
+				int sumThisWeek = 0;
+				for (int j = 0; j < dataListThisWeek.size(); j++) {
+					Data data = dataListThisWeek.get(j);
+					sumThisWeek = sumThisWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				int sumLastWeek = 0;
+				for (int j = 0; j < dataListLastWeek.size(); j++) {
+					Data data = dataListLastWeek.get(j);
+					sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek);
+				/* Compare Huanbi growth rate with threshold */
+				int category = Integer.parseInt(field.get("category").toString());
+				String huanbiThreshold = field.get("huanbiThreshold").toString();
+				try {
+					double toDouble = Double.parseDouble(huanbiThreshold);
+					if (category > 0) {	// good
+						if (huanbiGrowthRate > toDouble) {
+							green++;
+						} else if (huanbiGrowthRate < toDouble) {
+							red++;
+						} else {
+							normal++;
+						}
+					} else { // bad
+						if (Math.abs(huanbiGrowthRate) > toDouble) {
+							red++;
+						} else if (Math.abs(huanbiGrowthRate) < toDouble) {
+							green++;
+						} else {
+							normal++;
+						}
+					}
+				} catch (Exception e) { // huanbiThreshold = "*"
+					normal++;
+				}
+			}
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("'R':" + Integer.toString(red));
+		sb.append(",'G':" + Integer.toString(green));
+		sb.append(",'B':" + Integer.toString(normal));
+		sb.append("}");
+		
+		return sb.toString();
+	}
+	
+	public static String getFieldSpecialDisplayInMonth(Date calculatedDate, String gridCode) {
+		List<Data> dataListThisMonth = getDataOfMonth(calculatedDate, gridCode);
+		List<Data> dataListLastMonth = getDataOfMonth(DateUtils.getFirstDayOfLastMonth(calculatedDate), gridCode);
+		List<Data> dataListThisMonthLastYear = getDataOfMonth(DateUtils.getFirstDayOfThisMonthLastYear(calculatedDate), gridCode);
+		
+		Config config = Config.getInstance();
+		String[] namesOfMemVar = getNameOfMemberVariables();
+		int red = 0;
+		int green = 0;
+		int normal = 0;
+		
+		for (int i = 0; i < namesOfMemVar.length; i++) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
+			
+			int status = Integer.parseInt(field.get("status").toString());
+			if (status < 0) { // field not in use
+				continue;
+			}
+			
+			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
+			if (onlyDay > 0) { // field should be only displayed in DAY
+				continue;
+			} else {
+				/* Calculate Huanbi (& Tongbi) growth rate comparing this month with last month (& same month in last year) */
+				int sumThisMonth = 0;
+				for (int j = 0; j < dataListThisMonth.size(); j++) {
+					Data data = dataListThisMonth.get(j);
+					sumThisMonth = sumThisMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				int sumLastMonth = 0;
+				for (int j = 0; j < dataListLastMonth.size(); j++) {
+					Data data = dataListLastMonth.get(j);
+					sumLastMonth = sumLastMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				int sumThisMonthLastYear = 0;
+				for (int j = 0; j < dataListThisMonthLastYear.size(); j++) {
+					Data data = dataListThisMonthLastYear.get(j);
+					sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth);
+				double tongbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear);
+				/* Compare Huanbi (& Tongbi) growth rate with threshold */
+				int category = Integer.parseInt(field.get("category").toString());
+				String huanbiThreshold = field.get("huanbiThreshold").toString();
+				try {
+					double toDouble = Double.parseDouble(huanbiThreshold);
+					if (category > 0) { // good
+						/* Huanbi */
+						if (huanbiGrowthRate > toDouble) {
+							green++;
+						} else if (huanbiGrowthRate < toDouble) {
+							red++;
+						} else {
+							normal++;
+						}
+						/* Tongbi */
+						if (tongbiGrowthRate > toDouble) {
+							green++;
+						} else if (tongbiGrowthRate < toDouble) {
+							red++;
+						} else {
+							normal++;
+						}
+					} else { // bad
+						/* Huanbi */
+						if (Math.abs(huanbiGrowthRate) > toDouble) {
+							red++;
+						} else if (Math.abs(huanbiGrowthRate) < toDouble) {
+							green++;
+						} else {
+							normal++;
+						}
+						/* Tongbi */
+						if (Math.abs(tongbiGrowthRate) > toDouble) {
+							red++;
+						} else if (Math.abs(tongbiGrowthRate) < toDouble) {
+							green++;
+						} else {
+							normal++;
+						}
+					}
+				} catch (Exception e) { // huanbiThreshold = "*"
+					normal++;
+				}
+			}
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("'R':" + Integer.toString(red));
+		sb.append(",'G':" + Integer.toString(green));
+		sb.append(",'B':" + Integer.toString(normal));
+		sb.append("}");
+		
+		return sb.toString();
+	}
 	
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
-		if (calculatedDate != null) {
-			sb.append("'calculated_date':'" + calculatedDate + "'");
-		}
-		if (gridCode != null) {
-			sb.append(",'grid_code':'" + gridCode + "'");
-		}
-		if (telephoneArrive != null) {
-			sb.append(",'telephone_arrive':'" + telephoneArrive + "'");
-		}
-		if (broadbandArrive != null) {
-			sb.append(",'broadband_arrive':'" + broadbandArrive + "'");
-		}
-		if (broadbandNew != null) {
-			sb.append(",'broadband_new':'" + broadbandNew + "'");
-		}
-		if (broadbandRemove != null) {
-			sb.append(",'broadband_remove':'" + broadbandRemove + "'");
-		}
-		if (broadbandMoveSetup != null) {
-			sb.append(",'broadband_move_setup':'" + broadbandMoveSetup + "'");
-		}
-		if (broadbandMoveUnload != null) {
-			sb.append(",'broadband_move_unload':'" + broadbandMoveUnload + "'");
-		}
-		if (broadbandOrderInTransit != null) {
-			sb.append(",'broadband_order_in_transit':'" + broadbandOrderInTransit + "'");
-		}
-		if (calculatedDate != null) {
-			sb.append(",'calculated_date':'" + calculatedDate + "'");
-		}
+		sb.append("'calculated_date':" + calculatedDate.getTime());
+		sb.append(",'grid_code':'" + gridCode + "'");
+		sb.append(",'telephone_arrive':" + telephoneArrive);
+		sb.append(",'broadband_arrive':" + broadbandArrive);
+		sb.append(",'broadband_new':" + broadbandNew);
+		sb.append(",'broadband_remove':" + broadbandRemove);
+		sb.append(",'broadband_move_setup':" + broadbandMoveSetup);
+		sb.append(",'broadband_move_unload':" + broadbandMoveUnload);
+		sb.append(",'broadband_order_in_transit':" + broadbandOrderInTransit);
+		sb.append(",'additional_1':" + additional_1);
+		sb.append(",'additional_2':" + additional_2);
+		sb.append(",'additional_3':" + additional_3);
+		sb.append(",'additional_4':" + additional_4);
+		sb.append(",'additional_5':" + additional_5);
+		sb.append(",'additional_6':" + additional_6);
+		sb.append(",'additional_7':" + additional_7);
+		sb.append(",'additional_8':" + additional_8);
+		sb.append(",'additional_9':" + additional_9);
+		sb.append(",'additional_10':" + additional_10);
+		sb.append(",'additional_11':" + additional_11);
+		sb.append(",'additional_12':" + additional_12);
+		sb.append(",'additional_13':" + additional_13);
 		sb.append("}");
 		return sb.toString();
 	}

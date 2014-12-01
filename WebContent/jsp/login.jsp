@@ -16,8 +16,6 @@
 		try {
 			loginState = (String)session.getAttribute("loginstate");
 			if (loginState.equals("S")) {
-				//userName = (String)session.getAttribute("username");
-				//role = Integer.parseInt((String)session.getAttribute("role"));
 				/* Login successfully, go to index page */
 				String path = "index.jsp";
 				response.sendRedirect(path);
@@ -72,7 +70,7 @@
 						<label>密码：</label> <input type="password" name="password"
 							size="20" class="login_input" />
 					</p>
-					<p>
+					<!-- <p>
 						<label>角色：</label> <select name="role" id="role">
 							<option value="0">请选择</option>
 							<option value="1">系统管理员</option>
@@ -80,7 +78,7 @@
 							<option value="3">营销数据管理员</option>
 							<option value="4">普通用户</option>
 						</select>
-					</p>
+					</p>  -->
 					<div class="login_bar">
 						<input class="sub" type="submit" value=" " />
 					</div>

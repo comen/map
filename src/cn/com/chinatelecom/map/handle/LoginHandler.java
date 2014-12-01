@@ -3,11 +3,13 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 public class LoginHandler implements IHandler {
 	
@@ -35,19 +37,22 @@ public class LoginHandler implements IHandler {
 					case "password":
 						user.setPassword(string);
 						break;
-					case "role":
-						user.setRole(string);
-						break;
+//					case "role":
+//						user.setRole(Integer.parseInt(string));
+//						break;
 					}
-				} catch (java.io.UnsupportedEncodingException e) {}
+				} catch (java.io.UnsupportedEncodingException e) {
+					String log = StringUtils.getLogPrefix(Level.WARNING);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
+				}
 			}
 		}
 		
 		if(user.exist()) {
 			result.put("loginstate", "S");
 			result.put("username", user.getUserName());
-			result.put("password", user.getPassword());
-			result.put("role", user.getRole());
+			result.put("role", Integer.toString(user.getRole()));
 		} else {
 			result.put("loginstate", "F");
 		}

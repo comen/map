@@ -6,11 +6,13 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author swei019
@@ -40,7 +42,11 @@ public class DeleteUserHandler implements IHandler {
 						userName = string;
 						break;
 					}
-				} catch (java.io.UnsupportedEncodingException e) {}
+				} catch (java.io.UnsupportedEncodingException e) {
+					String log = StringUtils.getLogPrefix(Level.WARNING);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
+				}
 			}
 		}
 		
@@ -55,12 +61,6 @@ public class DeleteUserHandler implements IHandler {
 				sb.append(",\"callbackType\":" + "\"\"");
 				sb.append(",\"forwardUrl\":" + "\"\"");
 				sb.append("}");
-//				result.put("statusCode", "200");
-//				result.put("message", "用户删除成功！");
-//				result.put("navTabId", "");
-//				result.put("rel", "");
-//				result.put("callbackType", "");
-//				result.put("forwardUrl", "");
 			} else {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"300\"");
@@ -70,12 +70,6 @@ public class DeleteUserHandler implements IHandler {
 				sb.append(",\"callbackType\":" + "\"\"");
 				sb.append(",\"forwardUrl\":" + "\"\"");
 				sb.append("}");
-//				result.put("statusCode", "300");
-//				result.put("message", "用户删除失败，请重新操作！");
-//				result.put("navTabId", "");
-//				result.put("rel", "");
-//				result.put("callbackType", "");
-//				result.put("forwardUrl", "");
 			}
 		} else {
 			sb.append("{");
@@ -86,12 +80,6 @@ public class DeleteUserHandler implements IHandler {
 			sb.append(",\"callbackType\":" + "\"\"");
 			sb.append(",\"forwardUrl\":" + "\"\"");
 			sb.append("}");
-//			result.put("statusCode", "300");
-//			result.put("message", "用户名 " + userName + " 不存在！");
-//			result.put("navTabId", "");
-//			result.put("rel", "");
-//			result.put("callbackType", "");
-//			result.put("forwardUrl", "");
 		}
 		
 		result.put("DelUserResult", sb.toString());

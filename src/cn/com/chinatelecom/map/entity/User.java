@@ -1,6 +1,7 @@
 package cn.com.chinatelecom.map.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.com.chinatelecom.map.common.MongoDB;
@@ -16,10 +17,10 @@ public class User {
 	
 	private String userName;
 	private String password;
-	private String role; /* 1 - System Administrator; 2 - Grid Data Administrator; 3 - Sales Data Administrator; 4 - Normal User */
+	private int role; /* 1 - System Administrator; 2 - Grid Data Administrator; 3 - Sales Data Administrator; 4 - Normal User */
 	private String realName;
 	private String department;
-	private String createDate;
+	private Date createDate;
 	
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -29,7 +30,7 @@ public class User {
 		this.password = password;
 	}
 	
-	public void setRole(String role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 	
@@ -41,7 +42,7 @@ public class User {
 		this.department = department;
 	}
 	
-	public void setCreateDate(String createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 	
@@ -53,7 +54,7 @@ public class User {
 		return password;
 	}
 	
-	public String getRole() {
+	public int getRole() {
 		return role;
 	}
 	
@@ -65,7 +66,7 @@ public class User {
 		return department;
 	}
 	
-	public String getCreateDate() {
+	public Date getCreateDate() {
 		return createDate;
 	}
 	
@@ -101,7 +102,7 @@ public class User {
 			password = dbo.get("password").toString();
 		}
 		if (dbo.get("role") != null) {
-			role = dbo.get("role").toString();
+			role = Integer.parseInt(dbo.get("role").toString());
 		}
 		if (dbo.get("realname") != null) {
 			realName = dbo.get("realname").toString();
@@ -110,7 +111,7 @@ public class User {
 			department = dbo.get("department").toString();
 		}
 		if (dbo.get("createdate") != null) {
-			createDate = dbo.get("createdate").toString();
+			createDate = new Date((long) dbo.get("createdate"));
 		}
 	}
 	
@@ -154,7 +155,7 @@ public class User {
 		if (password != null) {
 			sb.append(",'password':'" + password + "'");
 		}
-		if (role != null) {
+		if (role != 0) {
 			sb.append(",'role':" + role);
 		}
 		if (realName != null) {
@@ -164,7 +165,7 @@ public class User {
 			sb.append(",'department':'" + department + "'");
 		}
 		if (createDate != null) {
-			sb.append(",'createdate':'" + createDate + "'");
+			sb.append(",'createdate':" + createDate.getTime());
 		}
 		sb.append("}");
 		return sb.toString();
