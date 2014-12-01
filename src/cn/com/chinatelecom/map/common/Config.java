@@ -3,6 +3,9 @@ package cn.com.chinatelecom.map.common;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author joseph
@@ -18,7 +21,9 @@ public class Config {
 			properties = new Properties();
 			properties.load(getClass().getResourceAsStream("/conf.properties"));
 		} catch (Exception e) {
-			System.out.println(e.getClass() + "\t:\t" + e.getMessage());
+			String log = StringUtils.getLogPrefix(Level.SEVERE);
+			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+					+ e.getMessage());
 		}
 	}
 
@@ -39,7 +44,9 @@ public class Config {
 			String uri = "C:/eclipse-workspace/Map/src/conf.properties";
 			properties.store(new FileOutputStream(new File(uri)), null);
 		} catch (Exception e) {
-			System.out.println(e.getClass() + "\t:\t" + e.getMessage());
+			String log = StringUtils.getLogPrefix(Level.SEVERE);
+			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+					+ e.getMessage());
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -26,6 +27,13 @@ public class UploadHandler implements IHandler {
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		Map<String, Object> result = new HashMap<String, Object>();
+
+		if (items == null) {
+			String log = StringUtils.getLogPrefix(Level.WARNING);
+			System.out.println("\n" + log + "\nThere is no request item!");
+			return null;
+		}
+
 		for (FileItem item : items) {
 			if (item.isFormField()) {
 				String fieldName = item.getFieldName();
@@ -35,7 +43,9 @@ public class UploadHandler implements IHandler {
 				String filename = item.getName().trim();
 				filename = FileUtils.getFileName(filename);
 				if (!StringUtils.isLegal(filename, ".xls$")) {
-					result.put("info", "文件格式有误");
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
+					System.out.println("\n" + log + "\n文件格式有误:" + filename);
+					result.put("info", "文件格式有误！");
 					return result;
 				}
 				File file = new File(Config.getInstance()
@@ -44,7 +54,9 @@ public class UploadHandler implements IHandler {
 				try {
 					FileUtils.writeFile(item.getInputStream(), file);
 				} catch (Exception e) {
-					result.put("info", e.getClass() + ":" + e.getMessage());
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
 					return result;
 				}
 
@@ -58,7 +70,11 @@ public class UploadHandler implements IHandler {
 						grid.insert();
 					}
 				}
-				result.put("info", "文件上传成功");
+
+				file.delete();
+				String log = StringUtils.getLogPrefix(Level.INFO);
+				System.out.println("\n" + log + "\n文件上传成功！");
+				result.put("info", "文件上传成功！");
 
 				// --------------------Test MongoDB Start--------------------
 				// 北区局
@@ -78,19 +94,19 @@ public class UploadHandler implements IHandler {
 				 "{'GRID_CODE':'3','GRID_NAME':'平顺分局','GRID_COORDINATES':[{LONGTITUDE:121.40850,LATITUDE:31.34395},{LONGTITUDE:121.40584,LATITUDE:31.34146},{LONGTITUDE:121.41022,LATITUDE:31.32921},{LONGTITUDE:121.40756,LATITUDE:31.32298},{LONGTITUDE:121.40713,LATITUDE:31.31880},{LONGTITUDE:121.40756,LATITUDE:31.31308},{LONGTITUDE:121.40352,LATITUDE:31.30611},{LONGTITUDE:121.39963,LATITUDE:31.29268},{LONGTITUDE:121.42636,LATITUDE:31.29410},{LONGTITUDE:121.42844,LATITUDE:31.29061},{LONGTITUDE:121.43843,LATITUDE:31.29086},{LONGTITUDE:121.43904,LATITUDE:31.28753},{LONGTITUDE:121.44185,LATITUDE:31.29052},{LONGTITUDE:121.44522,LATITUDE:31.28278},{LONGTITUDE:121.45428,LATITUDE:31.27407},{LONGTITUDE:121.45841,LATITUDE:31.26793},{LONGTITUDE:121.46581,LATITUDE:31.27139},{LONGTITUDE:121.46427,LATITUDE:31.27417},{LONGTITUDE:121.47005,LATITUDE:31.27707},{LONGTITUDE:121.47250,LATITUDE:31.27534},{LONGTITUDE:121.47710,LATITUDE:31.27812},{LONGTITUDE:121.47523,LATITUDE:31.28009},{LONGTITUDE:121.47796,LATITUDE:31.28509},{LONGTITUDE:121.46888,LATITUDE:31.28598},{LONGTITUDE:121.46832,LATITUDE:31.28807},{LONGTITUDE:121.46883,LATITUDE:31.29097},{LONGTITUDE:121.46797,LATITUDE:31.29485},{LONGTITUDE:121.46673,LATITUDE:31.29606},{LONGTITUDE:121.46978,LATITUDE:31.30021},{LONGTITUDE:121.47154,LATITUDE:31.30388},{LONGTITUDE:121.47063,LATITUDE:31.31077},{LONGTITUDE:121.47703,LATITUDE:31.31183},{LONGTITUDE:121.48390,LATITUDE:31.31799},{LONGTITUDE:121.48480,LATITUDE:31.32148},{LONGTITUDE:121.48209,LATITUDE:31.32804},{LONGTITUDE:121.47529,LATITUDE:31.32638},{LONGTITUDE:121.47433,LATITUDE:31.33493},{LONGTITUDE:121.46956,LATITUDE:31.33310},{LONGTITUDE:121.46042,LATITUDE:31.33288},{LONGTITUDE:121.45188,LATITUDE:31.32998},{LONGTITUDE:121.44351,LATITUDE:31.34890},{LONGTITUDE:121.43656,LATITUDE:31.34813},{LONGTITUDE:121.43321,LATITUDE:31.34450},{LONGTITUDE:121.42540,LATITUDE:31.34351},{LONGTITUDE:121.41889,LATITUDE:31.34498}]}");
 				 grid.insert();
 				// 和田分局
-				 grid = new Grid(
-				 "{'GRID_CODE':'4','GRID_NAME':'和田分局','GRID_COORDINATES':[{LONGTITUDE:121.47796,LATITUDE:31.28509},{LONGTITUDE:121.47523,LATITUDE:31.28009},{LONGTITUDE:121.47710,LATITUDE:31.27812},{LONGTITUDE:121.47250,LATITUDE:31.27534},{LONGTITUDE:121.47005,LATITUDE:31.27707},{LONGTITUDE:121.46427,LATITUDE:31.27417},{LONGTITUDE:121.46581,LATITUDE:31.27139},{LONGTITUDE:121.45841,LATITUDE:31.26793},{LONGTITUDE:121.46017,LATITUDE:31.26484},{LONGTITUDE:121.45636,LATITUDE:31.26154},{LONGTITUDE:121.45582,LATITUDE:31.25932},{LONGTITUDE:121.47317,LATITUDE:31.25256},{LONGTITUDE:121.47724,LATITUDE:31.25359},{LONGTITUDE:121.48554,LATITUDE:31.25867},{LONGTITUDE:121.48723,LATITUDE:31.26145},{LONGTITUDE:121.48665,LATITUDE:31.26623},{LONGTITUDE:121.47983,LATITUDE:31.27375},{LONGTITUDE:121.48294,LATITUDE:31.27662},{LONGTITUDE:121.48482,LATITUDE:31.28166}]}");
-				 grid.insert();
-
-//				grid = new Grid("{GRID_CODE:'BQ-PS-SD-5045'}");
-//				System.out.println(grid.exist());
-//				grid.delete();
-//				System.out.println(grid.exist());
-//
-//				grid = new Grid("{GRID_CODE:'BQ-PS-SD-5043'}");
-//				System.out.println(Grid.findOne(grid.toString()));
-//				grid.update("{GRID_CODE:'BQ-PS-SD-5043',GRID_NAME:'上海市体育运动学校',GRID_MANAGER:'钱惠平',GRID_ADDRESS:'上海市虹口区广中路406号',GRID_COORDINATES:[{LATITUDE:31.25214,LONGTITUDE:121.46386},{LATITUDE:31.25313,LONGTITUDE:121.46892}]}");
-//				System.out.println(Grid.findOne(grid.toString()));
+				// grid = new Grid(
+				// "{'GRID_CODE':'4','GRID_NAME':'和田分局','GRID_COORDINATES':[{LONGTITUDE:121.47796,LATITUDE:31.28509},{LONGTITUDE:121.47523,LATITUDE:31.28009},{LONGTITUDE:121.47710,LATITUDE:31.27812},{LONGTITUDE:121.47250,LATITUDE:31.27534},{LONGTITUDE:121.47005,LATITUDE:31.27707},{LONGTITUDE:121.46427,LATITUDE:31.27417},{LONGTITUDE:121.46581,LATITUDE:31.27139},{LONGTITUDE:121.45841,LATITUDE:31.26793},{LONGTITUDE:121.46017,LATITUDE:31.26484},{LONGTITUDE:121.45636,LATITUDE:31.26154},{LONGTITUDE:121.45582,LATITUDE:31.25932},{LONGTITUDE:121.47317,LATITUDE:31.25256},{LONGTITUDE:121.47724,LATITUDE:31.25359},{LONGTITUDE:121.48554,LATITUDE:31.25867},{LONGTITUDE:121.48723,LATITUDE:31.26145},{LONGTITUDE:121.48665,LATITUDE:31.26623},{LONGTITUDE:121.47983,LATITUDE:31.27375},{LONGTITUDE:121.48294,LATITUDE:31.27662},{LONGTITUDE:121.48482,LATITUDE:31.28166}]}");
+				// grid.insert();
+				//
+				// grid = new Grid("{GRID_CODE:'BQ-PS-SD-5045'}");
+				// System.out.println(grid.exist());
+				// grid.delete();
+				// System.out.println(grid.exist());
+				//
+				// grid = new Grid("{GRID_CODE:'BQ-PS-SD-5043'}");
+				// System.out.println(Grid.findOne(grid.toString()));
+				// grid.update("{GRID_CODE:'BQ-PS-SD-5043',GRID_NAME:'上海市体育运动学校',GRID_MANAGER:'钱惠平',GRID_ADDRESS:'上海市虹口区广中路406号',GRID_COORDINATES:[{LATITUDE:31.25214,LONGTITUDE:121.46386},{LATITUDE:31.25313,LONGTITUDE:121.46892}]}");
+				// System.out.println(Grid.findOne(grid.toString()));
 				// --------------------Test MongoDB End--------------------
 			}
 		}
