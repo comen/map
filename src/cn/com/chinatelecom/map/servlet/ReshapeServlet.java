@@ -16,7 +16,7 @@ import cn.com.chinatelecom.map.process.IProcessor;
 /**
  * Servlet implementation class ReshapeServlet
  */
-@WebServlet(description = "Reshape the grid on map", urlPatterns = { "/reshape" })
+@WebServlet(description = "Reshape the grid on map", urlPatterns = { "/jsp/reshape" })
 public class ReshapeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;

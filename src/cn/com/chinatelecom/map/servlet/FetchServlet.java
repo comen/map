@@ -8,16 +8,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.com.chinatelecom.map.handle.FetchHandler;
 import cn.com.chinatelecom.map.handle.IHandler;
-import cn.com.chinatelecom.map.handle.InfoHandler;
 import cn.com.chinatelecom.map.process.DataProcessor;
 import cn.com.chinatelecom.map.process.IProcessor;
 
 /**
- * Servlet implementation class InfoServlet
+ * Servlet implementation class FetchServlet
  */
-@WebServlet(description = "Get grid info", urlPatterns = { "/jsp/info" })
-public class InfoServlet extends HttpServlet {
+@WebServlet(description = "Fetch grid", urlPatterns = { "/jsp/fetch" })
+public class FetchServlet extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;
 	private IHandler handler;
@@ -25,10 +26,10 @@ public class InfoServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public InfoServlet() {
+	public FetchServlet() {
 		super();
 		processor = new DataProcessor();
-		handler = new InfoHandler();
+		handler = new FetchHandler();
 	}
 
 	/**

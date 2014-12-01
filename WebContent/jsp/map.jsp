@@ -78,7 +78,7 @@ body {
 		})();
 
 		function fetch() {
-			if (currAjax != null) {
+			if (currAjax) {
 				currAjax.abort();
 			}
 			map.closeInfoWindow();
@@ -86,19 +86,12 @@ body {
 			
 			var formData = new FormData();
 			formData.append("zoom", map.getZoom());
-			var bounds = map.getBounds();
-			var sw = bounds.getSouthWest();
-			var ne = bounds.getNorthEast();
-			formData.append("swlng", sw.lng);
-			formData.append("swlat", sw.lat);
-			formData.append("nelng", ne.lng);
-			formData.append("nelat", ne.lat);
 			
 			currAjax = $.ajax({
 				url : 'fetch',
 				type : 'POST',
 				data : formData,
-				timeout: 5000,
+				timeout: 3000,
 				async : true,
 				cache : true,
 				contentType : false,
@@ -111,33 +104,21 @@ body {
 					for (var i = 0; i < grids.length; i++) {
 						var code = grids[i].c;
 						var points = new Array();
-						switch (zoom) {
-						case 13:
-						case 14:
-						case 15:
-						case 18:
-						case 19:
-							if (grids[i].p != null && grids[i].p.length > 2) {
-								var coordinates = grids[i].p;
-								for (var j = 0; j < coordinates.length; j++) {
-									var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
-									points.push(point);
-								}
-								var polygon = new BMap.Polygon(points, {
-									strokeColor : getRandomColor(),
-									strokeWeight : 2,
-									strokeOpacity : 0.5,
-									fillOpacity : 0.5,
-								});
-								polygons.put(code, polygon);
-							} else {
-								independ.put(code, grids[i].d);
+						if (grids[i].p != null && grids[i].p.length > 2) {
+							var coordinates = grids[i].p;
+							for (var j = 0; j < coordinates.length; j++) {
+								var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
+								points.push(point);
 							}
-							break;
-						case 16:
-						case 17:
+							var polygon = new BMap.Polygon(points, {
+								strokeColor : "blue",
+								strokeWeight : 1,
+								strokeOpacity : 0.5,
+								fillOpacity : 0.5
+							});
+							polygons.put(code, polygon);
+						} else if (zoom > 15) {
 							independ.put(code, grids[i].d);
-							break;
 						}
 					}
 					
@@ -145,148 +126,30 @@ body {
 						var geo = new BMap.Geocoder();
 						geo.getPoint(address, function(point){
 							if (point && map.getBounds().containsPoint(point)) {
-								if (zoom > 17) {
-									var polygon = new BMap.Polygon([new BMap.Point(point.lng - 0.0005, point.lat + 0.0003),
-											new BMap.Point(point.lng - 0.0005, point.lat - 0.0003),
-											new BMap.Point(point.lng + 0.0005, point.lat - 0.0003),
-											new BMap.Point(point.lng + 0.0005, point.lat + 0.0003)], {
-										strokeColor : getRandomColor(),
-										strokeWeight : 2,
-										strokeOpacity : 0.5,
-										fillOpacity : 0.5,
-									});
-									map.addOverlay(polygon);
-									var editable = false;
-									
-									var path = polygon.getPath();
-									var coordinates = "[{LONGTITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
-									for (var i = 1; i < path.length; i++) {
-										var point = path[i];
-										coordinates += ",{LONGTITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
-									}
-									coordinates += "]";
-									
-									var shape = new FormData();
-									shape.append("GRID_CODE", code);
-									shape.append("GRID_COORDINATES", coordinates);
-									$.ajax({
-										url : 'reshape',
-										type : 'POST',
-										data : shape,
-										async : true,
-										cache : true,
-										contentType : false,
-										processData : false,
-									});
-									
-									function openInfo(event) {
-										var message;
-										var formData = new FormData();
-										formData.append("zoom", map.getZoom());
-										formData.append("longtitude", event.point.lng.toFixed(5));
-										formData.append("latitude", event.point.lat.toFixed(5));
-										$.ajax({
-											url : 'info',
-											type : 'POST',
-											data : formData,
-											async : false,
-											cache : false,
-											contentType : false,
-											processData : false,
-											success : function(respText) {
-												message = respText;
-											}
-										});
-										
-										if (message.length == 0 || editable)
-											return;
-										
-										var path = event.target.getPath();
-										var lngsum = Number(path[0].lng.toFixed(5));
-										var latsum = Number(path[0].lat.toFixed(5));
-										for (var i = 1; i < path.length; i++) {
-											var point = path[i];
-											lngsum = lngsum + Number(point.lng.toFixed(5));
-											latsum = latsum	+ Number(point.lat.toFixed(5));
-										}
-										lngsum = lngsum / path.length;
-										latsum = latsum / path.length;
-										
-										map.openInfoWindow(new BMap.InfoWindow(message, {
-											width : 200,
-											height : 100,
-											title : "<b>网格数据</b>",
-											message : message,
-											enableCloseOnClick : true
-										}), new BMap.Point(lngsum,latsum));
-										polygon.setStrokeWeight(3);
-										polygon.setStrokeOpacity(0.8);
-										polygon.setFillOpacity(0.8);
-									}
-
-									function switchEdit(event) {
-										closeInfo(event);
-										if (editable) {
-											editable = false;
-											event.target.disableEditing();
-											
-											var path = event.target.getPath();
-											var coordinates = "[{LONGTITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
-											for (var i = 1; i < path.length; i++) {
-												var point = path[i];
-												coordinates += ",{LONGTITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
-											}
-											coordinates += "]";
-											
-											var formData = new FormData();
-											formData.append("GRID_CODE", code);
-											formData.append("GRID_COORDINATES", coordinates);
-											$.ajax({
-												url : 'reshape',
-												type : 'POST',
-												data : formData,
-												async : false,
-												cache : false,
-												contentType : false,
-												processData : false,
-												success : function(respText) {
-													alert('成功修改网格区域！');
-													var grid = eval(respText);
-													var points = new Array();
-													var coordinates = grids[i].p;
-													for (var j = 0; j < coordinates.length; j++) {
-														var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
-														points.push(point);
-													}
-													event.target.setPath(points);
-												}
-											});
-										} else {
-											editable = true;
-											event.target.enableEditing();
-										}
-									}
-
-									event.target.addEventListener("click", openInfo);
-									event.target.addEventListener("mouseover", openInfo);
-									event.target.addEventListener("mouseout", closeInfo);
-									event.target.addEventListener("rightclick", switchEdit);
-								} else {
-									var marker = new BMap.Marker(point);
-									map.addOverlay(marker);
-									var label = new BMap.Label(code,{offset:new BMap.Size(20,-10)});
-									marker.setLabel(label);
-								}
+								var marker = new BMap.Marker(point);
+								map.addOverlay(marker);
+								var label = new BMap.Label(code,{offset:new BMap.Size(20,-10)});
+								marker.setLabel(label);
 							}
 						}, "上海市");
 					});
 
 					polygons.foreach(function(index, code, polygon) {
 						map.addOverlay(polygon);
+						var message = "";
 						var editable = false;
+						var path = polygon.getPath();
+						var lngsum = Number(path[0].lng.toFixed(5));
+						var latsum = Number(path[0].lat.toFixed(5));
+						for (var i = 1; i < path.length; i++) {
+							var point = path[i];
+							lngsum = lngsum + Number(point.lng.toFixed(5));
+							latsum = latsum	+ Number(point.lat.toFixed(5));
+						}
+						lngsum = lngsum / path.length;
+						latsum = latsum / path.length;
 						
 						function openInfo(event) {
-							var message;
 							var formData = new FormData();
 							formData.append("zoom", map.getZoom());
 							formData.append("longtitude", event.point.lng.toFixed(5));
@@ -307,17 +170,6 @@ body {
 							if (message.length == 0 || editable)
 								return;
 							
-							var path = event.target.getPath();
-							var lngsum = Number(path[0].lng.toFixed(5));
-							var latsum = Number(path[0].lat.toFixed(5));
-							for (var i = 1; i < path.length; i++) {
-								var point = path[i];
-								lngsum = lngsum + Number(point.lng.toFixed(5));
-								latsum = latsum	+ Number(point.lat.toFixed(5));
-							}
-							lngsum = lngsum / path.length;
-							latsum = latsum / path.length;
-							
 							map.openInfoWindow(new BMap.InfoWindow(message, {
 								width : 200,
 								height : 100,
@@ -329,12 +181,22 @@ body {
 							polygon.setStrokeOpacity(0.8);
 							polygon.setFillOpacity(0.8);
 						}
-						
+								
+						function closeInfo(event) {
+							map.closeInfoWindow();
+							polygon.setStrokeWeight(2);
+							polygon.setStrokeOpacity(0.5);
+							polygon.setFillOpacity(0.5);
+						}
+							
 						function switchEdit(event) {
 							closeInfo(event);
 							if (editable) {
 								editable = false;
-								event.target.disableEditing();
+								polygon.disableEditing();
+								polygon.addEventListener("click", openInfo);
+								polygon.addEventListener("mouseover", openInfo);
+								polygon.addEventListener("mouseout", closeInfo);
 								
 								var path = event.target.getPath();
 								var coordinates = "[{LONGTITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
@@ -355,21 +217,14 @@ body {
 									cache : false,
 									contentType : false,
 									processData : false,
-									success : function(respText) {
-										alert('成功修改网格区域！');
-										var grid = eval(respText);
-										var points = new Array();
-										var coordinates = grids[i].p;
-										for (var j = 0; j < coordinates.length; j++) {
-											var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
-											points.push(point);
-										}
-										event.target.setPath(points);
-									}
+									success : alert('成功修改网格区域！')
 								});
 							} else {
 								editable = true;
-								event.target.enableEditing();
+								polygon.enableEditing();
+								polygon.removeEventListener("click", openInfo);
+								polygon.removeEventListener("mouseover", openInfo);
+								polygon.removeEventListener("mouseout", closeInfo);
 							}
 						}
 							
@@ -380,20 +235,6 @@ body {
 					});
 				}
 			});
-		}
-		
-		var getRandomColor = function(){    
-			  return (function(m,s,c){    
-			    return (c ? arguments.callee(m,s,c-1) : '#') +    
-			      s[m.floor(m.random() * 16)]    
-			  })(Math,'0123456789abcdef',5)    
-		}
-		
-		function closeInfo(event) {
-			map.closeInfoWindow();
-			event.target.setStrokeWeight(2);
-			event.target.setStrokeOpacity(0.5);
-			event.target.setFillOpacity(0.5);
 		}
 	</script>
 	<div style="width: 100%;" id="info"></div>
