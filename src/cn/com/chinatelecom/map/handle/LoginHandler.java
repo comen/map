@@ -50,9 +50,10 @@ public class LoginHandler implements IHandler {
 		}
 		
 		if(user.exist()) {
+			User userTmp = User.findOne(user.toString());
 			result.put("loginstate", "S");
-			result.put("username", user.getUserName());
-			result.put("role", Integer.toString(user.getRole()));
+			result.put("username", userTmp.getUserName());
+			result.put("role", Integer.toString(userTmp.getRole()));
 		} else {
 			result.put("loginstate", "F");
 		}

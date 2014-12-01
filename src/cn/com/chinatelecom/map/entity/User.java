@@ -151,7 +151,11 @@ public class User {
 	
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("{'username':'" + userName + "'");
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		if (userName != null) {
+			sb.append("'username':'" + userName + "'");
+		}
 		if (password != null) {
 			sb.append(",'password':'" + password + "'");
 		}

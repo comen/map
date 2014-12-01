@@ -29,9 +29,10 @@ public class SearchUserHandler implements IHandler {
 		Map<String, Object> result = new HashMap<String, Object>();
 		User user = new User();
 		String userName = "";
-		String role = "";
+		int role = 0;
 		String realName = "";
 		String department = "";
+//		Date createDate = new Date();
 		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -44,7 +45,7 @@ public class SearchUserHandler implements IHandler {
 						userName = string;
 						break;
 					case "role":
-						role = string;
+						role = Integer.parseInt(string);
 						break;
 					case "realname":
 						realName = string;
@@ -52,6 +53,9 @@ public class SearchUserHandler implements IHandler {
 					case "department":
 						department = string;
 						break;
+//					case "createdate":
+//						createDate = string;
+//						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
 					String log = StringUtils.getLogPrefix(Level.WARNING);
@@ -64,8 +68,8 @@ public class SearchUserHandler implements IHandler {
 		if (!userName.equals("")) {
 			user.setUserName(userName);
 		}
-		if (!role.equals("")) {
-			user.setRole(Integer.parseInt(role));
+		if (role != 0) {
+			user.setRole(role);
 		}
 		if (!realName.equals("")) {
 			user.setRealName(realName);
@@ -77,11 +81,15 @@ public class SearchUserHandler implements IHandler {
 		List<User> userList = User.findList(user.toString());
 		StringBuffer sb = new StringBuffer();
 		
-		sb = new StringBuffer("[");
-		for (int i = 0; i < userList.size(); i++, sb.append(",")) {
+		sb = new StringBuffer();
+		sb.append("{");
+		for (int i = 0; i < userList.size(); i++) {
 			sb.append(userList.get(i).toString());
+			if (i < userList.size()-1) {
+				sb.append(",");
+			}
 		}
-		sb.append("]");
+		sb.append("}");
 		
 		result.put("SearchUserResult", sb.toString());
 		return result;

@@ -175,7 +175,7 @@ $(function(){
 				</div>
 
 				<div class="accordion" fillSpace="sidebar">
-					<div class="accordionHeader">
+					<!-- <div class="accordionHeader">
 						<h2>
 							<span>Folder</span>地图数据展示
 						</h2>
@@ -186,7 +186,10 @@ $(function(){
 								<a href="map.jsp" target="navTab" rel="map" title="百度地图" external="true">百度地图</a>
 							</li>
 						</ul>
-					</div>
+					</div> -->
+					<%
+						if (role == 1) {
+					%>
 					<div class="accordionHeader">
 						<h2>
 							<span>Folder</span>用户数据管理
@@ -194,36 +197,16 @@ $(function(){
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a>系统管理员</a>
-								<ul>
-									<li><a href="userlist.jsp?role=1" target="navTab"
-										rel="userlist1" title="系统管理员">浏览</a></li>
-									<li><a href="useradd.jsp?role=1" target="navTab"
-										rel="useradd1" title="系统管理员">新建</a></li>
-								</ul></li>
-							<li><a>网格数据管理员</a>
-								<ul>
-									<li><a href="userlist.jsp?role=2" target="navTab"
-										rel="userlist2" title="网格数据管理员">浏览</a></li>
-									<li><a href="useradd.jsp?role=2" target="navTab"
-										rel="useradd2" title="New 网格数据管理员">新建</a></li>
-								</ul></li>
-							<li><a>营销数据管理员</a>
-								<ul>
-									<li><a href="userlist.jsp?role=3" target="navTab"
-										rel="userlist3" title="营销数据管理员">浏览</a></li>
-									<li><a href="useradd.jsp?role=3" target="navTab"
-										rel="useradd3" title="营销数据管理员">新建</a></li>
-								</ul></li>
-							<li><a>普通用户</a>
-								<ul>
-									<li><a href="userlist.jsp?role=4" target="navTab"
-										rel="userlist4" title="普通用户">浏览</a></li>
-									<li><a href="useradd.jsp?role=4" target="navTab"
-										rel="useradd4" title="普通用户">新建</a></li>
-								</ul></li>
+							<li><a href="userlist.jsp?role=1" target="navTab"
+								rel="userlist1" title="浏览用户">浏览用户</a></li>
+							<li><a href="useradd.jsp?role=1" target="navTab"
+								rel="useradd1" title="添加用户">添加用户</a></li>
 						</ul>
 					</div>
+					<%
+						}
+						if (role == 1 || role == 2) {
+					%>
 					<div class="accordionHeader">
 						<h2>
 							<span>Folder</span>网格数据管理
@@ -231,9 +214,13 @@ $(function(){
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a href="gridlist.jsp" target="navTab" rel="gridlist">浏览</a></li>
+							<li><a href="gridlist.jsp" target="navTab" rel="gridlist" title="浏览网格">浏览网格</a></li>
 						</ul>
 					</div>
+					<%
+						}
+						if (role == 1 || role == 3) {
+					%>
 					<div class="accordionHeader">
 						<h2>
 							<span>Folder</span>营销数据管理
@@ -247,6 +234,9 @@ $(function(){
 								rel="salesdatafields">营销字段管理</a></li>
 						</ul>
 					</div>
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>
@@ -272,9 +262,11 @@ $(function(){
 				<div class="navTab-panel tabsPageContent layoutBox">
 					<div class="page unitBox">
 						<div class="accountInfo">
-							<p>这里用来进行系统使用说明...</p>
+							<p>这里用来显示日历控件...</p>
 						</div>
-						
+						<div class="pageFormContent" layoutH="80">
+							<iframe src="map.jsp" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
+						</div>
 					</div>
 
 				</div>

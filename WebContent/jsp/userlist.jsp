@@ -14,32 +14,14 @@
 	}
 %>
 
-<%
-	String roleSeleted = request.getParameter("role").toString();
-	String roleDesc = "";
-	switch (roleSeleted) {
-	case "1":
-		roleDesc = "系统管理员";
-		break;
-	case "2":
-		roleDesc = "网格数据管理员";
-		break;
-	case "3":
-		roleDesc = "营销数据管理员";
-		break;
-	case "4":
-		roleDesc = "普通用户";
-		break;
-	default:
-		roleDesc = "未知角色";
-		break;
-	}
-%>
-
 <script type="text/javascript">
 
 	var formData = new FormData();
-	formData.append("role", <%=roleSeleted%>);
+	formData.append("username", "");
+	formData.append("role", 0);
+	formData.append("realname", "");
+	formData.append("department", "");
+	formData.append("createdate", "");
 
  	$.ajax({
 		url : 'searchUser',
@@ -51,13 +33,13 @@
 		processData : false,
 		success : function(respText) {
 			//var users = eval(respText);
+			//document.write(respText);
 		}
 	});
 
 </script>
 
-<form id="pagerForm" method="post"
-	action="userlist.jsp?role=<%=roleSeleted%>">
+<form id="pagerForm" method="post" action="userlist.jsp">
 	<input type="hidden" name="status" value="${param.status}"> <input
 		type="hidden" name="keywords" value="${param.keywords}" /> <input
 		type="hidden" name="pageNum" value="1" /> <input type="hidden"
@@ -66,24 +48,22 @@
 </form>
 
 <div class="pageHeader">
-	<form action="userlist.jsp?role=<%=roleSeleted%>" method="post"
+	<form action="userlist.jsp" method="post"
 		onsubmit="return navTabSearch(this);">
 		<div class="searchBar">
 			<table class="searchContent">
 				<tr>
-					<td>用户名：<input type="text" name="username" />
+					<td>用户名：<input type="text" name="username" /></td>
+					<td>
+						<select class="combox" name="role">
+							<option value="0">所有角色</option>
+							<option value="1">系统管理员</option>
+							<option value="2">网格数据管理员</option>
+							<option value="3">营销数据管理员</option>
+							<option value="4">普通用户</option>
+						</select>
 					</td>
-					<!-- <td>
-					<select class="combox" name="office">
-						<option value="all">所有单位</option>
-						<option value="central_office">北区局</option>
-						<option value="suboffice_one">北区一分局</option>
-						<option value="suboffice_two">北区二分局</option>
-						<option value="suboffice_three">北区三分局</option>
-					</select>
-				</td> -->
-					<td>账户开通日期：<input type="text" class="date" name="createdate"
-						readonly="true" />
+					<td>账户开通日期：<input type="text" class="date" name="createdate" readonly="true" />
 					</td>
 				</tr>
 			</table>
@@ -104,7 +84,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="useradd.jsp?role=<%=roleSeleted%>"
+			<li><a class="add" href="useradd.jsp"
 				target="dialog" height="360"><span>添加</span></a></li>
 			<li class="line">line</li>
 			<li><a class="delete" href="deleteUser?uid={sid_user}"

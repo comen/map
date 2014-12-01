@@ -57,6 +57,7 @@ public class ChangePwdHandler implements IHandler {
 				sb.append(",\"rel\":" + "\"\"");
 				sb.append(",\"callbackType\":" + "\"closeCurrent\"");
 				sb.append(",\"forwardUrl\":" + "\"\"");
+				sb.append("}");
 			} else {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"300\"");

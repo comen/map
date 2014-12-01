@@ -14,28 +14,6 @@
 	}
 %>
 
-<%
-	String roleSeleted = request.getParameter("role").toString();
-	String roleDesc = "";
-	switch (roleSeleted) {
-	case "1":
-		roleDesc = "系统管理员";
-		break;
-	case "2":
-		roleDesc = "网格数据管理员";
-		break;
-	case "3":
-		roleDesc = "营销数据管理员";
-		break;
-	case "4":
-		roleDesc = "普通用户";
-		break;
-	default:
-		roleDesc = "未知角色";
-		break;
-	}
-%>
-
 <div class="pageContent">
 	<form method="post" action="addUser" class="pageForm required-validate"
 		onsubmit="return validateCallback(this, navTabAjaxDone);">
@@ -46,8 +24,13 @@
 					alt="请输入手机号" />
 			</p>
 			<p>
-				<label>角色：</label> <input type="hidden" name="role"
-					value="<%=roleSeleted%>" /> <span><%=roleDesc%></span>
+				<label>角色：</label>
+				<select class="combox" name="role">
+					<option value="1">系统管理员</option>
+					<option value="2">网格数据管理员</option>
+					<option value="3">营销数据管理员</option>
+					<option value="4">普通用户</option>
+				</select>
 			</p>
 			<p>
 				<label>初始密码：</label> <input type="text" name="password"
