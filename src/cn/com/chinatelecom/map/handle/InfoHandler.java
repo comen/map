@@ -3,11 +3,13 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.entity.Coordinate;
 import cn.com.chinatelecom.map.entity.Grid;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author joseph
@@ -24,6 +26,8 @@ public class InfoHandler implements IHandler {
 	public Map<String, Object> handle(List<FileItem> items) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (items == null) {
+			String log = StringUtils.getLogPrefix(Level.WARNING);
+			System.out.println("\n" + log + "\nThere is no request item!");
 			return null;
 		}
 
@@ -50,6 +54,12 @@ public class InfoHandler implements IHandler {
 			}
 		}
 
+		String log = StringUtils.getLogPrefix(Level.INFO);
+		System.out.println("\n" + log + "\nGetting info on zoom level of "
+				+ zoom + "...");
+		System.out.println("Longtitude: " + longtitude);
+		System.out.println("Latitude: " + latitude);
+
 		Coordinate coordinate = new Coordinate(latitude, longtitude);
 		Grid grid = null;
 		switch (zoom) {
@@ -58,6 +68,8 @@ public class InfoHandler implements IHandler {
 			grid = new Grid("{GRID_CODE:'0'}");
 			grid = Grid.findOne(grid.toString());
 			if (grid.contains(coordinate)) {
+				System.out.println("Grid: " + grid.getCode() + ","
+						+ grid.getName());
 				result.put("grid", grid.toInfo());
 			}
 			break;
@@ -67,6 +79,8 @@ public class InfoHandler implements IHandler {
 				grid = new Grid("{GRID_CODE:'" + i + "'}");
 				grid = Grid.findOne(grid.toString());
 				if (null != grid && grid.contains(coordinate)) {
+					System.out.println("Grid: " + grid.getCode() + ","
+							+ grid.getName());
 					result.put("grid", grid.toInfo());
 					break;
 				}
@@ -79,6 +93,8 @@ public class InfoHandler implements IHandler {
 			List<Grid> grids = Grid.findList(null);
 			for (Grid g : grids) {
 				if (g.contains(coordinate) && 1 != g.getCode().length()) {
+					System.out.println("Grid: " + g.getCode() + ","
+							+ g.getName());
 					result.put("grid", g.toInfo());
 					break;
 				}

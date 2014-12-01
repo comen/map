@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -30,7 +31,9 @@ public class FileUtils {
 				os.flush();
 				os.close();
 			} catch (Exception e) {
-				System.out.println(e.getClass() + ":" + e.getMessage());
+				String log = StringUtils.getLogPrefix(Level.SEVERE);
+				System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+						+ e.getMessage());
 				return false;
 			}
 		}
@@ -73,7 +76,9 @@ public class FileUtils {
 				}
 				result = sb.toString();
 			} catch (Exception e) {
-				System.out.println(e.getClass() + ":" + e.getMessage());
+				String log = StringUtils.getLogPrefix(Level.SEVERE);
+				System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+						+ e.getMessage());
 			}
 		}
 		return result;

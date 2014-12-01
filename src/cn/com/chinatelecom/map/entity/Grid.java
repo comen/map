@@ -142,10 +142,34 @@ public class Grid {
 	}
 
 	public boolean contains(Coordinate coordinate) {
-		if (coordinates == null || coordinates.isEmpty()) {
+		if (coordinates == null || coordinates.isEmpty() || coordinate == null) {
 			return false;
 		}
 
+		if (getPolygon().contains(coordinate.getLongtitude(),
+				coordinate.getLatitude())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean contains(Grid grid) {
+		if (coordinates == null || coordinates.isEmpty() || grid == null) {
+			return false;
+		}
+
+		Polygon polygon = getPolygon();
+		List<Coordinate> points = grid.getCoordinates();
+		for (Coordinate point : points) {
+			if (!polygon.contains(point.getLongtitude(), point.getLatitude())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public Polygon getPolygon() {
 		int size = coordinates.size();
 		double[] points = new double[size * 2];
 		for (int i = 0; i < size; i++) {
@@ -153,12 +177,25 @@ public class Grid {
 			points[i * 2 + 1] = coordinates.get(i).getLatitude();
 		}
 		Polygon polygon = new Polygon(points);
-		if (polygon.contains(coordinate.getLongtitude(),
-				coordinate.getLatitude())) {
-			return true;
-		} else {
-			return false;
+		return polygon;
+	}
+
+	public String toFetch() {
+		StringBuffer sb = new StringBuffer("{c:'" + code + "'");
+		if (address != null) {
+			sb.append(",d:'" + address + "'");
 		}
+		if (coordinates != null && !coordinates.isEmpty()) {
+			sb.append(",p:[");
+			for (Coordinate coordinate : coordinates) {
+				sb.append("{a:" + coordinate.getLatitude() + ",o:"
+						+ coordinate.getLongtitude() + "},");
+			}
+			sb.deleteCharAt(sb.length() - 1);
+			sb.append("]");
+		}
+		sb.append("}");
+		return sb.toString();
 	}
 
 	public String toInfo() {

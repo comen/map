@@ -2,12 +2,15 @@ package cn.com.chinatelecom.map.common;
 
 import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author joseph
@@ -42,7 +45,9 @@ public class Repository {
 		try {
 			return sfu.parseRequest(request);
 		} catch (Exception e) {
-			System.out.println(e.getClass() + "\t:\t" + e.getMessage());
+			String log = StringUtils.getLogPrefix(Level.SEVERE);
+			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+					+ e.getMessage());
 		}
 		return null;
 	}

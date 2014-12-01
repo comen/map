@@ -1,11 +1,14 @@
 package cn.com.chinatelecom.map.handle;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.entity.Grid;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author joseph
@@ -20,7 +23,11 @@ public class ReshapeHandler implements IHandler {
 	 */
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
 		if (items == null) {
+			String log = StringUtils.getLogPrefix(Level.WARNING);
+			System.out.println("\n" + log + "\nThere is no request item!");
 			return null;
 		}
 
@@ -43,6 +50,10 @@ public class ReshapeHandler implements IHandler {
 			}
 		}
 
+		String log = StringUtils.getLogPrefix(Level.INFO);
+		System.out.println("\n" + log + "\nReshaping grid " + code + "...");
+		System.out.println("Coordinates: " + coordinates);
+
 		Grid origin = new Grid("{GRID_CODE:'" + code + "'}");
 		Grid target = Grid.findOne(origin.toString());
 		StringBuffer sb = new StringBuffer("{GRID_CODE:'" + code + "'");
@@ -57,6 +68,7 @@ public class ReshapeHandler implements IHandler {
 		}
 		sb.append(",GRID_COORDINATES:" + coordinates + "}");
 		origin.update(sb.toString());
+		result.put("grid", sb.toString());
 
 		return null;
 	}
