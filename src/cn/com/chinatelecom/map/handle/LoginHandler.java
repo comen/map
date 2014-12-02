@@ -49,13 +49,17 @@ public class LoginHandler implements IHandler {
 			}
 		}
 		
-		if(user.exist()) {
-			User userTmp = User.findOne(user.toString());
-			result.put("loginstate", "S");
-			result.put("username", userTmp.getUserName());
-			result.put("role", Integer.toString(userTmp.getRole()));
-		} else {
+		if (user.getUserName() == null || user.getPassword() == null || user.getUserName().equals("") || user.getPassword().equals("")) {
 			result.put("loginstate", "F");
+		} else {
+			if(user.exist()) {
+				User userTmp = User.findOne(user.toString());
+				result.put("loginstate", "S");
+				result.put("username", userTmp.getUserName());
+				result.put("role", Integer.toString(userTmp.getRole()));
+			} else {
+				result.put("loginstate", "F");
+			}
 		}
 		
 		return result;

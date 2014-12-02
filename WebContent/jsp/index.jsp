@@ -262,7 +262,7 @@ $(function(){
 				<div class="navTab-panel tabsPageContent layoutBox">
 					<div class="page unitBox">
 						<div class="accountInfo">
-							<p>这里用来显示日历控件...</p>
+							<!-- <p>这里用来显示日历控件...</p> -->
 						</div>
 						<div class="pageFormContent" layoutH="80">
 							<iframe src="map.jsp" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
