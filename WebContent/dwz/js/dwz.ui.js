@@ -112,17 +112,11 @@ function initUI(_box){
 	if ($.fn.uploadify) {
 		$(":file[uploaderOption]", $p).each(function(){
 			var $this = $(this);
-//			var salesDataType = $('#salesDataType').value;
-//			alert(salesDataType);
-//			var toJson = "{'salesDataType':" + salesDataType + "}";
 			
 			var options = {
 				fileObjName: $this.attr("name") || "file",
 				auto: true,
 				multi: true,
-//				onUploadStart: function(file) {
-//		            $("#file_upload").uploadify("settings", "formData", {'salesDataType': "broadbandRemove"});
-//		        },
 				onUploadError: uploadifyError
 			};
 			

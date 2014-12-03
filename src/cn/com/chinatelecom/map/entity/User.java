@@ -159,7 +159,7 @@ public class User {
 		if (password != null) {
 			sb.append(",'password':'" + password + "'");
 		}
-		if (role != 0) {
+		if (role > 0) {
 			sb.append(",'role':" + role);
 		}
 		if (realName != null) {

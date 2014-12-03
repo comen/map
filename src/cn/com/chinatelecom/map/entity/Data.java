@@ -72,7 +72,7 @@ public class Data {
 	
 	public void setValue(String nameOfMemberVariable, Object value) {
 		if (nameOfMemberVariable.equalsIgnoreCase("calculatedDate")) {
-			setCalculatedDate((Date) value);
+			setCalculatedDate(new Date((long) value));
 		} else if (nameOfMemberVariable.equalsIgnoreCase("gridCode")) {
 			setGridCode((String) value);
 		} else if (nameOfMemberVariable.equalsIgnoreCase("telephoneArrive")) {
@@ -360,7 +360,9 @@ public class Data {
 	private void setData(DBObject dbo) {
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			setValue(namesOfMemVar[i], dbo.get(namesOfMemVar[i]));
+			if (dbo.get(namesOfMemVar[i]) != null) {
+				setValue(namesOfMemVar[i], dbo.get(namesOfMemVar[i]));
+			}
 		}
 	}
 	
@@ -456,6 +458,9 @@ public class Data {
 		int normal = 0;
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+				continue;
+			}
 			@SuppressWarnings("unchecked")
 			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
 			
@@ -523,6 +528,9 @@ public class Data {
 		int normal = 0;
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+				continue;
+			}
 			@SuppressWarnings("unchecked")
 			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
 			
@@ -597,6 +605,9 @@ public class Data {
 		int normal = 0;
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+				continue;
+			}
 			@SuppressWarnings("unchecked")
 			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
 			
@@ -687,28 +698,68 @@ public class Data {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
-		sb.append("'calculated_date':" + calculatedDate.getTime());
-		sb.append(",'grid_code':'" + gridCode + "'");
-		sb.append(",'telephone_arrive':" + telephoneArrive);
-		sb.append(",'broadband_arrive':" + broadbandArrive);
-		sb.append(",'broadband_new':" + broadbandNew);
-		sb.append(",'broadband_remove':" + broadbandRemove);
-		sb.append(",'broadband_move_setup':" + broadbandMoveSetup);
-		sb.append(",'broadband_move_unload':" + broadbandMoveUnload);
-		sb.append(",'broadband_order_in_transit':" + broadbandOrderInTransit);
-		sb.append(",'additional_1':" + additional_1);
-		sb.append(",'additional_2':" + additional_2);
-		sb.append(",'additional_3':" + additional_3);
-		sb.append(",'additional_4':" + additional_4);
-		sb.append(",'additional_5':" + additional_5);
-		sb.append(",'additional_6':" + additional_6);
-		sb.append(",'additional_7':" + additional_7);
-		sb.append(",'additional_8':" + additional_8);
-		sb.append(",'additional_9':" + additional_9);
-		sb.append(",'additional_10':" + additional_10);
-		sb.append(",'additional_11':" + additional_11);
-		sb.append(",'additional_12':" + additional_12);
-		sb.append(",'additional_13':" + additional_13);
+		sb.append("'calculatedDate':" + calculatedDate.getTime());
+		sb.append(",'gridCode':'" + gridCode + "'");
+		if (telephoneArrive > 0) {
+			sb.append(",'telephoneArrive':" + telephoneArrive);
+		}
+		if (broadbandArrive > 0) {
+			sb.append(",'broadbandArrive':" + broadbandArrive);
+		}
+		if (broadbandNew > 0) {
+			sb.append(",'broadbandNew':" + broadbandNew);
+		}
+		if (broadbandRemove > 0) {
+			sb.append(",'broadbandRemove':" + broadbandRemove);
+		}
+		if (broadbandMoveSetup > 0) {
+			sb.append(",'broadbandMoveSetup':" + broadbandMoveSetup);
+		}
+		if (broadbandMoveUnload > 0) {
+			sb.append(",'broadbandMoveUnload':" + broadbandMoveUnload);
+		}
+		if (broadbandOrderInTransit > 0) {
+			sb.append(",'broadbandOrderInTransit':" + broadbandOrderInTransit);
+		}
+		if (additional_1 > 0) {
+			sb.append(",'additional_1':" + additional_1);
+		}
+		if (additional_2 > 0) {
+			sb.append(",'additional_2':" + additional_2);
+		}
+		if (additional_3 > 0) {
+			sb.append(",'additional_3':" + additional_3);
+		}
+		if (additional_4 > 0) {
+			sb.append(",'additional_4':" + additional_4);
+		}
+		if (additional_5 > 0) {
+			sb.append(",'additional_5':" + additional_5);
+		}
+		if (additional_6 > 0) {
+			sb.append(",'additional_6':" + additional_6);
+		}
+		if (additional_7 > 0) {
+			sb.append(",'additional_7':" + additional_7);
+		}
+		if (additional_8 > 0) {
+			sb.append(",'additional_8':" + additional_8);
+		}
+		if (additional_9 > 0) {
+			sb.append(",'additional_9':" + additional_9);
+		}
+		if (additional_10 > 0) {
+			sb.append(",'additional_10':" + additional_10);
+		}
+		if (additional_11 > 0) {
+			sb.append(",'additional_11':" + additional_11);
+		}
+		if (additional_12 > 0) {
+			sb.append(",'additional_12':" + additional_12);
+		}
+		if (additional_13 > 0) {
+			sb.append(",'additional_13':" + additional_13);
+		}
 		sb.append("}");
 		return sb.toString();
 	}

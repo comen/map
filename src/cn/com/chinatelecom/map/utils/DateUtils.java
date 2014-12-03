@@ -3,10 +3,13 @@
  */
 package cn.com.chinatelecom.map.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.logging.Level;
+
+import cn.com.chinatelecom.map.common.Config;
 
 /**
  * @author Shelwin
@@ -16,11 +19,15 @@ public class DateUtils {
 	
 	public static Date getCurrentDate() {
 		
-		TimeZone shZone = TimeZone.getTimeZone("Asia/Shanghai");
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		format.setTimeZone(shZone);
-		
 		Date currentDate = new Date();
+		SimpleDateFormat sdt = new SimpleDateFormat(Config.getInstance().getValue("dateFormat"));
+		try {
+			currentDate = sdt.parse(sdt.format(currentDate));
+		} catch (ParseException e) {
+			String log = StringUtils.getLogPrefix(Level.WARNING);
+			System.out.println("\n" + log + "\n" + e.getClass()
+					+ "\t:\t" + e.getMessage());
+		}
 		return currentDate;
 		
 	}

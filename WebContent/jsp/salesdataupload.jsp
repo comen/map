@@ -35,6 +35,7 @@
 
 	<input id="file_upload" type="file" name="image"
 		uploaderOption="{
+			fileSizeLimit:'10MB',
 			swf:'../dwz/uploadify/scripts/uploadify.swf',
 			uploader:'uploadSalesData',
 			progressData:'speed',
