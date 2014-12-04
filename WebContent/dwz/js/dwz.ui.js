@@ -117,7 +117,64 @@ function initUI(_box){
 				fileObjName: $this.attr("name") || "file",
 				auto: true,
 				multi: true,
-				onUploadError: uploadifyError
+//				onUploadError: uploadifyError
+				onUploadError: function(file, errorCode, errorMsg, errorString) {
+					if (errorCode == -280) { //Ignore FILE_CANCELLED error
+						return;
+					}
+					var msgText = '文件《' + file.name + '》上传失败...' + 
+									'\n错误代码：' + errorCode +
+									'\n错误信息：';
+					/* 
+					 * List of SWFUpload.UPLOAD_ERROR:
+					 * 
+					 * HTTP_ERROR:-200
+					 * MISSING_UPLOAD_URL:-210
+					 * IO_ERROR:-220
+					 * SECURITY_ERROR:-230
+					 * UPLOAD_LIMIT_EXCEEDED:-240
+					 * UPLOAD_FAILED:-250
+					 * SPECIFIED_FILE_ID_NOT_FOUND:-260
+					 * FILE_VALIDATION_FAILED:-270
+					 * FILE_CANCELLED:-280
+					 * UPLOAD_STOPPED:-290
+					 * 
+					 */
+					switch(errorCode)
+					{
+					case -200:
+						msgText += "HTTP错误 " + errorMsg;
+						break;
+					case -210:
+						msgText += "上传文件丢失，请重新操作";
+						break;
+					case -230:
+						msgText += "安全性错误 " + errorMsg;
+						break;
+					case -240:
+						msgText += "上传文件数量限制最多 " + this.settings.uploadLimit + " 个";
+						break;
+					case -250:
+						msgText += "上传失败 " + errorMsg;
+						break;
+					case -260:
+						msgText += "涨不到指定文件的ID，请重新操作";
+						break;
+					case -270:
+						msgText += "参数错误";
+						break;
+					case -280:
+						msgText += "文件上传被取消";
+						break;
+					case -290:
+						msgText += "文件上传被停止";
+						break;
+					default:   
+						msgText += "未知错误 " + errorMsg;
+					}
+
+		            alert(msgText);
+		        }
 			};
 			
 			var uploaderOption = DWZ.jsonEval($this.attr("uploaderOption"));

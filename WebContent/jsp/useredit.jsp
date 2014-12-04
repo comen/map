@@ -16,16 +16,62 @@
 
 <%
 	String uid = (String)request.getParameter("uid");
-	String roleDesc = (String)request.getParameter("roledesc");
-	String realName = (String)request.getParameter("realname");
-	String department = (String)request.getParameter("department");
-	String createDate = (String)request.getParameter("createdate");
+	out.println("<input type=\"hidden\" id=\"uid\" value=\"" + uid +"\">");
 %>
 
+<script type="text/javascript">
+	var formData = new FormData();
+	formData.append("username", $("#uid").val());
+	
+	$.ajax({
+	  url: "searchUser",
+	  type: "POST",
+	  data: formData,
+	  processData: false,  // 告诉jQuery不要去处理发送的数据
+	  contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+	  success: function(data) {
+		  populateUserAttribute(data);
+	  }
+	});
+	
+	function populateUserAttribute(userListArray) {
+		var usetList = eval(userListArray);
+		for (var i = 0; i < usetList.length; i++) {
+			if (usetList[i].username != $("#uid").val()) {
+				continue;
+			}
+			/* Format created date */
+			var createDate = new Date(usetList[i].createdate);
+			var year = createDate.getFullYear().toString();
+			var month = (createDate.getMonth() + 1).toString();
+			var day = createDate.getDate();
+			if (day < 10) {
+				day = "0" + day;
+			}
+			var createDateStr = year + "-" + month + "-" + day;
+			$("#createdate").val(createDateStr);
+			$("#role").val(usetList[i].role);
+			$("#realname").val(usetList[i].realname);
+			$("#department").val(usetList[i].department);
+		}
+	}
+	
+	function save() {
+		var formData = new FormData();
+		formData.append("username", $("#uid").val());
+		
+		$.ajax({
+		  url: "searchUser",
+		  type: "POST",
+		  data: formData,
+		  processData: false,  // 告诉jQuery不要去处理发送的数据
+		  contentType: false   // 告诉jQuery不要去设置Content-Type请求头
+		});
+	}
+</script>
+
 <div class="pageContent">
-	<form method="post" action="editUser"
-		class="pageForm required-validate"
-		onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="editUser" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<p>
 				<label>用户名：</label> <input name="username" class="required"
@@ -33,15 +79,11 @@
 					value="<%=uid%>" readonly="readonly" />
 			</p>
 			<p>
-				<label>角色：</label> <select name="role" class="required combox">
-					<option value="1"
-						<% if(roleDesc.equals("系统管理员")) {out.print("selected");} %>>系统管理员</option>
-					<option value="2"
-						<% if(roleDesc.equals("网格数据管理员")) {out.print("selected");} %>>网格数据管理员</option>
-					<option value="3"
-						<% if(roleDesc.equals("营销数据管理员")) {out.print("selected");} %>>营销数据管理员</option>
-					<option value="4"
-						<% if(roleDesc.equals("普通用户")) {out.print("selected");} %>>普通用户</option>
+				<label>角色：</label> <select name="role" id="role">
+					<option value="1">系统管理员</option>
+					<option value="2">网格数据管理员</option>
+					<option value="3">营销数据管理员</option>
+					<option value="4">普通用户</option>
 				</select>
 			</p>
 			<p>
@@ -50,24 +92,23 @@
 					alt="请输入6-20位初始密码" />
 			</p>
 			<p>
-				<label>姓名：</label> <input name="realname" type="text" size="30"
-					value="<%=realName%>" />
+				<label>姓名：</label> <input name="realname" id="realname" type="text" size="30"
+					value="" />
 			</p>
 			<p>
-				<label>所属部门：</label> <input name="department" type="text" size="30"
-					value="<%=department%>" />
+				<label>所属部门：</label> <input name="department" id="department" type="text" size="30"
+					value="" />
 			</p>
 			<p>
-				<label>账户开通日期：</label> <input name="createdate" type="text"
-					size="30" value="<%=createDate%>" readonly="true" />
+				<label>账户开通日期：</label> <input name="createdate" id="createdate" type="text"
+					size="30" value="" readonly="true" />
 			</p>
 		</div>
 		<div class="formBar">
 			<ul>
-				<!--<li><a class="buttonActive" href="javascript:;"><span>保存</span></a></li>-->
 				<li><div class="buttonActive">
 						<div class="buttonContent">
-							<button type="submit">保存</button>
+							<button type="submit" onclick="save()">保存</button>
 						</div>
 					</div></li>
 				<li>

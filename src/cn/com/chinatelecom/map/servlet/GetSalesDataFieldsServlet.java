@@ -8,29 +8,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cn.com.chinatelecom.map.handle.DeleteUserHandler;
 import cn.com.chinatelecom.map.handle.IHandler;
+import cn.com.chinatelecom.map.handle.GetSalesDataFieldsHandler;
 import cn.com.chinatelecom.map.process.DataProcessor;
 import cn.com.chinatelecom.map.process.IProcessor;
 
 /**
- * Servlet implementation class DeleteUserServlet
+ * Servlet implementation class GetSalesDataFieldsServlet
  */
-@WebServlet(description = "Delete User", urlPatterns = { "/jsp/deleteUser" })
-public class DeleteUserServlet extends HttpServlet {
+@WebServlet(description = "Get Sales Data Fields", urlPatterns = { "/jsp/getSalesDataFields" })
+public class GetSalesDataFieldsServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;
 	private IHandler handler;
-	
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteUserServlet() {
+    public GetSalesDataFieldsServlet() {
         super();
         // TODO Auto-generated constructor stub
         processor = new DataProcessor();
-		handler = new DeleteUserHandler();
+		handler = new GetSalesDataFieldsHandler();
     }
 
 	/**

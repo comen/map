@@ -32,7 +32,8 @@ public class SearchUserHandler implements IHandler {
 		int role = 0;
 		String realName = "";
 		String department = "";
-//		Date createDate = new Date();
+//		String createDate = "";
+//		SimpleDateFormat sdt = new SimpleDateFormat(Config.getInstance().getValue("dateFormat"));
 		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -54,7 +55,7 @@ public class SearchUserHandler implements IHandler {
 						department = string;
 						break;
 //					case "createdate":
-//						createDate = string;
+//						createDate = sdt.format(new Date(Long.parseLong(string)));
 //						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
@@ -65,7 +66,7 @@ public class SearchUserHandler implements IHandler {
 			}
 		}
 		
-		if (!userName.equals("")) {
+		if (!(userName == null || userName.equals(""))) {
 			user.setUserName(userName);
 		}
 		if (role != 0) {
@@ -77,19 +78,23 @@ public class SearchUserHandler implements IHandler {
 		if (!department.equals("")) {
 			user.setDepartment(department);
 		}
+//		if (!createDate.equals("")) {
+//			user.setDepartment(createDate);
+//		}
 		
 		List<User> userList = User.findList(user.toString());
 		StringBuffer sb = new StringBuffer();
-		
-		sb = new StringBuffer();
-		sb.append("{");
+		sb.append("[");
 		for (int i = 0; i < userList.size(); i++) {
+			/* Clear password */
+			userList.get(i).setPassword(null);
+			
 			sb.append(userList.get(i).toString());
 			if (i < userList.size()-1) {
 				sb.append(",");
 			}
 		}
-		sb.append("}");
+		sb.append("]");
 		
 		result.put("SearchUserResult", sb.toString());
 		return result;

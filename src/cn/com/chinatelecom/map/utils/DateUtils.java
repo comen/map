@@ -24,7 +24,7 @@ public class DateUtils {
 		try {
 			currentDate = sdt.parse(sdt.format(currentDate));
 		} catch (ParseException e) {
-			String log = StringUtils.getLogPrefix(Level.WARNING);
+			String log = StringUtils.getLogPrefix(Level.SEVERE);
 			System.out.println("\n" + log + "\n" + e.getClass()
 					+ "\t:\t" + e.getMessage());
 		}

@@ -1,6 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
+<%-- Validate if user login successfully. --%>
+<%@include file="validate.jsp"%>
+
+<%-- check authority --%>
+<%
+	if (role != 1 && role != 2) {
+%>
+<%@include file="noAuthorityError.jsp"%>
+<%
+		return;
+	}
+%>
+
 <div class="pageContent">
 	<form method="post" action="ajaxDone.jsp"
 		class="pageForm required-validate"

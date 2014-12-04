@@ -1,6 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
+<%-- Validate if user login successfully. --%>
+<%@include file="validate.jsp"%>
+
+<%-- check authority --%>
+<%
+	if (role != 1 && role != 2) {
+%>
+<%@include file="noAuthorityError.jsp"%>
+<%
+		return;
+	}
+%>
+
 <script type="text/javascript">
 	var map = new BMap.Map("mapcontainer2");
 	var center = new BMap.Point(121.42000, 31.29336);

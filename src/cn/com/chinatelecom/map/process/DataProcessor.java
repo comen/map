@@ -46,25 +46,6 @@ public class DataProcessor implements IProcessor {
 		}
 		out.flush();
 		out.close();
-		
-//		JSONObject jsonObj;
-//		
-//		Map<String, Object> result = handler.handle(Repository.getInstance()
-//				.parse(request));
-//		
-//		if (result == null) {
-//			return;
-//		} else {
-//			jsonObj = JSONObject.fromObject(result);
-//		}
-//		
-//		response.setContentType("text/html;charset="
-//				+ Config.getInstance().getValue("charset"));
-//		PrintWriter out = response.getWriter();
-//		
-//		out.println(jsonObj.toString());
-//		out.flush();
-//		out.close();
 
 	}
 

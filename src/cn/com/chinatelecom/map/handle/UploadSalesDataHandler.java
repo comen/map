@@ -81,7 +81,7 @@ public class UploadSalesDataHandler implements IHandler {
 								try {
 									calculatedDate = format.parse(dateStr);
 								} catch (ParseException e) {
-									String log = StringUtils.getLogPrefix(Level.WARNING);
+									String log = StringUtils.getLogPrefix(Level.SEVERE);
 									System.out.println("\n" + log + "\n" + e.getClass()
 											+ "\t:\t" + e.getMessage());
 								}
@@ -162,7 +162,7 @@ public class UploadSalesDataHandler implements IHandler {
 									}
 								}
 							} catch (Exception e) {
-								String log = StringUtils.getLogPrefix(Level.INFO);
+								String log = StringUtils.getLogPrefix(Level.SEVERE);
 								System.out.println("\n" + log + "\n" + e.getClass()
 										+ "\t:\t" + e.getMessage());
 							}
@@ -170,8 +170,6 @@ public class UploadSalesDataHandler implements IHandler {
 					}
 					
 					file.delete();
-					String log = StringUtils.getLogPrefix(Level.INFO);
-					System.out.println("\n" + log + "\n文件上传成功！");
 					result.put("info", "文件上传成功！");
 				}
 			}

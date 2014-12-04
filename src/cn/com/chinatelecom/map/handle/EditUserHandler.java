@@ -28,7 +28,7 @@ public class EditUserHandler implements IHandler {
 		User user = new User();
 		String userName = "";
 		String password = "";
-		String role = "";
+		int role = 0;
 		String realName = "";
 		String department = "";
 		
@@ -37,7 +37,6 @@ public class EditUserHandler implements IHandler {
 				String fieldName = item.getFieldName();
 				try {
 					String string = item.getString(Config.getInstance().getValue("charset").toString());
-					
 					switch(fieldName) {
 					case "username":
 						userName = string;
@@ -46,7 +45,7 @@ public class EditUserHandler implements IHandler {
 						password = string;
 						break;
 					case "role":
-						role = string;
+						role = Integer.parseInt(string);
 						break;
 					case "realname":
 						realName = string;
@@ -67,7 +66,7 @@ public class EditUserHandler implements IHandler {
 		if(user.exist()) {
 			User userTmp = User.findOne(user.toString());
 			userTmp.setPassword(password);
-			userTmp.setRole(Integer.parseInt(role));
+			userTmp.setRole(role);
 			userTmp.setRealName(realName);
 			userTmp.setDepartment(department);
 			if (user.update(userTmp.toString())) {

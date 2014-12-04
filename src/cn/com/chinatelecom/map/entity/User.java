@@ -3,8 +3,10 @@ package cn.com.chinatelecom.map.entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 
 import cn.com.chinatelecom.map.common.MongoDB;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
@@ -102,7 +104,13 @@ public class User {
 			password = dbo.get("password").toString();
 		}
 		if (dbo.get("role") != null) {
-			role = Integer.parseInt(dbo.get("role").toString());
+			try {
+				role = Integer.parseInt(dbo.get("role").toString());
+			} catch (Exception e) {
+				String log = StringUtils.getLogPrefix(Level.SEVERE);
+				System.out.println("\n" + log + "\n" + e.getClass()
+						+ "\t:\t" + e.getMessage());
+			}
 		}
 		if (dbo.get("realname") != null) {
 			realName = dbo.get("realname").toString();
@@ -146,6 +154,7 @@ public class User {
 		for (DBObject dbo : dbl) {
 			ul.add(new User(dbo));
 		}
+		
 		return ul;
 	}
 	

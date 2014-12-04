@@ -29,7 +29,7 @@ public class AddUserHandler implements IHandler {
 		User user = new User();
 		String userName = "";
 		String password = "";
-		String role = "";
+		int role = 0;
 		String realName = "";
 		String department = "";
 		
@@ -47,7 +47,7 @@ public class AddUserHandler implements IHandler {
 						password = string;
 						break;
 					case "role":
-						role = string;
+						role = Integer.parseInt(string);
 						break;
 					case "realname":
 						realName = string;
@@ -76,7 +76,7 @@ public class AddUserHandler implements IHandler {
 			sb.append("}");
 		} else {
 			user.setPassword(password);
-			user.setRole(Integer.parseInt(role));
+			user.setRole(role);
 			user.setRealName(realName);
 			user.setDepartment(department);
 			user.setCreateDate(DateUtils.getCurrentDate());

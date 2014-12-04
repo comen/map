@@ -38,7 +38,7 @@ public class DeleteUserHandler implements IHandler {
 					String string = item.getString(Config.getInstance().getValue("charset").toString());
 					
 					switch(fieldName) {
-					case "username":
+					case "uid":
 						userName = string;
 						break;
 					}

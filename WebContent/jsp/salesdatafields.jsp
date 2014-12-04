@@ -1,6 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
+<%-- Validate if user login successfully. --%>
+<%@include file="validate.jsp"%>
+
+<%-- check authority --%>
+<%
+	if (role != 1 && role != 3) {
+%>
+<%@include file="noAuthorityError.jsp"%>
+<%
+		return;
+	}
+%>
+
 <div class="pageHeader">
 	<p>说明：</p>
 	<p>&nbsp;</p>

@@ -42,7 +42,7 @@ public class Data {
 	private int additional_12;
 	private int additional_13;
 	
-	private static String[] getNameOfMemberVariables() {
+	public static String[] getNameOfMemberVariables() {
 		String[] strArray = {
 				"calculatedDate",
 				"gridCode",
@@ -402,6 +402,25 @@ public class Data {
 	
 	private static Object getValueOfMemberVariables(Data data, String memberVariable) {
 		return data.getValue(memberVariable);
+	}
+	
+	public static boolean fieldIsOnUse(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		int status = Integer.parseInt(field.get("status").toString());
+		if (status < 0) { // field not in use
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public static String getFieldDesc(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		return field.get("description").toString();
 	}
 	
 	public static Data getDataOfDay(Date calculatedDate, String gridCode) {

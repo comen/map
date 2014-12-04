@@ -296,14 +296,28 @@ function dialogPageBreak(args, rel){
 function ajaxTodo(url, callback){
 	var $callback = callback || navTabAjaxDone;
 	if (! $.isFunction($callback)) $callback = eval('(' + callback + ')');
+	
+	/* Added by Shelwin - Transform request parameters into FormData */
+	var formData = new FormData();
+	if (url.indexOf("?") != -1) { // if found '?'
+		var str = url.substr(url.split("?")[0].length + 1);
+	    strs = str.split("&");
+	    for(var i = 0; i < strs.length; i++) {
+	    	var key = strs[i].split("=")[0];
+	    	var value = strs[i].split("=")[1];
+	    	formData.append(key, value);
+	    }
+	}
+	/* End */
+	
 	$.ajax({
 		type:'POST',
 		url:url,
-//		{ Added by Shelwin
-//		contentType:false,
-//		processData:false,
-//		data:$formData,
-//		} End
+		/* Added by Shelwin */
+		contentType:false,
+		processData:false,
+		data:formData,
+		/* End */
 		dataType:"json",
 		cache: false,
 		success: $callback,

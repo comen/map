@@ -1,6 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
+<%-- Validate if user login successfully. --%>
+<%@include file="validate.jsp"%>
+
+<%-- check authority --%>
+<%
+	if (role != 1 && role != 3) {
+%>
+<%@include file="noAuthorityError.jsp"%>
+<%
+		return;
+	}
+%>
+
 <style type="text/css" media="screen">
 .my-uploadify-button {
 	background: none;
@@ -27,6 +40,57 @@
 	function setFormData(obj) {
 		$("#file_upload").uploadify("settings", "formData", { 'salesDataType': obj.value }); 
 	}
+	function doUpload() {
+		if ($("#salesDataType").val() == "请选择") {
+			alert('请选择您要上传的营销数据类型！');
+		} else {
+			if (confirm('请务必保证营销数据类型与上传文件中的数据一致！\n\n您确定要上传吗？') == true) {
+				$('#file_upload').uploadify('upload', '*');
+			}
+		}
+	}
+</script>
+
+<script type="text/javascript">
+	var xmlHttp;
+	function createXmlHttp() {
+		if (window.XMLHttpRequest) {
+			xmlHttp = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	}
+
+	function callBack() {
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+			var responseText = xmlHttp.responseText;
+			appendOptionToCombox(responseText);
+		}
+	}
+
+	function getFields() {
+   		createXmlHttp();
+		xmlHttp.onreadystatechange = callBack;
+
+		var formData = new FormData();
+		formData.append("status", 1);
+
+		xmlHttp.open("post", "getSalesDataFields", true);
+		xmlHttp.setRequestHeader("Content-Type", "multipart/form-data;boundary=index");
+		xmlHttp.send(formData);
+	}
+	
+	function appendOptionToCombox(fieldsArray) {
+		var $parent = $("#salesDataType");
+		var fields = eval(fieldsArray);
+		for (var i = 0; i < fields.length; i++) {
+			var $option = $("<option value='" + fields[i].field + "'>" + fields[i].description + "</option>");
+			$parent.append($option);
+		}
+	}
+	
+	getFields();
+	
 </script>
 
 <h2 class="contentTitle">通过Excel上传营销数据</h2>
@@ -49,24 +113,17 @@
 			multi:true
 		}" />
 
-	<select class="combox" name="salesDataType" id="salesDataType" onchange="setFormData(this)">
-		<option value="">请选择</option>
-		<option value="telephoneArrive">固话到达</option>
-		<option value="broadbandArrive">宽带到达</option>
-		<option value="broadbandNew">宽带新装</option>
-		<option value="broadbandRemove">宽带拆机</option>
-		<option value="broadbandMoveSetup">宽带移机（装）</option>
-		<option value="broadbandMoveUnload">宽带移机（拆）</option>
-		<option value="broadbandOrderInTransit">宽带在途订单</option>
-		<option value="additional_1">附加字段</option>
+	<select id="salesDataType" onchange="setFormData(this)">
+		<option value="请选择">请选择</option>
 	</select>
-	
+	<p>&nbsp;</p>
 	<span class="inputInfo">仅支持 Microsoft Excel 97-2003 Worksheet(.xls)</span>
 	<div id="fileQueue" class="fileQueue"></div>
 
 	<input type="image" src="../dwz/uploadify/img/upload.jpg"
-		onclick="$('#file_upload').uploadify('upload', '*');" />
+		onclick="doUpload()" />
 	<input type="image" src="../dwz/uploadify/img/cancel.jpg"
 		onclick="$('#file_upload').uploadify('cancel', '*');" />
 
 </div>
+

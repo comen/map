@@ -20,28 +20,6 @@ function changeState(obj) {
 	}
 }
 
-function updateHref(thisRow, anchorId) {
-	var href = document.getElementById(anchorId).href;
-	var cells = thisRow.getElementsByTagName("td");
-	for (var i = 0; i < cells.length; i++){
-		switch (i) {
-		case 1:
-			href = href + "&roledesc=" + cells[i].textContent;
-			break;
-		case 2:
-			href = href + "&realname=" + cells[i].textContent;
-			break;
-		case 3:
-			href = href + "&department=" + cells[i].textContent;
-			break;
-		case 4:
-			href = href + "&createdate=" + cells[i].textContent;
-			break;
-		}
-	}
-	document.getElementById(anchorId).href = href;
-}
-
 function validateForm(thisForm) {
 	with (thisForm) {
 		if (validateRequired(username, "请输入用户名！") == false) {
