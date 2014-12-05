@@ -163,22 +163,25 @@ public class User {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		if (userName != null) {
-			sb.append("'username':'" + userName + "'");
+			sb.append("'username':'" + userName + "',");
 		}
 		if (password != null) {
-			sb.append(",'password':'" + password + "'");
+			sb.append("'password':'" + password + "',");
 		}
 		if (role > 0) {
-			sb.append(",'role':" + role);
+			sb.append("'role':" + role + ",");
 		}
 		if (realName != null) {
-			sb.append(",'realname':'" + realName + "'");
+			sb.append("'realname':'" + realName + "',");
 		}
 		if (department != null) {
-			sb.append(",'department':'" + department + "'");
+			sb.append("'department':'" + department + "',");
 		}
 		if (createDate != null) {
-			sb.append(",'createdate':" + createDate.getTime());
+			sb.append("'createdate':" + createDate.getTime());
+		}
+		if (sb.charAt(sb.length() - 1) == ',') {
+			sb.deleteCharAt(sb.length() - 1);
 		}
 		sb.append("}");
 		return sb.toString();

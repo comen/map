@@ -197,10 +197,8 @@ $(function(){
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a href="userlist.jsp?role=1" target="navTab"
-								rel="userlist1" title="浏览用户">浏览用户</a></li>
-							<li><a href="useradd.jsp?role=1" target="navTab"
-								rel="useradd1" title="添加用户">添加用户</a></li>
+							<li><a href="userlist.jsp" target="navTab" rel="userlist" title="浏览用户">浏览用户</a></li>
+							<li><a href="useradd.jsp" target="navTab" rel="useradd" title="添加用户">添加用户</a></li>
 						</ul>
 					</div>
 					<%

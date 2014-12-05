@@ -14,7 +14,9 @@
 	}
 %>
 
-<script type="text/javascript">	
+<script type="text/javascript">
+	getUserList("", 0, "");	// Search all users
+	
 	function search() {
 		getUserList($("#username").val(), $("#role").val(), $("#createdate").val());
 	}
@@ -39,10 +41,23 @@
 	
  	function generateUserList(userListArray) {
 		var $parent = $("#userList");
-		var usetList = eval(userListArray);
-		for (var i = 0; i < usetList.length; i++) {	
+		var userList = eval(userListArray);
+		for (var i = 0; i < 20; i++) {
+			/* If userList.length is less than predefined 20 <tr>, reset the rest <tr> */
+			if (i >= userList.length) {
+				var $tr = $("#" + i);
+				if ($tr) {
+					$tr.attr("rel", i);
+					var $tr_children = $tr.children();
+					$tr_children.each(function(){
+						$(this).text("");
+					});
+					$tr.hide();
+				}
+				continue;
+			}
 			/* Get role description */
-			var role = usetList[i].role;
+			var role = userList[i].role;
 			var roleDesc;
 			switch(role) {
 			case 1:
@@ -61,7 +76,7 @@
 				roleDesc = "未知角色";
 			}
 			/* Format created date */
-			var createDate = new Date(usetList[i].createdate);
+			var createDate = new Date(userList[i].createdate);
 			var year = createDate.getFullYear().toString();
 			var month = (createDate.getMonth() + 1).toString();
 			var day = createDate.getDate();
@@ -72,23 +87,23 @@
 			/* Modify cells */
 			var $tr = $("#" + i);
 			if ($tr) {
-				$tr.attr("id", usetList[i].username);
-				$tr.attr("rel", usetList[i].username);
+				$tr.attr("rel", userList[i].username);
+				$tr.show();
 				var $tr_children = $tr.children();
 				var index = 0;
-				$tr_children.each(function(){
+				$tr_children.each(function() {
 					switch (index) {
 					case 0:
-						$(this).text(usetList[i].username);
+						$(this).text(userList[i].username);
 						break;
 					case 1:
 						$(this).text(roleDesc);
 						break;
 					case 2:
-						$(this).text(usetList[i].realname);
+						$(this).text(userList[i].realname);
 						break;
 					case 3:
-						$(this).text(usetList[i].department);
+						$(this).text(userList[i].department);
 						break;
 					case 4:
 						$(this).text(createDateStr);
@@ -99,17 +114,14 @@
 			}
 		}
 	}
-	
-	getUserList("", 0, "");	// Search all users
-	
 </script>
 
 <form id="pagerForm" method="post" action="userlist.jsp">
-	<input type="hidden" name="status" value="${param.status}"> <input
-		type="hidden" name="keywords" value="${param.keywords}" /> <input
-		type="hidden" name="pageNum" value="1" /> <input type="hidden"
-		name="numPerPage" value="${model.numPerPage}" /> <input type="hidden"
-		name="orderField" value="${param.orderField}" />
+	<input type="hidden" name="status" value="${param.status}">
+	<input type="hidden" name="username" value="${param.username}" />
+	<input type="hidden" name="pageNum" value="1" />
+	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
+	<input type="hidden" name="orderField" value="${param.orderField}" />
 </form>
 
 <div class="pageHeader">
@@ -210,10 +222,108 @@
 				<td></td>
 				<td></td>
 			</tr>
+			<tr id="6" target="sid_user" rel="6">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="7" target="sid_user" rel="7">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="8" target="sid_user" rel="8">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="9" target="sid_user" rel="9">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="10" target="sid_user" rel="10">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="11" target="sid_user" rel="11">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="12" target="sid_user" rel="12">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="13" target="sid_user" rel="13">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="14" target="sid_user" rel="14">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="15" target="sid_user" rel="15">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="16" target="sid_user" rel="16">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="17" target="sid_user" rel="17">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="18" target="sid_user" rel="18">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr id="19" target="sid_user" rel="19">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
 		</tbody>
 	</table>
 	<div class="panelBar">
-		<!-- <div class="pages">
+		<div class="pages">
 			<span>显示</span> <select class="combox" name="numPerPage"
 				onchange="navTabPageBreak({numPerPage:this.value})">
 				<option value="20">20</option>
@@ -221,7 +331,7 @@
 				<option value="100">100</option>
 				<option value="200">200</option>
 			</select> <span>条，共${totalCount}条</span>
-		</div> -->
+		</div>
 
 		<div class="pagination" targetType="navTab" totalCount="200"
 			numPerPage="20" pageNumShown="10" currentPage="1"></div>

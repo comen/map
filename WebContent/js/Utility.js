@@ -30,10 +30,10 @@ function validateForm(thisForm) {
 			password.focus();
 			return false;
 		}
-		if (validateSelected(role, "请选择角色！") == false) {
-			role.focus();
-			return false;
-		}
+//		if (validateSelected(role, "请选择角色！") == false) {
+//			role.focus();
+//			return false;
+//		}
 	}
 }
 

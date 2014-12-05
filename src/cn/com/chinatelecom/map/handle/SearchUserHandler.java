@@ -3,6 +3,8 @@
  */
 package cn.com.chinatelecom.map.handle;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +34,8 @@ public class SearchUserHandler implements IHandler {
 		int role = 0;
 		String realName = "";
 		String department = "";
-//		String createDate = "";
-//		SimpleDateFormat sdt = new SimpleDateFormat(Config.getInstance().getValue("dateFormat"));
+		Date createDate = null;
+		SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
 		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -54,9 +56,17 @@ public class SearchUserHandler implements IHandler {
 					case "department":
 						department = string;
 						break;
-//					case "createdate":
-//						createDate = sdt.format(new Date(Long.parseLong(string)));
-//						break;
+					case "createdate":
+						try {
+							if (!string.equals("")) {
+								createDate = sdt.parse(string);
+							}
+						} catch (Exception e) {
+							String log = StringUtils.getLogPrefix(Level.SEVERE);
+							System.out.println("\n" + log + "\n" + e.getClass()
+									+ "\t:\t" + e.getMessage());
+						}
+						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
 					String log = StringUtils.getLogPrefix(Level.WARNING);
@@ -78,9 +88,9 @@ public class SearchUserHandler implements IHandler {
 		if (!department.equals("")) {
 			user.setDepartment(department);
 		}
-//		if (!createDate.equals("")) {
-//			user.setDepartment(createDate);
-//		}
+		if (createDate != null) {
+			user.setCreateDate(createDate);
+		}
 		
 		List<User> userList = User.findList(user.toString());
 		StringBuffer sb = new StringBuffer();
@@ -99,5 +109,4 @@ public class SearchUserHandler implements IHandler {
 		result.put("SearchUserResult", sb.toString());
 		return result;
 	}
-
 }

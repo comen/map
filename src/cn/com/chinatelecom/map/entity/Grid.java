@@ -63,6 +63,10 @@ public class Grid {
 	public void setCoordinates(List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
+	
+	public Grid() {
+		
+	}
 
 	public Grid(String json) {
 		DBObject dbo = (DBObject) JSON.parse(json);
@@ -191,24 +195,32 @@ public class Grid {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("{GRID_CODE:'" + code + "'");
+		//StringBuffer sb = new StringBuffer("{GRID_CODE:'" + code + "'");
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		if (code != null) {
+			sb.append("GRID_CODE:'" + code + "',");
+		}
 		if (name != null) {
-			sb.append(",GRID_NAME:'" + name + "'");
+			sb.append("GRID_NAME:'" + name + "',");
 		}
 		if (manager != null) {
-			sb.append(",GRID_MANAGER:'" + manager + "'");
+			sb.append("GRID_MANAGER:'" + manager + "',");
 		}
 		if (address != null) {
-			sb.append(",GRID_ADDRESS:'" + address + "'");
+			sb.append("GRID_ADDRESS:'" + address + "',");
 		}
 		if (coordinates != null && !coordinates.isEmpty()) {
-			sb.append(",GRID_COORDINATES:[");
+			sb.append("GRID_COORDINATES:[");
 			for (Coordinate coordinate : coordinates) {
 				sb.append("{LATITUDE:" + coordinate.getLatitude()
 						+ ",LONGTITUDE:" + coordinate.getLongtitude() + "},");
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			sb.append("]");
+		}
+		if (sb.charAt(sb.length() - 1) == ',') {
+			sb.deleteCharAt(sb.length() - 1);
 		}
 		sb.append("}");
 		return sb.toString();

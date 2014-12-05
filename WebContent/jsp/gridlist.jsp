@@ -14,6 +14,77 @@
 	}
 %>
 
+<script type="text/javascript">
+	getGridList("");	// Search all grids
+
+	function search() {
+		getGridList($("#gridcode").val());
+	}
+
+	function getGridList(gridCode) {
+		var formData = new FormData();
+		formData.append("gridcode", gridCode);
+		
+		$.ajax({
+			url: "searchGrid",
+			type: "POST",
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+			success: function(responseText) {
+				generateGridList(responseText);
+			}
+		});
+	}
+	
+ 	function generateGridList(gridListArray) {
+		var $parent = $("#gridList");
+		var gridList = eval(gridListArray);
+		for (var i = 0; i < 20; i++) {
+			/* If gridList.length is less than predefined 20 <tr>, reset the rest <tr> */
+			 if (i >= gridList.length) {
+				var $tr = $("#" + i);
+				if ($tr) {
+					$tr.attr("rel", i);
+					$tr_children.each(function(){
+						$(this).text("");
+					});
+					$tr.hide();
+				}
+				continue;
+			}
+			/* Modify cells */
+			var $tr = $("#" + i);
+			if ($tr) {
+				//$tr.attr("rel", gridList[i].gridcode);
+				$tr.show();
+				var $tr_children = $tr.children();
+				var index = 0;
+				$tr_children.each(function() {
+					switch (index) {
+					case 0:
+						$(this).text(gridList[i].GRID_CODE);
+						break;
+					case 1:
+						$(this).text(gridList[i].GRID_NAME);
+						break;
+					case 2:
+						$(this).text(gridList[i].GRID_MANAGER);
+						break;
+					case 3:
+						$(this).text(gridList[i].GRID_ADDRESS);
+						break;
+					//case 4:
+						//$(this).text(gridList[i].GRID_CODE);
+						//break;
+					}
+					index = index + 1;
+				});
+			}
+		}
+	}
+</script>
+
 <form id="pagerForm" method="post" action="gridlist.jsp">
 	<input type="hidden" name="status" value="${param.status}"> <input
 		type="hidden" name="keywords" value="${param.keywords}" /> <input
@@ -24,36 +95,34 @@
 
 
 <div class="pageHeader">
-	<form onsubmit="return navTabSearch(this);" action="gridlist.jsp"
-		method="post">
+	<!-- <form onsubmit="return navTabSearch(this);" action="gridlist.jsp"
+		method="post"> -->
 		<div class="searchBar">
 			<table class="searchContent">
 				<tr>
-					<td>网格编号：<input type="text" name="grid_code" />
-					</td>
+					<td>网格编号：<input type="text" name="gridcode" id="gridcode" /></td>
 				</tr>
 			</table>
 			<div class="subBar">
 				<ul>
 					<li><div class="buttonActive">
 							<div class="buttonContent">
-								<button type="submit">检索</button>
+								<button type="submit" onclick="search()">检索</button>
 							</div>
 						</div></li>
-					<li><a class="button" href="gridadvsearch.jsp" target="dialog"
-						height="360" mask="true" title="查询框"><span>高级检索</span></a></li>
+					<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="360" mask="true" title="查询框"><span>高级检索</span></a></li>
 				</ul>
 			</div>
 		</div>
-	</form>
+	<!-- </form> -->
 </div>
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="gridadd.jsp" target="dialog"
-				height="360"><span>添加</span></a></li>
+			<li><a class="add" href="gridadd.jsp" target="dialog" title="添加网格"
+				height="300"><span>添加</span></a></li>
 			<li class="line">line</li>
-			<li><a class="delete" href="ajaxDone.jsp?gid={sid_grid}"
+			<li><a class="delete" href="deleteGrid?gid={sid_grid}"
 				target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li class="line">line</li>
 			<li><a class="edit" href="gridedit.jsp?gid={sid_grid}"
@@ -70,34 +139,150 @@
 				<th align="center" width="100">网格编号</th>
 				<th align="center" width="100">网格名称</th>
 				<th align="center" width="100">网格经理</th>
-				<th align="center" width="100">网格对应地图地址</th>
+				<th align="center" width="100">网格地址</th>
 				<th align="center" width="100">操作</th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr target="sid_grid" rel="BQ-GQ-BZC-1000">
-				<td>BQ-GQ-BZC-1000</td>
-				<td>耀光国际</td>
-				<td>李健</td>
-				<td>祁连山南路2888号</td>
-				<td><a href="grideditinmap.jsp" target="dialog" width="800"
-					height="600" title="BQ-GQ-BZC-1000 耀光国际" rel="salesdatalist">{编辑地图区域}</a></td>
+		<tbody id="gridList">
+			<tr id="0" target="sid_grid" rel="0">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr target="sid_grid" rel="BQ-GQ-BZC-2017">
-				<td>BQ-GQ-BZC-2017</td>
-				<td>大众物流</td>
-				<td>李健</td>
-				<td>绥德路二弄24号</td>
-				<td><a href="grideditinmap.jsp" target="dialog" width="800"
-					height="600" title="BQ-GQ-BZC-2017 大众物流" rel="salesdatalist">{编辑地图区域}</a></td>
+			<tr id="1" target="sid_grid" rel="1">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr target="sid_grid" rel="BQ-GQ-DAH-1003">
-				<td>BQ-GQ-DAH-1003</td>
-				<td>大华第一坊</td>
-				<td>沈旭东</td>
-				<td>大华二路316号</td>
-				<td><a href="grideditinmap.jsp" target="dialog" width="800"
-					height="600" title="BQ-GQ-DAH-1003 大华第一坊" rel="salesdatalist">{编辑地图区域}</a></td>
+			<tr id="2" target="sid_grid" rel="2">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="3" target="sid_grid" rel="3">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="4" target="sid_grid" rel="4">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="5" target="sid_grid" rel="5">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="6" target="sid_grid" rel="6">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="7" target="sid_grid" rel="7">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="8" target="sid_grid" rel="8">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="9" target="sid_grid" rel="9">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="10" target="sid_grid" rel="10">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="11" target="sid_grid" rel="11">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="12" target="sid_grid" rel="12">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="13" target="sid_grid" rel="13">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="14" target="sid_grid" rel="14">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="15" target="sid_grid" rel="15">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="16" target="sid_grid" rel="16">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="17" target="sid_grid" rel="17">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="18" target="sid_grid" rel="18">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+			</tr>
+			<tr id="19" target="sid_grid" rel="19">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 		</tbody>
 	</table>

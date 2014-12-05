@@ -32,10 +32,8 @@
 					type="text" size="30" />
 			</div>
 			<div class="unit">
-				<label>网格对应地图地址：</label> <input id="grid_address" class="required"
-					type="text" size="50" /> <span><a href="grideditinmap.jsp"
-					target="dialog" width="800" height="600"
-					title="BQ-GQ-BZC-1000 耀光国际" rel="salesdatalist">{编辑地图区域}</a></span>
+				<label>网格地址：</label> <input id="grid_address" class="required"
+					type="text" size="50" />
 			</div>
 		</div>
 		<div class="formBar">

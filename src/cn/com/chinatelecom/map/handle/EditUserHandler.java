@@ -28,7 +28,7 @@ public class EditUserHandler implements IHandler {
 		User user = new User();
 		String userName = "";
 		String password = "";
-		int role = 0;
+		int role = 4;	// Set default as Normal User
 		String realName = "";
 		String department = "";
 		
@@ -45,7 +45,13 @@ public class EditUserHandler implements IHandler {
 						password = string;
 						break;
 					case "role":
-						role = Integer.parseInt(string);
+						try {
+							role = Integer.parseInt(string);
+						} catch (Exception e) {
+							String log = StringUtils.getLogPrefix(Level.SEVERE);
+							System.out.println("\n" + log + "\n" + e.getClass()
+									+ "\t:\t" + e.getMessage());
+						}
 						break;
 					case "realname":
 						realName = string;

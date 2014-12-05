@@ -35,13 +35,13 @@
 	});
 	
 	function populateUserAttribute(userListArray) {
-		var usetList = eval(userListArray);
-		for (var i = 0; i < usetList.length; i++) {
-			if (usetList[i].username != $("#uid").val()) {
+		var userList = eval(userListArray);
+		for (var i = 0; i < userList.length; i++) {
+			if (userList[i].username != $("#uid").val()) {
 				continue;
 			}
 			/* Format created date */
-			var createDate = new Date(usetList[i].createdate);
+			var createDate = new Date(userList[i].createdate);
 			var year = createDate.getFullYear().toString();
 			var month = (createDate.getMonth() + 1).toString();
 			var day = createDate.getDate();
@@ -49,19 +49,29 @@
 				day = "0" + day;
 			}
 			var createDateStr = year + "-" + month + "-" + day;
-			$("#createdate").val(createDateStr);
-			$("#role").val(usetList[i].role);
-			$("#realname").val(usetList[i].realname);
-			$("#department").val(usetList[i].department);
+			$("#userCreateDate").val(createDateStr);
+			$("#realname").val(userList[i].realname);
+			$("#department").val(userList[i].department);
+			if (userList[i].role == null) {
+				/* Sometimes role attribute will be removed because of no reason, 
+				 * if so it will be set default as normal user. */
+				$("#userRole").val("4");
+			} else {
+				$("#userRole").val(userList[i].role.toString());
+			}
 		}
 	}
 	
 	function save() {
 		var formData = new FormData();
 		formData.append("username", $("#uid").val());
+		formData.append("role", $("#role").val());
+		formData.append("resetpassword", $("#resetpassword").val());
+		formData.append("realname", $("#realname").val());
+		formData.append("department", $("#department").val());
 		
 		$.ajax({
-		  url: "searchUser",
+		  url: "editUser",
 		  type: "POST",
 		  data: formData,
 		  processData: false,  // 告诉jQuery不要去处理发送的数据
@@ -79,7 +89,7 @@
 					value="<%=uid%>" readonly="readonly" />
 			</p>
 			<p>
-				<label>角色：</label> <select name="role" id="role">
+				<label>角色：</label> <select name="role" id="userRole">
 					<option value="1">系统管理员</option>
 					<option value="2">网格数据管理员</option>
 					<option value="3">营销数据管理员</option>
@@ -87,7 +97,7 @@
 				</select>
 			</p>
 			<p>
-				<label>重置密码为：</label> <input name="resetpassword" class="required"
+				<label>重置密码为：</label> <input name="resetpassword" id="resetpassword" class="required"
 					size="30" minlength="6" maxlength="20" value="111111"
 					alt="请输入6-20位初始密码" />
 			</p>
@@ -100,7 +110,7 @@
 					value="" />
 			</p>
 			<p>
-				<label>账户开通日期：</label> <input name="createdate" id="createdate" type="text"
+				<label>账户开通日期：</label> <input name="createdate" id="userCreateDate" type="text"
 					size="30" value="" readonly="true" />
 			</p>
 		</div>
