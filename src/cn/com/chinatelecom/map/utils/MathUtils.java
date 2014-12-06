@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class MathUtils {
 
-	public static double getTitude(double number, double decimal) {
+	public static double getTitude(double number, int decimal) {
 		String format = "0.";
 		for (int i = 0; i < decimal; i++) {
 			format += '0';

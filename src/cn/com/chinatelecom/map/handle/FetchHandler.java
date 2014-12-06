@@ -114,8 +114,7 @@ public class FetchHandler implements IHandler {
 				grid = grids.get(i);
 				if (1 != grid.getCode().length()
 						&& MathUtils.randomTrue(19 - zoom)
-						&& (grid.getCoordinates() == null || bounds
-								.contains(grids.get(i)))) {
+						&& bounds.contains(grid)) {
 					amount++;
 					sb.append(grid.toFetch() + ",");
 				}
