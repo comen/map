@@ -29,7 +29,19 @@ public class DateUtils {
 					+ "\t:\t" + e.getMessage());
 		}
 		return currentDate;
-		
+	}
+	
+	public static Date getSpecificDate(String dateStr, String dateFormat) {
+		SimpleDateFormat sdt = new SimpleDateFormat(dateFormat);
+		Date date = null;
+		try {
+			date = sdt.parse(dateStr);
+		} catch (Exception e) {
+			String log = StringUtils.getLogPrefix(Level.SEVERE);
+			System.out.println("\n" + log + "\n" + e.getClass()
+					+ "\t:\t" + e.getMessage());
+		}
+		return date;
 	}
 	
 	public static Date getFirstDayOfThisWeek(Date date) {

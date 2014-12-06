@@ -46,8 +46,21 @@
 				var $tr = $("#" + i);
 				if ($tr) {
 					$tr.attr("rel", i);
+					var index = 0;
 					$tr_children.each(function(){
-						$(this).text("");
+						switch (index) {
+						case 0:
+						case 1:
+						case 2:
+						case 3:
+							$(this).text("");
+							break;
+						case 4:
+							$(this).find('a').attr("href", "grideditinmap.jsp?address=");
+							$(this).find('a').attr("title", "");
+							break;
+						}
+						index = index + 1;
 					});
 					$tr.hide();
 				}
@@ -74,9 +87,12 @@
 					case 3:
 						$(this).text(gridList[i].GRID_ADDRESS);
 						break;
-					//case 4:
-						//$(this).text(gridList[i].GRID_CODE);
-						//break;
+					case 4:
+						var href = $(this).find('a').attr("href");
+						$(this).find('a').attr("href", href + gridList[i].GRID_ADDRESS);
+						var title = gridList[i].GRID_CODE + " " + gridList[i].GRID_NAME;
+						$(this).find('a').attr("title", title);
+						break;
 					}
 					index = index + 1;
 				});
@@ -86,11 +102,11 @@
 </script>
 
 <form id="pagerForm" method="post" action="gridlist.jsp">
-	<input type="hidden" name="status" value="${param.status}"> <input
-		type="hidden" name="keywords" value="${param.keywords}" /> <input
-		type="hidden" name="pageNum" value="1" /> <input type="hidden"
-		name="numPerPage" value="${model.numPerPage}" /> <input type="hidden"
-		name="orderField" value="${param.orderField}" />
+	<input type="hidden" name="status" value="${param.status}" />
+	<input type="hidden" name="keywords" value="${param.keywords}" />
+	<input type="hidden" name="pageNum" value="1" />
+	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
+	<input type="hidden" name="orderField" value="${param.orderField}" />
 </form>
 
 
@@ -149,140 +165,140 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="1" target="sid_grid" rel="1">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="2" target="sid_grid" rel="2">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="3" target="sid_grid" rel="3">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="4" target="sid_grid" rel="4">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="5" target="sid_grid" rel="5">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="6" target="sid_grid" rel="6">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="7" target="sid_grid" rel="7">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="8" target="sid_grid" rel="8">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="9" target="sid_grid" rel="9">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="10" target="sid_grid" rel="10">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="11" target="sid_grid" rel="11">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="12" target="sid_grid" rel="12">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="13" target="sid_grid" rel="13">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="14" target="sid_grid" rel="14">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="15" target="sid_grid" rel="15">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="16" target="sid_grid" rel="16">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="17" target="sid_grid" rel="17">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="18" target="sid_grid" rel="18">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 			<tr id="19" target="sid_grid" rel="19">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a href="grideditinmap.jsp?gridcode=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
+				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
 		</tbody>
 	</table>
