@@ -2,13 +2,16 @@ package cn.com.chinatelecom.map.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.common.MongoDB;
 import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.MathUtils;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
@@ -404,6 +407,38 @@ public class Data {
 		return data.getValue(memberVariable);
 	}
 	
+	public static Map<String, Object> getFieldDescAndQty(Date calculatedDate, String gridCode) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Data data = new Data();
+		data.setCalculatedDate(calculatedDate);
+		data.setGridCode(gridCode);
+		if (data.exist()) {
+			data = Data.findOne(data.toString());
+		} else {
+			return null;
+		}
+		String[] namesOfMemVar = getNameOfMemberVariables();
+		for (int i = 0; i < namesOfMemVar.length; i++) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+				continue;
+			}
+			if (fieldIsOnUse(namesOfMemVar[i])) {
+				String fieldDesc = getFieldDesc(namesOfMemVar[i]);
+				int fieldQty = 0;
+				try {
+					fieldQty = Integer.parseInt(data.getValue(namesOfMemVar[i]).toString());
+				} catch (Exception e) {
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
+				}
+				result.put(fieldDesc, fieldQty);
+			}
+		}
+		
+		return result;
+	}
+	
 	public static boolean fieldIsOnUse(String memberVariable) {
 		Config config = Config.getInstance();
 		@SuppressWarnings("unchecked")
@@ -457,6 +492,13 @@ public class Data {
 	}
 	
 	public static String getFieldSpecialDisplay(Date calculatedDate, String gridCode, String mode ) {
+		Data data = new Data();
+		data.setCalculatedDate(calculatedDate);
+		data.setGridCode(gridCode);
+		if (!data.exist()) {
+			return null;
+		}
+		
 		if (mode.equalsIgnoreCase("Day")) {
 			return getFieldSpecialDisplayInDay(calculatedDate, gridCode);
 		} else if (mode.equalsIgnoreCase("Week")) {
