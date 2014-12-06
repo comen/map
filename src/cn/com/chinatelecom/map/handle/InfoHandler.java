@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -12,7 +11,6 @@ import cn.com.chinatelecom.map.entity.Coordinate;
 import cn.com.chinatelecom.map.entity.Data;
 import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.utils.DateUtils;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author joseph
@@ -29,8 +27,7 @@ public class InfoHandler implements IHandler {
 	public Map<String, Object> handle(List<FileItem> items) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (null == items) {
-			String log = StringUtils.getLogPrefix(Level.WARNING);
-			System.out.println("\n" + log + "\nThere is no request item!");
+			logger.warn("没有请求数据!");
 			return null;
 		}
 
@@ -68,13 +65,8 @@ public class InfoHandler implements IHandler {
 		String format = "MM/dd/yyyy";
 		Date specific = DateUtils.getSpecificDate(date, format);
 
-		String log = StringUtils.getLogPrefix(Level.INFO);
-		System.out.println("\n" + log + "\nGetting info on zoom level of "
-				+ zoom + "...");
-		System.out.println("Longtitude: " + longtitude);
-		System.out.println("Latitude: " + latitude);
-		System.out.println("Mode: " + mode);
-		System.out.println("Date: " + specific);
+		logger.info("获取信息在缩放级别: " + zoom + ". 经度: " + longtitude + ". 纬度: "
+				+ latitude + ". 模式: " + mode + ". 日期: " + specific);
 
 		Coordinate coordinate = new Coordinate(latitude, longtitude);
 		String data = null;
@@ -84,10 +76,10 @@ public class InfoHandler implements IHandler {
 		case 13:
 			grid = Grid.findOne("{GRID_CODE:'0'}");
 			if (grid.contains(coordinate)) {
-				System.out.println("Grid: " + grid.getCode() + ","
-						+ grid.getName());
 				data = Data.getFieldDescAndQty(specific, grid.getCode(), mode);
-				result.put("grid", grid.toInfo(data));
+				data = grid.toInfo(data);
+				logger.info("网格信息: " + data);
+				result.put("grid", data);
 			}
 			break;
 		case 14:
@@ -95,11 +87,11 @@ public class InfoHandler implements IHandler {
 			for (int i = 1; i != 5; i++) {
 				grid = Grid.findOne("{GRID_CODE:'" + i + "'}");
 				if (null != grid && grid.contains(coordinate)) {
-					System.out.println("Grid: " + grid.getCode() + ","
-							+ grid.getName());
 					data = Data.getFieldDescAndQty(specific, grid.getCode(),
 							mode);
-					result.put("grid", grid.toInfo(data));
+					data = grid.toInfo(data);
+					logger.info("网格信息: " + data);
+					result.put("grid", data);
 					break;
 				}
 			}
@@ -111,10 +103,10 @@ public class InfoHandler implements IHandler {
 			List<Grid> grids = Grid.findList(null);
 			for (Grid g : grids) {
 				if (g.contains(coordinate) && 1 != g.getCode().length()) {
-					System.out.println("Grid: " + g.getCode() + ","
-							+ g.getName());
 					data = Data.getFieldDescAndQty(specific, g.getCode(), mode);
-					result.put("grid", g.toInfo(data));
+					data = g.toInfo(data);
+					logger.info("网格信息: " + data);
+					result.put("grid", data);
 					break;
 				}
 			}

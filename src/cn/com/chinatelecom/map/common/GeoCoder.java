@@ -7,9 +7,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
-import cn.com.chinatelecom.map.utils.StringUtils;
+import org.apache.log4j.Logger;
 
 /**
  * @author joseph
@@ -20,6 +19,7 @@ public class GeoCoder {
 	private static GeoCoder instance;
 	private String url;
 	private Map<String, String> parameters;
+	private Logger logger = Logger.getLogger(MongoDB.class);
 
 	private GeoCoder() {
 		url = Config.getInstance().getValue("geocoder");
@@ -35,27 +35,39 @@ public class GeoCoder {
 	}
 
 	public String getParameter(String key) {
-		if (null == key || null == parameters || parameters.isEmpty())
+		if (null == key || null == parameters || parameters.isEmpty()) {
+			logger.error("要获取的geocoder参数为空！");
 			return null;
+		}
 		return parameters.get(key);
 	}
 
 	public void setParameter(String key, String value) {
 		if (null != key)
 			parameters.replace(key, value);
+		else
+			logger.error("geocoder参数的键不能为空！");
 	}
 
 	public void putParameter(String key, String value) {
 		if (null != key)
 			parameters.put(key, value);
+		else
+			logger.error("geocoder参数的键不能为空！");
 	}
 
 	public void removeParameter(String key) {
 		if (null != key)
 			parameters.remove(key);
+		else
+			logger.error("geocoder参数的键不能为空！");
 	}
 
 	public String geoCode(String address) {
+		if (null == address) {
+			logger.warn("请求geocoder的地址为空！");
+			return null;
+		}
 		try {
 			address = URLEncoder.encode(address,
 					Config.getInstance().getValue("charset"));
@@ -70,9 +82,7 @@ public class GeoCoder {
 			}
 			return sb.toString();
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("请求geocoder发生错误: " + e.getMessage());
 			return null;
 		}
 	}

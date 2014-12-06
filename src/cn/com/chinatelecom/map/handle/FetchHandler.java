@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -27,11 +26,9 @@ public class FetchHandler implements IHandler {
 	 */
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
-
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (null == items) {
-			String log = StringUtils.getLogPrefix(Level.WARNING);
-			System.out.println("\n" + log + "\nThere is no request item!");
+			logger.warn("没有请求数据!");
 			return null;
 		}
 
@@ -77,11 +74,8 @@ public class FetchHandler implements IHandler {
 		String format = "MM/dd/yyyy";
 		Date specific = DateUtils.getSpecificDate(date, format);
 
-		String log = StringUtils.getLogPrefix(Level.INFO);
-		System.out.println("\n" + log + "\nFetching grids on zoom level of "
-				+ zoom + "...");
-		System.out.println("Mode: " + mode);
-		System.out.println("Date: " + specific);
+		logger.info("抓取数据在缩放级别: " + zoom + ". 模式: " + mode + ". 日期: "
+				+ specific);
 
 		String json = "{GRID_CODE: '-1', GRID_COORDINATES:[{LONGTITUDE:"
 				+ swlng + ",LATITUDE:" + nelat + "},{LONGTITUDE:" + swlng
@@ -145,8 +139,8 @@ public class FetchHandler implements IHandler {
 		}
 		result.put("grids", sb.toString());
 
-		System.out.println("Grids amount: " + amount);
-		System.out.println(result.get("grids"));
+		logger.info("网格数量: " + amount);
+		logger.info(result.get("grids"));
 
 		return result;
 	}

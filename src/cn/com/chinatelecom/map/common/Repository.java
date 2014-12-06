@@ -1,15 +1,13 @@
 package cn.com.chinatelecom.map.common;
 
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
-import cn.com.chinatelecom.map.utils.StringUtils;
+import org.apache.log4j.Logger;
 
 /**
  * @author joseph
@@ -19,6 +17,7 @@ public class Repository {
 
 	private static Repository instance;
 	private ServletFileUpload sfu;
+	private Logger logger = Logger.getLogger(Repository.class);
 
 	private Repository() {
 		Config config = Config.getInstance();
@@ -37,12 +36,14 @@ public class Repository {
 	}
 
 	public List<FileItem> parse(HttpServletRequest request) {
+		if (null == request) {
+			logger.error("待解析HTTP请求为空！");
+			return null;
+		}
 		try {
 			return sfu.parseRequest(request);
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("解析HTTP请求失败: " + e.getMessage());
 		}
 		return null;
 	}

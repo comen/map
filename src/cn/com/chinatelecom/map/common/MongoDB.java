@@ -2,9 +2,8 @@ package cn.com.chinatelecom.map.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
-import cn.com.chinatelecom.map.utils.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -24,6 +23,7 @@ public class MongoDB {
 
 	private static MongoDB instance;
 	private DB db;
+	private Logger logger = Logger.getLogger(MongoDB.class);
 
 	private MongoDB() {
 		try {
@@ -32,9 +32,7 @@ public class MongoDB {
 					.getValue("dbport")));
 			db = mongoClient.getDB(Config.getInstance().getValue("dbname"));
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("初始化数据库失败: " + e.getMessage());
 		}
 	}
 

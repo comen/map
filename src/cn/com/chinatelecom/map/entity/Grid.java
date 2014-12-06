@@ -3,12 +3,13 @@ package cn.com.chinatelecom.map.entity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
+
+import org.apache.log4j.Logger;
 
 import javafx.scene.shape.Polygon;
 import cn.com.chinatelecom.map.common.GeoCoder;
 import cn.com.chinatelecom.map.common.MongoDB;
-import cn.com.chinatelecom.map.utils.StringUtils;
+import cn.com.chinatelecom.map.handle.IHandler;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -26,6 +27,7 @@ public class Grid {
 	private String manager;
 	private String address;
 	private List<Coordinate> coordinates;
+	Logger logger = Logger.getLogger(IHandler.class);
 
 	public String getCode() {
 		return code;
@@ -68,19 +70,32 @@ public class Grid {
 	}
 
 	public Grid(String json) {
-		DBObject dbo = (DBObject) JSON.parse(json);
-		setGrid(dbo);
+		if (null != json) {
+			try {
+				DBObject dbo = (DBObject) JSON.parse(json);
+				setGrid(dbo);
+			} catch (Exception e) {
+				logger.warn("解析网格字符串错误: " + e.getMessage());
+			}
+		} else {
+			logger.error("待设置网格字符串为空！");
+		}
 	}
 
 	public Grid(DBObject dbo) {
-		setGrid(dbo);
+		if (null != dbo)
+			setGrid(dbo);
+		else
+			logger.error("待设置网格数据库对象为空！");
 	}
 
 	private void setGrid(DBObject dbo) {
-		if (null != dbo.get("GRID_CODE"))
+		if (null != dbo && null != dbo.get("GRID_CODE")) {
 			code = dbo.get("GRID_CODE").toString();
-		else
+		} else {
+			logger.error("待设置网格ID为空！");
 			return;
+		}
 		if (null != dbo.get("GRID_NAME"))
 			name = dbo.get("GRID_NAME").toString();
 		if (null != dbo.get("GRID_MANAGER"))
@@ -213,9 +228,7 @@ public class Grid {
 				}
 			}
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("根据网格地址(" + address + ")获取坐标失败: " + e.getMessage());
 		}
 		return null;
 	}

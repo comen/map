@@ -34,6 +34,7 @@ public class PageProcessor implements IProcessor {
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
 		if (null == result) {
+			logger.warn("没有响应数据!");
 			return;
 		}
 		for (Entry<String, Object> eso : result.entrySet()) {

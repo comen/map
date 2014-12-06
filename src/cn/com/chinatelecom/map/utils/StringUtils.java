@@ -7,6 +7,8 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
@@ -16,26 +18,30 @@ import com.mongodb.util.JSON;
  */
 public class StringUtils {
 
+	private static Logger logger = Logger.getLogger(StringUtils.class);
+
 	public static boolean isLegal(String name, String filter) {
+		if (null == name || null == filter) {
+			logger.error("文件名或正则表达式为空！");
+			return false;
+		}
 		try {
-			if (null == name || null == filter)
-				return false;
 			Pattern p = Pattern.compile(filter);
 			Matcher m = p.matcher(name);
 			if (!m.find())
 				return false;
 			return true;
 		} catch (Exception e) {
-			String log = getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.error("匹配正则表达式错误: " + e.getMessage());
 			return false;
 		}
 	}
 
 	public static String getFileName(String path) {
-		if (null == path)
+		if (null == path) {
+			logger.error("文件路径为空！");
 			return null;
+		}
 		int index = path.lastIndexOf("/");
 		if (0 < index)
 			return path.substring(index);
@@ -58,8 +64,10 @@ public class StringUtils {
 	}
 
 	public static String getColor(String rgb) {
-		if (rgb == null)
+		if (null == rgb || "".equals(rgb.trim())) {
+			logger.warn("输入的RGB组合为空！");
 			return "#FFFFFF";
+		}
 		String color = "#FFFFFF";
 		DBObject dbo = null;
 		try {
@@ -70,9 +78,7 @@ public class StringUtils {
 			int g = (int) (G * 15 / (R + G));
 			color = "#" + getHtmlColor(r) + getHtmlColor(g) + "00";
 		} catch (Exception e) {
-			String log = getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("解析RGB组合错误: " + e.getMessage());
 		}
 		return color;
 	}

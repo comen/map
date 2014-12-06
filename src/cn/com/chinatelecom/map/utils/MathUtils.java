@@ -18,8 +18,9 @@ public class MathUtils {
 	}
 
 	public static boolean randomTrue(int chance) {
-		if (2 > chance)
+		if (2 > chance) {
 			return true;
+		}
 		Random random = new Random();
 		int number = random.nextInt();
 		if (number % chance == 0)

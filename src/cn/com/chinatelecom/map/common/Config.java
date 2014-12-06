@@ -3,9 +3,8 @@ package cn.com.chinatelecom.map.common;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Properties;
-import java.util.logging.Level;
 
-import cn.com.chinatelecom.map.utils.StringUtils;
+import org.apache.log4j.Logger;
 
 /**
  * @author joseph
@@ -15,15 +14,14 @@ public class Config {
 
 	private static Config instance;
 	private Properties properties;
+	private Logger logger = Logger.getLogger(Config.class);
 
 	private Config() {
 		try {
 			properties = new Properties();
 			properties.load(getClass().getResourceAsStream("/conf.properties"));
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("读取配置文件错误: " + e.getMessage());
 		}
 	}
 
@@ -38,13 +36,16 @@ public class Config {
 	}
 
 	public void setValue(String key, String value) {
+		if (null == key || null == value) {
+			logger.error("修改配置文件输入参数不能为空！");
+			return;
+		}
 		try {
 			properties.setProperty(key, value);
 			String uri = "C:/eclipse-workspace/Map/src/conf.properties";
 			properties.store(new FileOutputStream(new File(uri)), null);
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+			logger.fatal("修改配置文件(" + key + "-->" + value + ")错误: "
 					+ e.getMessage());
 		}
 	}
