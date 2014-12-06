@@ -2,7 +2,6 @@ package cn.com.chinatelecom.map.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -407,16 +406,29 @@ public class Data {
 		return data.getValue(memberVariable);
 	}
 	
-	public static Map<String, Object> getFieldDescAndQty(Date calculatedDate, String gridCode) {
-		Map<String, Object> result = new HashMap<String, Object>();
+	public static String getFieldDescAndQty(Date calculatedDate, String gridCode, String mode) {
 		Data data = new Data();
 		data.setCalculatedDate(calculatedDate);
 		data.setGridCode(gridCode);
-		if (data.exist()) {
-			data = Data.findOne(data.toString());
+		if (!data.exist()) {
+			return null;
+		}
+		
+		if (mode.equalsIgnoreCase("Day")) {
+			return getFieldDescAndQtyInDay(calculatedDate, gridCode);
+		} else if (mode.equalsIgnoreCase("Week")) {
+			return getFieldDescAndQtyInWeek(calculatedDate, gridCode);
+		} else if (mode.equalsIgnoreCase("Month")) {
+			return getFieldDescAndQtyInMonth(calculatedDate, gridCode);
 		} else {
 			return null;
 		}
+	}
+	
+	public static String getFieldDescAndQtyInDay(Date calculatedDate, String gridCode) {
+		StringBuffer sb = new StringBuffer();
+		Data data = getDataOfDay(calculatedDate, gridCode);
+		
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		for (int i = 0; i < namesOfMemVar.length; i++) {
 			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
@@ -432,11 +444,137 @@ public class Data {
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
 				}
-				result.put(fieldDesc, fieldQty);
+				sb.append(fieldDesc);
+				sb.append("：");	//冒号
+				sb.append(fieldQty);
+				sb.append("；");	//分号
+			}
+		}
+		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '；') { //删除末尾分号
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		return sb.toString();
+	}
+	
+	public static String getFieldDescAndQtyInWeek(Date calculatedDate, String gridCode) {
+		StringBuffer sb = new StringBuffer();
+		List<Data> dataListThisWeek = getDataOfWeek(calculatedDate, gridCode);
+		List<Data> dataListLastWeek = getDataOfWeek(DateUtils.getFirstDayOfLastWeek(calculatedDate), gridCode);
+		
+		Config config = Config.getInstance();
+		String[] namesOfMemVar = getNameOfMemberVariables();
+		
+		for (int i = 0; i < namesOfMemVar.length; i++) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+				continue;
+			}
+			@SuppressWarnings("unchecked")
+			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
+			
+			int status = Integer.parseInt(field.get("status").toString());
+			if (status < 0) { // field not in use
+				continue;
+			}
+			
+			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
+			if (onlyDay > 0) { // field should be only displayed in DAY
+				continue;
+			} else {
+				/* Calculate Huanbi growth rate comparing this week with last week */
+				int sumThisWeek = 0;
+				for (int j = 0; j < dataListThisWeek.size(); j++) {
+					Data data = dataListThisWeek.get(j);
+					sumThisWeek = sumThisWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				int sumLastWeek = 0;
+				for (int j = 0; j < dataListLastWeek.size(); j++) {
+					Data data = dataListLastWeek.get(j);
+					sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek);
+				
+				String fieldDesc = getFieldDesc(namesOfMemVar[i]);
+				sb.append(fieldDesc);
+				sb.append("：");	//冒号
+				sb.append(sumThisWeek);
+				sb.append("，");	//逗号
+				
+				sb.append("环比：");
+				sb.append(huanbiGrowthRate);
+				sb.append("%；");
 			}
 		}
 		
-		return result;
+		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '；') { //删除末尾分号
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		return sb.toString();
+	}
+	
+	public static String getFieldDescAndQtyInMonth(Date calculatedDate, String gridCode) {
+		StringBuffer sb = new StringBuffer();
+		List<Data> dataListThisMonth = getDataOfMonth(calculatedDate, gridCode);
+		List<Data> dataListLastMonth = getDataOfMonth(DateUtils.getFirstDayOfLastMonth(calculatedDate), gridCode);
+		List<Data> dataListThisMonthLastYear = getDataOfMonth(DateUtils.getFirstDayOfThisMonthLastYear(calculatedDate), gridCode);
+		
+		Config config = Config.getInstance();
+		String[] namesOfMemVar = getNameOfMemberVariables();
+		
+		for (int i = 0; i < namesOfMemVar.length; i++) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+				continue;
+			}
+			@SuppressWarnings("unchecked")
+			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
+			
+			int status = Integer.parseInt(field.get("status").toString());
+			if (status < 0) { // field not in use
+				continue;
+			}
+			
+			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
+			if (onlyDay > 0) { // field should be only displayed in DAY
+				continue;
+			} else {
+				/* Calculate Huanbi (& Tongbi) growth rate comparing this month with last month (& same month in last year) */
+				int sumThisMonth = 0;
+				for (int j = 0; j < dataListThisMonth.size(); j++) {
+					Data data = dataListThisMonth.get(j);
+					sumThisMonth = sumThisMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				int sumLastMonth = 0;
+				for (int j = 0; j < dataListLastMonth.size(); j++) {
+					Data data = dataListLastMonth.get(j);
+					sumLastMonth = sumLastMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				int sumThisMonthLastYear = 0;
+				for (int j = 0; j < dataListThisMonthLastYear.size(); j++) {
+					Data data = dataListThisMonthLastYear.get(j);
+					sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				}
+				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth);
+				double tongbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear);
+				
+				String fieldDesc = getFieldDesc(namesOfMemVar[i]);
+				sb.append(fieldDesc);
+				sb.append("：");	//冒号
+				sb.append(sumThisMonth);
+				sb.append("，");	//逗号
+				
+				sb.append("环比：");
+				sb.append(huanbiGrowthRate);
+				sb.append("%，");
+				
+				sb.append("同比：");
+				sb.append(tongbiGrowthRate);
+				sb.append("%；");
+			}
+		}
+		
+		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '；') { //删除末尾分号
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		return sb.toString();
 	}
 	
 	public static boolean fieldIsOnUse(String memberVariable) {
@@ -491,7 +629,7 @@ public class Data {
 		return Data.findList(sb.toString());
 	}
 	
-	public static String getFieldSpecialDisplay(Date calculatedDate, String gridCode, String mode ) {
+	public static String getFieldSpecialDisplay(Date calculatedDate, String gridCode, String mode) {
 		Data data = new Data();
 		data.setCalculatedDate(calculatedDate);
 		data.setGridCode(gridCode);
@@ -503,7 +641,7 @@ public class Data {
 			return getFieldSpecialDisplayInDay(calculatedDate, gridCode);
 		} else if (mode.equalsIgnoreCase("Week")) {
 			return getFieldSpecialDisplayInWeek(calculatedDate, gridCode);
-		} else if (mode.equalsIgnoreCase("Year")) {
+		} else if (mode.equalsIgnoreCase("Month")) {
 			return getFieldSpecialDisplayInMonth(calculatedDate, gridCode);
 		} else {
 			return null;

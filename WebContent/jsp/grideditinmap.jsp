@@ -14,11 +14,48 @@
 	}
 %>
 
-<h2 class="contentTitle">请编辑网格在地图中的区域：</h2>
+<%
+	String longitude = "";
+	String latitude = "";
+	String address = request.getParameter("address");
+	if (address == null) {
+		return;
+	}
+	out.println("<input type=\"hidden\" id=\"address\" value=\"" + address + "\">");
+%>
 
+<script type="text/javascript">
+	getCoordinates($("#address").val());
+
+	function getCoordinates(address) {
+		var formData = new FormData();
+		formData.append("address", address);
+		
+		$.ajax({
+			url: "fetchCoordinates",
+			type: "POST",
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+			success: function(responseText) {
+				var $longitude = $("#longitude");
+				var $latitude = $("#latitude");
+				var coordinates = eval(responseText);
+				if (coordinates.length > 0) {
+					$longitude.val(coordinates[0].longitude);
+					$latitude.val(coordinates[0].latitude);
+				}
+			}
+		});
+	}
+</script>
+
+<h2 class="contentTitle">请编辑网格在地图中的区域：</h2>
+<input type="hidden" id="longitude" value="">
+<input type="hidden" id="latitude" value="">
 <div class="pageContent">
 	<div class="pageFormContent" layoutH="97">
-		<iframe src="map.jsp?gridcode=${param.gridcode}" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
+		<iframe src="map.jsp?longitude=<%=longitude%>&latitude=<%=latitude%>" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
 	</div>
 	<div class="formBar">
 		<ul>

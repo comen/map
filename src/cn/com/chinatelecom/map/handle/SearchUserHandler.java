@@ -3,7 +3,7 @@
  */
 package cn.com.chinatelecom.map.handle;
 
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
+import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
@@ -35,7 +36,7 @@ public class SearchUserHandler implements IHandler {
 		String realName = "";
 		String department = "";
 		Date createDate = null;
-		SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
+		//SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
 		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -57,7 +58,7 @@ public class SearchUserHandler implements IHandler {
 						department = string;
 						break;
 					case "createdate":
-						try {
+						/*try {
 							if (!string.equals("")) {
 								createDate = sdt.parse(string);
 							}
@@ -65,7 +66,8 @@ public class SearchUserHandler implements IHandler {
 							String log = StringUtils.getLogPrefix(Level.SEVERE);
 							System.out.println("\n" + log + "\n" + e.getClass()
 									+ "\t:\t" + e.getMessage());
-						}
+						}*/
+						createDate = DateUtils.getSpecificDate(string, "yyyy-MM-dd");
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
