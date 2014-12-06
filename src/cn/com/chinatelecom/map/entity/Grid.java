@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javafx.scene.shape.Polygon;
+import cn.com.chinatelecom.map.common.GeoCoder;
 import cn.com.chinatelecom.map.common.MongoDB;
 
 import com.mongodb.BasicDBList;
@@ -145,11 +146,59 @@ public class Grid {
 		return gl;
 	}
 
+	public static List<Grid> search(String address) {
+		List<Grid> grids = findList(null);
+		if (grids == null || address == null) {
+			return null;
+		}
+		List<Grid> rtvl = new ArrayList<Grid>();
+		for (Grid grid : grids) {
+			if (grid.contains(address)) {
+				rtvl.add(grid);
+			}
+		}
+		return rtvl;
+	}
+
 	public boolean contains(Coordinate coordinate) {
-		if (coordinates == null || coordinates.isEmpty()) {
+		if (coordinates == null || coordinates.isEmpty() || coordinate == null) {
 			return false;
 		}
+		if (getPolygon().contains(coordinate.getLongtitude(),
+				coordinate.getLatitude())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
+	public boolean contains(Grid grid) {
+		if (coordinates == null || coordinates.isEmpty() || grid == null) {
+			return false;
+		}
+		Polygon polygon = getPolygon();
+		List<Coordinate> points = grid.getCoordinates();
+		if (points == null) {
+			return contains(grid.getAddress());
+		}
+		for (Coordinate point : points) {
+			if (polygon.contains(point.getLongtitude(), point.getLatitude())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean contains(String address) {
+		if (coordinates == null || coordinates.isEmpty() || address == null
+				|| address.trim().equals("")) {
+			return false;
+		}
+		Coordinate coordinate = getCoordinate(address);
+		return contains(coordinate);
+	}
+
+	public Polygon getPolygon() {
 		int size = coordinates.size();
 		double[] points = new double[size * 2];
 		for (int i = 0; i < size; i++) {
@@ -157,14 +206,30 @@ public class Grid {
 			points[i * 2 + 1] = coordinates.get(i).getLatitude();
 		}
 		Polygon polygon = new Polygon(points);
-		if (polygon.contains(coordinate.getLongtitude(),
-				coordinate.getLatitude())) {
-			return true;
-		} else {
-			return false;
-		}
+		return polygon;
 	}
-	
+
+	public Coordinate getCoordinate(String address) {
+		if (address == null) {
+			return null;
+		}
+		String json = GeoCoder.getInstance().geoCode(address);
+		DBObject dbo = (DBObject) JSON.parse(json);
+		if (dbo.get("result") != null) {
+			json = dbo.get("result").toString();
+			dbo = (DBObject) JSON.parse(json);
+			if (dbo.get("location") != null) {
+				json = dbo.get("location").toString();
+				dbo = (DBObject) JSON.parse(json);
+				Double longtitude = (Double) dbo.get("lng");
+				Double latitude = (Double) dbo.get("lat");
+				Coordinate coordinate = new Coordinate(latitude, longtitude);
+				return coordinate;
+			}
+		}
+		return null;
+	}
+
 	public String toFetch() {
 		StringBuffer sb = new StringBuffer("{c:'" + code + "'");
 		if (address != null) {

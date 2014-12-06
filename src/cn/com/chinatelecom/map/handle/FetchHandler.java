@@ -8,6 +8,7 @@ import java.util.Random;
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.entity.Grid;
+import cn.com.chinatelecom.map.utils.MathUtils;
 
 /**
  * @author joseph
@@ -80,8 +81,10 @@ public class FetchHandler implements IHandler {
 			List<Grid> grids = Grid.findList(null);
 			sb = new StringBuffer("[");
 			for (int i = 0; i < grids.size(); i++) {
-				if (1 != grids.get(i).getCode().length()
-						&& random.nextInt() % (20 - zoom) == 0) {
+				grid = grids.get(i);
+				if (1 != grid.getCode().length()
+						&& MathUtils.randomTrue(19 - zoom)) {
+						//&& bounds.contains(grid)) {
 					amount++;
 					sb.append(grids.get(i).toFetch() + ",");
 				}
