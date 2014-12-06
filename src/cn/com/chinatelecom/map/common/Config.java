@@ -28,9 +28,8 @@ public class Config {
 	}
 
 	public static Config getInstance() {
-		if (instance == null) {
+		if (null == instance)
 			instance = new Config();
-		}
 		return instance;
 	}
 

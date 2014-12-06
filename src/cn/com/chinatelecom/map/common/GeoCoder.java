@@ -29,35 +29,30 @@ public class GeoCoder {
 	}
 
 	public static GeoCoder getInstance() {
-		if (instance == null) {
+		if (null == instance)
 			instance = new GeoCoder();
-		}
 		return instance;
 	}
 
 	public String getParameter(String key) {
-		if (key == null || parameters == null || parameters.isEmpty()) {
+		if (null == key || null == parameters || parameters.isEmpty())
 			return null;
-		}
 		return parameters.get(key);
 	}
 
 	public void setParameter(String key, String value) {
-		if (key != null) {
+		if (null != key)
 			parameters.replace(key, value);
-		}
 	}
 
 	public void putParameter(String key, String value) {
-		if (key != null) {
+		if (null != key)
 			parameters.put(key, value);
-		}
 	}
 
 	public void removeParameter(String key) {
-		if (key != null) {
+		if (null != key)
 			parameters.remove(key);
-		}
 	}
 
 	public String geoCode(String address) {
@@ -70,7 +65,7 @@ public class GeoCoder {
 					url.openStream(), Config.getInstance().getValue("charset")));
 			StringBuffer sb = new StringBuffer();
 			String line;
-			while ((line = br.readLine()) != null) {
+			while (null != (line = br.readLine())) {
 				sb.append(line.trim());
 			}
 			return sb.toString();
@@ -83,14 +78,13 @@ public class GeoCoder {
 	}
 
 	public String toString() {
-		if (parameters == null) {
+		if (null == parameters)
 			return url;
-		}
 
 		StringBuffer sb = new StringBuffer(url);
 		int index = 0;
 		for (Entry<String, String> es : parameters.entrySet()) {
-			if (index++ == 0)
+			if (0 == index++)
 				sb.append("?");
 			else
 				sb.append("&");

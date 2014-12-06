@@ -31,9 +31,8 @@ public class Repository {
 	}
 
 	public static Repository getInstance() {
-		if (instance == null) {
+		if (null == instance)
 			instance = new Repository();
-		}
 		return instance;
 	}
 

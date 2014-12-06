@@ -33,7 +33,7 @@ public class PageProcessor implements IProcessor {
 		HttpSession session = request.getSession();
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
-		if (result == null) {
+		if (null == result) {
 			return;
 		}
 		for (Entry<String, Object> eso : result.entrySet()) {

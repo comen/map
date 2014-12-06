@@ -1,40 +1,89 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%
+	String longtitude = request.getParameter("longtitude");
+	String latitude = request.getParameter("latitude");
+	Double lng = 0.0;
+	Double lat = 0.0;
+	if (longtitude != null && latitude != null) {
+		lng = Double.parseDouble(longtitude);
+		lat = Double.parseDouble(latitude);
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>北区局</title>
+<title>北区电信局</title>
 <style type="text/css">
 html {
 	height: 100%;
 }
 
 body {
-	height: 97%;
+	height: 96%;
 	margin: 0px;
 	padding: 0px;
 	font: 12px/16px Verdana, Helvetica, Arial, '微软雅黑';
 }
 
+label {
+	margin-left: 30px;
+	font-weight: bold;
+}
+
+#menu {
+	height: 4%;
+}
+
 #mapcontainer {
-	height: 100%;
+	height: 94%;
+}
+
+#status {
+	height: 2%;
 }
 </style>
+<link rel="stylesheet" href="css/jquery-ui.min.css">
 <script type="text/javascript" src="js/HashMap.js"></script>
 <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-<script type="text/javascript"
-	src="http://api.map.baidu.com/api?v=1.5&ak=msbblC5TGVpnQnafevVen547"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="//api.map.baidu.com/api?v=1.5&ak=msbblC5TGVpnQnafevVen547"></script>
+<script>
+	$(function() {
+		$("#date").datepicker();
+	});
+</script>
 </head>
 <body>
+	<div id="menu">
+		<label for="chance">选择数据显示方式：</label>
+		<input type="radio" name="mode" id ="day" value="day" checked="checked" />按天显示
+		<input type="radio" name="mode" id ="week" value="week" />按周显示
+		<input type="radio" name="mode" id ="month" value="month" />按月显示
+		<label for="date">选择数据日期: </label>
+		<input type="time" id="date" id="date">
+		<input type="button" onclick="fetch()" value="重新获取数据">
+	</div>
 	<div id="mapcontainer"></div>
+	<div id="status"></div>
 	<script type="text/javascript">
 		var currAjax;
 		var map = (function() {
-			var center = new BMap.Point(121.42000, 31.29336);
 			map = new BMap.Map("mapcontainer");
-			map.centerAndZoom(center, 13);
+			var center = new BMap.Point(121.42000, 31.29336);
+			var zoom = 13;
+<%
+	if (lng > 0 && lat > 0) {
+%>
+			center = new BMap.Point(<%=lng%>, <%=lat%>);
+			zoom = 18;
+<%
+	}
+%>
+			
+			map.centerAndZoom(center, zoom);
 			map.addControl(new BMap.OverviewMapControl());
 			map.addControl(new BMap.NavigationControl());
 			map.addControl(new BMap.MapTypeControl());
@@ -73,6 +122,7 @@ body {
 					fetch();
 				}
 			});
+			$("#date").val(getDate(1));
 			fetch();
 			return map;
 		})();
@@ -85,10 +135,14 @@ body {
 			map.clearOverlays();
 			
 			var formData = new FormData();
-			formData.append("zoom", map.getZoom());
+			var mode = $('input[name="mode"]:checked').val();
+			var date = $("#date").val();
 			var bounds = map.getBounds();
 			var sw = bounds.getSouthWest();
 			var ne = bounds.getNorthEast();
+			formData.append("zoom", map.getZoom());
+			formData.append("mode", mode);
+			formData.append("date", date);
 			formData.append("swlng", sw.lng);
 			formData.append("swlat", sw.lat);
 			formData.append("nelng", ne.lng);
@@ -127,6 +181,7 @@ body {
 									strokeColor : getRandomColor(),
 									strokeWeight : 2,
 									strokeOpacity : 0.5,
+									fillColor: grids[i].r,
 									fillOpacity : 0.5,
 								});
 								polygons.put(code, polygon);
@@ -182,7 +237,11 @@ body {
 									function openInfo(event) {
 										var message;
 										var formData = new FormData();
+										var mode = $('input[name="mode"]:checked').val();
+										var date = $("#date").val();
 										formData.append("zoom", map.getZoom());
+										formData.append("mode", mode);
+										formData.append("date", date);
 										formData.append("longtitude", event.point.lng.toFixed(5));
 										formData.append("latitude", event.point.lat.toFixed(5));
 										$.ajax({
@@ -217,6 +276,8 @@ body {
 											height : 100,
 											title : "<b>网格数据</b>",
 											message : message,
+											width : 0,
+											height : 0,
 											enableCloseOnClick : true
 										}), new BMap.Point(lngsum,latsum));
 										polygon.setStrokeWeight(3);
@@ -274,8 +335,22 @@ body {
 								} else {
 									var marker = new BMap.Marker(point);
 									map.addOverlay(marker);
-									var label = new BMap.Label(code,{offset:new BMap.Size(20,-10)});
+									var text = code + "<br/>" + address;
+									var label = new BMap.Label(code,{offset:new BMap.Size(-10,-5)});
 									marker.setLabel(label);
+									
+									function openLabel(event) {
+										label.setContent(text);
+										marker.setTop(true);
+									}
+									
+									function closeLabel(event) {
+										label.setContent(code);
+										marker.setTop(false);
+									}
+									
+									marker.addEventListener("mouseover", openLabel);
+									marker.addEventListener("mouseout", closeLabel);
 								}
 							}
 						}, "上海市");
@@ -288,7 +363,11 @@ body {
 						function openInfo(event) {
 							var message;
 							var formData = new FormData();
+							var mode = $('input[name="mode"]:checked').val();
+							var date = $("#date").val();
 							formData.append("zoom", map.getZoom());
+							formData.append("mode", mode);
+							formData.append("date", date);
 							formData.append("longtitude", event.point.lng.toFixed(5));
 							formData.append("latitude", event.point.lat.toFixed(5));
 							$.ajax({
@@ -322,6 +401,8 @@ body {
 								width : 200,
 								height : 100,
 								title : "<b>网格数据</b>",
+								width : 0,
+								height : 0,
 								message : message,
 								enableCloseOnClick : true
 							}), new BMap.Point(lngsum,latsum));
@@ -382,11 +463,22 @@ body {
 			});
 		}
 		
-		var getRandomColor = function(){    
-			  return (function(m,s,c){    
-			    return (c ? arguments.callee(m,s,c-1) : '#') +    
-			      s[m.floor(m.random() * 16)]    
-			  })(Math,'0123456789abcdef',5)    
+		function getRandomColor() {    
+			 return (function(m, s, c){
+				 return (c ? arguments.callee(m, s,c - 1) : '#') + s[m.floor(m.random() * 16)]
+			 })(Math, '0123456789abcdef', 5)
+		}
+		
+		function getDate(offset) {
+			var date = new Date();
+			date.setDate(date.getDate() - offset);
+			var year = date.getFullYear();
+			var month = date.getMonth() + 1;
+			var day = date.getDate();
+			if (day < 10) {
+				day = '0' + day;
+			}
+			return (month + '/' + day + '/' + year);
 		}
 		
 		function closeInfo(event) {

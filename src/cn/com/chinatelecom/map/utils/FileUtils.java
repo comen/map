@@ -18,11 +18,10 @@ import jxl.Workbook;
 public class FileUtils {
 
 	public static boolean writeFile(InputStream is, File file) {
-		if (is != null && file != null) {
+		if (null != is && null != file) {
 			OutputStream os;
 			try {
 				os = new FileOutputStream(file);
-
 				byte[] buffer = new byte[1024];
 				for (int i = 0; (i = is.read(buffer)) != -1;) {
 					os.write(buffer, 0, i);
@@ -42,9 +41,8 @@ public class FileUtils {
 
 	public static String readFile(File file) {
 		String result = null;
-		if (file == null) {
+		if (null == file)
 			return result;
-		}
 		StringBuffer sb = new StringBuffer();
 		if (file.getName().endsWith(".xls")) {
 			try {
@@ -53,14 +51,13 @@ public class FileUtils {
 				int rows = sheet.getRows();
 				int columns = sheet.getColumns();
 				List<String> titles = new ArrayList<String>();
-				for (int row = 0; row < rows; row++) {
-					if (row != 0) {
+				for (int row = 0; row != rows; row++) {
+					if (0 != row)
 						sb.append("{");
-					}
-					for (int column = 0; column < columns; column++) {
+					for (int column = 0; column != columns; column++) {
 						String content = sheet.getCell(column, row)
 								.getContents();
-						if (row == 0) {
+						if (0 == row) {
 							titles.add(content);
 						} else {
 							sb.append("'" + titles.get(column) + "':'"
@@ -70,9 +67,8 @@ public class FileUtils {
 							}
 						}
 					}
-					if (row != 0) {
+					if (0 != row)
 						sb.append("}<br/>");
-					}
 				}
 				result = sb.toString();
 			} catch (Exception e) {

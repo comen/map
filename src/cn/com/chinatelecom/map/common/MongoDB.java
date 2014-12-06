@@ -39,9 +39,8 @@ public class MongoDB {
 	}
 
 	public static MongoDB getInstance() {
-		if (instance == null) {
+		if (null == instance)
 			instance = new MongoDB();
-		}
 		return instance;
 	}
 
@@ -54,9 +53,8 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		DBObject q = (DBObject) JSON.parse(json);
 		WriteResult wr = coll.save(q, WriteConcern.NORMAL);
-		if (wr.getError() != null) {
+		if (null != wr.getError())
 			return false;
-		}
 		return true;
 	}
 
@@ -64,9 +62,8 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		DBObject q = (DBObject) JSON.parse(json);
 		WriteResult wr = coll.remove(q, WriteConcern.NORMAL);
-		if (wr.getError() != null) {
+		if (null != wr.getError())
 			return false;
-		}
 		return true;
 	}
 
@@ -75,9 +72,8 @@ public class MongoDB {
 		DBObject q = (DBObject) JSON.parse(qJson);
 		DBObject o = (DBObject) JSON.parse(oJson);
 		WriteResult wr = coll.update(q, o);
-		if (wr.getError() != null) {
+		if (null != wr.getError())
 			return false;
-		}
 		return true;
 	}
 
@@ -85,16 +81,15 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		List<DBObject> dbl = null;
 		DBCursor cursor = null;
-		if (json != null) {
+		if (null != json) {
 			DBObject dbo = (DBObject) JSON.parse(json);
 			cursor = coll.find(dbo);
 		} else {
 			cursor = coll.find();
 		}
 		dbl = new ArrayList<DBObject>();
-		while (cursor.hasNext()) {
+		while (cursor.hasNext())
 			dbl.add(cursor.next());
-		}
 		return dbl;
 	}
 
