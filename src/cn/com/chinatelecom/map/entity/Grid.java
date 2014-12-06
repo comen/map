@@ -3,10 +3,12 @@ package cn.com.chinatelecom.map.entity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import javafx.scene.shape.Polygon;
 import cn.com.chinatelecom.map.common.GeoCoder;
 import cn.com.chinatelecom.map.common.MongoDB;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -210,8 +212,16 @@ public class Grid {
 			return null;
 		}
 		String json = GeoCoder.getInstance().geoCode(address);
-		DBObject dbo = (DBObject) JSON.parse(json);
-		if (dbo.get("result") != null) {
+		DBObject dbo = null;
+		try {
+			dbo = (DBObject) JSON.parse(json);
+		} catch (Exception e) {
+			String log = StringUtils.getLogPrefix(Level.SEVERE);
+			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
+					+ e.getMessage());
+			return null;
+		}
+		if (dbo != null && dbo.get("result") != null) {
 			json = dbo.get("result").toString();
 			dbo = (DBObject) JSON.parse(json);
 			if (dbo.get("location") != null) {
