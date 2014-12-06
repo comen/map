@@ -11,26 +11,28 @@ import java.util.logging.Level;
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
-import cn.com.chinatelecom.map.entity.User;
+import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
  *
  */
-public class EditUserHandler implements IHandler {
+public class EditGridHandler implements IHandler {
 
+	/* (non-Javadoc)
+	 * @see cn.com.chinatelecom.map.handle.IHandler#handle(java.util.List)
+	 */
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
 		StringBuffer sb = new StringBuffer();
-		User user = new User();
-		String userName = "";
-		String password = "";
-		int role = 4;	// Set default as Normal User
-		String realName = "";
-		String department = "";
+		Grid grid = new Grid();
+		String gridCode = "";
+		String gridName = "";
+		String gridManager = "";
+		String gridAddress = "";
 		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -38,26 +40,17 @@ public class EditUserHandler implements IHandler {
 				try {
 					String string = item.getString(Config.getInstance().getValue("charset").toString());
 					switch(fieldName) {
-					case "username":
-						userName = string;
+					case "grid_code":
+						gridCode = string;
 						break;
-					case "resetpassword":
-						password = string;
+					case "grid_name":
+						gridName = string;
 						break;
-					case "role":
-						try {
-							role = Integer.parseInt(string);
-						} catch (Exception e) {
-							String log = StringUtils.getLogPrefix(Level.SEVERE);
-							System.out.println("\n" + log + "\n" + e.getClass()
-									+ "\t:\t" + e.getMessage());
-						}
+					case "grid_manager":
+						gridManager = string;
 						break;
-					case "realname":
-						realName = string;
-						break;
-					case "department":
-						department = string;
+					case "grid_address":
+						gridAddress = string;
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
@@ -68,17 +61,16 @@ public class EditUserHandler implements IHandler {
 			}
 		}
 		
-		user.setUserName(userName);
-		if(user.exist()) {
-			User userTmp = User.findOne(user.toString());
-			userTmp.setPassword(password);
-			userTmp.setRole(role);
-			userTmp.setRealName(realName);
-			userTmp.setDepartment(department);
-			if (user.update(userTmp.toString())) {
+		grid.setCode(gridCode);
+		if(grid.exist()) {
+			Grid gridTmp = Grid.findOne(grid.toString());
+			gridTmp.setName(gridName);
+			gridTmp.setManager(gridManager);
+			gridTmp.setAddress(gridAddress);
+			if (grid.update(gridTmp.toString())) {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"200\"");
-				sb.append(",\"message\":" + "\"用户信息修改成功！\"");
+				sb.append(",\"message\":" + "\"网格信息修改成功！\"");
 				sb.append(",\"navTabId\":" + "\"\"");
 				sb.append(",\"rel\":" + "\"\"");
 				sb.append(",\"callbackType\":" + "\"\"");
@@ -87,7 +79,7 @@ public class EditUserHandler implements IHandler {
 			} else {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"300\"");
-				sb.append(",\"message\":" + "\"用户信息修改失败，请重新操作！\"");
+				sb.append(",\"message\":" + "\"网格信息修改失败，请重新操作！\"");
 				sb.append(",\"navTabId\":" + "\"\"");
 				sb.append(",\"rel\":" + "\"\"");
 				sb.append(",\"callbackType\":" + "\"\"");
@@ -97,7 +89,7 @@ public class EditUserHandler implements IHandler {
 		} else {
 			sb.append("{");
 			sb.append("\"statusCode\":" + "\"300\"");
-			sb.append(",\"message\":" + "\"用户名 " + userName + " 不存在！\"");
+			sb.append(",\"message\":" + "\"网格 " + gridCode + " 不存在！\"");
 			sb.append(",\"navTabId\":" + "\"\"");
 			sb.append(",\"rel\":" + "\"\"");
 			sb.append(",\"callbackType\":" + "\"\"");
@@ -105,7 +97,7 @@ public class EditUserHandler implements IHandler {
 			sb.append("}");
 		}
 		
-		result.put("EditUserResult", sb.toString());
+		result.put("EditGridResult", sb.toString());
 		return result;
 	}
 

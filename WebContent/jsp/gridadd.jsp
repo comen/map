@@ -15,24 +15,23 @@
 %>
 
 <div class="pageContent">
-	<form method="post" action="ajaxDone.jsp"
-		class="pageForm required-validate"
+	<form method="post" action="addGrid" class="pageForm required-validate"
 		onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<div class="unit">
-				<label>网格编号：</label> <input id="grid_code" class="required"
+				<label>网格编号：</label> <input name="grid_code" class="required"
 					type="text" size="30" />
 			</div>
 			<div class="unit">
-				<label>网格名称：</label> <input id="grid_name" class="required"
+				<label>网格名称：</label> <input name="grid_name" class="required"
 					type="text" size="30" />
 			</div>
 			<div class="unit">
-				<label>网格经理：</label> <input id="grid_manager" class="required"
+				<label>网格经理：</label> <input name="grid_manager" class="required"
 					type="text" size="30" />
 			</div>
 			<div class="unit">
-				<label>网格地址：</label> <input id="grid_address" class="required"
+				<label>网格地址：</label> <input name="grid_address" class="required"
 					type="text" size="50" />
 			</div>
 		</div>

@@ -596,6 +596,48 @@ public class Data {
 		return field.get("description").toString();
 	}
 	
+	public static String getOnlyDay(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		return field.get("onlyDay").toString();
+	}
+	
+	public static String getJueduizhiThreshold(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		return field.get("jueduizhiThreshold").toString();
+	}
+	
+	public static String getHuanbiThreshold(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		return field.get("huanbiThreshold").toString();
+	}
+	
+	public static String getTongbiThreshold(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		return field.get("tongbiThreshold").toString();
+	}
+	
+	public static String getStatus(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		return field.get("status").toString();
+	}
+	
+	public static String getCategory(String memberVariable) {
+		Config config = Config.getInstance();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+		return field.get("category").toString();
+	}
+	
 	public static Data getDataOfDay(Date calculatedDate, String gridCode) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");

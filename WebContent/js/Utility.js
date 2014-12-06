@@ -2,14 +2,6 @@
  * 
  */
 
-function testAlert(txt) {
-	alert(txt);
-}
-
-function showTooltip(obj) {
-	
-}
-
 function changeState(obj) {
 	if(obj.textContent == '正常') {
 		obj.title = '确定要删除该字段吗?';

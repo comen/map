@@ -6,10 +6,13 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
+import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Data;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
@@ -24,16 +27,32 @@ public class GetSalesDataFieldsHandler implements IHandler {
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
-//		int status = 1;
-//		
-//		for (FileItem item : items) {
-//			if (item.isFormField()) {
-//				String fieldName = item.getFieldName();
-//				if (fieldName.equals("status")) {
-//					status = Integer.parseInt(item.getString());
-//				}
-//			}
-//		}
+		int status = 0;
+		
+		for (FileItem item : items) {
+			if (item.isFormField()) {
+				String fieldName = item.getFieldName();
+				try {
+					String string = item.getString(Config.getInstance().getValue("charset").toString());
+					
+					switch(fieldName) {
+					case "status":
+						try {
+							status = Integer.parseInt(string);
+						} catch (Exception e) {
+							String log = StringUtils.getLogPrefix(Level.SEVERE);
+							System.out.println("\n" + log + "\n" + e.getClass()
+									+ "\t:\t" + e.getMessage());
+						}
+						break;
+					}
+				} catch (java.io.UnsupportedEncodingException e) {
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
+					System.out.println("\n" + log + "\n" + e.getClass()
+							+ "\t:\t" + e.getMessage());
+				}
+			}
+		}
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
@@ -42,9 +61,39 @@ public class GetSalesDataFieldsHandler implements IHandler {
 			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
 				continue;
 			}
-			if (Data.fieldIsOnUse(namesOfMemVar[i])) {
-				sb.append("{\"field\":\"" + namesOfMemVar[i] + "\"," + "\"description\":\"" + Data.getFieldDesc(namesOfMemVar[i]) + "\"},");
+			if (status > 0) { //Field is on use
+				if (Data.fieldIsOnUse(namesOfMemVar[i])) {
+					sb.append("{\"field\":\"" + namesOfMemVar[i] + "\",");
+					sb.append("\"description\":\"" + Data.getFieldDesc(namesOfMemVar[i]) + "\",");
+					sb.append("\"onlyDay\":" + Data.getOnlyDay(namesOfMemVar[i]) + ",");
+					sb.append("\"jueduizhiThreshold\":\"" + Data.getJueduizhiThreshold(namesOfMemVar[i]) + "\",");
+					sb.append("\"huanbiThreshold\":\"" + Data.getHuanbiThreshold(namesOfMemVar[i]) + "\",");
+					sb.append("\"tongbiThreshold\":\"" + Data.getTongbiThreshold(namesOfMemVar[i]) + "\",");
+					sb.append("\"status\":" + Data.getStatus(namesOfMemVar[i]) + ",");
+					sb.append("\"category\":" + Data.getCategory(namesOfMemVar[i]) + "},");
+				}
+			} else if (status < 0) { //Field isn't on use
+				if (!Data.fieldIsOnUse(namesOfMemVar[i])) {
+					sb.append("{\"field\":\"" + namesOfMemVar[i] + "\",");
+					sb.append("\"description\":\"" + Data.getFieldDesc(namesOfMemVar[i]) + "\",");
+					sb.append("\"onlyDay\":" + Data.getOnlyDay(namesOfMemVar[i]) + ",");
+					sb.append("\"jueduizhiThreshold\":\"" + Data.getJueduizhiThreshold(namesOfMemVar[i]) + "\",");
+					sb.append("\"huanbiThreshold\":\"" + Data.getHuanbiThreshold(namesOfMemVar[i]) + "\",");
+					sb.append("\"tongbiThreshold\":\"" + Data.getTongbiThreshold(namesOfMemVar[i]) + "\",");
+					sb.append("\"status\":" + Data.getStatus(namesOfMemVar[i]) + ",");
+					sb.append("\"category\":" + Data.getCategory(namesOfMemVar[i]) + "},");
+				}
+			} else { // Both on use and not not use
+				sb.append("{\"field\":\"" + namesOfMemVar[i] + "\",");
+				sb.append("\"description\":\"" + Data.getFieldDesc(namesOfMemVar[i]) + "\",");
+				sb.append("\"onlyDay\":" + Data.getOnlyDay(namesOfMemVar[i]) + ",");
+				sb.append("\"jueduizhiThreshold\":\"" + Data.getJueduizhiThreshold(namesOfMemVar[i]) + "\",");
+				sb.append("\"huanbiThreshold\":\"" + Data.getHuanbiThreshold(namesOfMemVar[i]) + "\",");
+				sb.append("\"tongbiThreshold\":\"" + Data.getTongbiThreshold(namesOfMemVar[i]) + "\",");
+				sb.append("\"status\":" + Data.getStatus(namesOfMemVar[i]) + ",");
+				sb.append("\"category\":" + Data.getCategory(namesOfMemVar[i]) + "},");
 			}
+			
 		}
 		sb.deleteCharAt(sb.length() - 1);
 		sb.append("]");

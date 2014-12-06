@@ -52,32 +52,22 @@
 </script>
 
 <script type="text/javascript">
-	var xmlHttp;
-	function createXmlHttp() {
-		if (window.XMLHttpRequest) {
-			xmlHttp = new XMLHttpRequest();
-		} else if (window.ActiveXObject) {
-			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-	}
-
-	function callBack() {
-		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-			var responseText = xmlHttp.responseText;
-			appendOptionToCombox(responseText);
-		}
-	}
-
+	getFields();
+	
 	function getFields() {
-   		createXmlHttp();
-		xmlHttp.onreadystatechange = callBack;
-
 		var formData = new FormData();
 		formData.append("status", 1);
 
-		xmlHttp.open("post", "getSalesDataFields", true);
-		xmlHttp.setRequestHeader("Content-Type", "multipart/form-data;boundary=index");
-		xmlHttp.send(formData);
+		$.ajax({
+			url: "getSalesDataFields",
+			type: "POST",
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+			success: function(responseText) {
+				appendOptionToCombox(responseText);
+			}
+		});
 	}
 	
 	function appendOptionToCombox(fieldsArray) {
@@ -88,9 +78,6 @@
 			$parent.append($option);
 		}
 	}
-	
-	getFields();
-	
 </script>
 
 <h2 class="contentTitle">通过Excel上传营销数据</h2>

@@ -40,57 +40,47 @@
 	}
 	
  	function generateUserList(userListArray) {
-		var $parent = $("#userList");
+ 		resetRows();
 		var userList = eval(userListArray);
-		for (var i = 0; i < 20; i++) {
-			/* If userList.length is less than predefined 20 <tr>, reset the rest <tr> */
-			if (i >= userList.length) {
-				var $tr = $("#" + i);
-				if ($tr) {
-					$tr.attr("rel", i);
-					var $tr_children = $tr.children();
-					$tr_children.each(function(){
-						$(this).text("");
-					});
-					$tr.hide();
-				}
+		for (var i = 0; i < userList.length; i++) {
+			if (i >= 20 ) {
 				continue;
 			}
-			/* Get role description */
-			var role = userList[i].role;
-			var roleDesc;
-			switch(role) {
-			case 1:
-				roleDesc = "系统管理员";
-				break;
-			case 2:
-				roleDesc = "网格数据管理员";
-				break;
-			case 3:
-				roleDesc = "营销数据管理员";
-				break;
-			case 4:
-				roleDesc = "普通用户";
-				break;
-			default:
-				roleDesc = "未知角色";
-			}
-			/* Format created date */
-			var createDate = new Date(userList[i].createdate);
-			var year = createDate.getFullYear().toString();
-			var month = (createDate.getMonth() + 1).toString();
-			var day = createDate.getDate();
-			if (day < 10) {
-				day = "0" + day;
-			}
-			var createDateStr = year + "-" + month + "-" + day;
-			/* Modify cells */
-			var $tr = $("#" + i);
+			/* Modify rows */
+			var $tr = $("#user_" + i);
 			if ($tr) {
 				$tr.attr("rel", userList[i].username);
 				$tr.show();
-				var $tr_children = $tr.children();
+				/* Get role description */
+				var roleDesc;
+				var role = userList[i].role;
+				switch(role) {
+				case 1:
+					roleDesc = "系统管理员";
+					break;
+				case 2:
+					roleDesc = "网格数据管理员";
+					break;
+				case 3:
+					roleDesc = "营销数据管理员";
+					break;
+				case 4:
+					roleDesc = "普通用户";
+					break;
+				default:
+					roleDesc = "未知角色";
+				}
+				/* Format created date */
+				var createDate = new Date(userList[i].createdate);
+				var year = createDate.getFullYear().toString();
+				var month = (createDate.getMonth() + 1).toString();
+				var day = createDate.getDate().toString();
+				if (day < 10) {
+					day = "0" + day;
+				}
+				var createDateStr = year + "-" + month + "-" + day;
 				var index = 0;
+				var $tr_children = $tr.children();
 				$tr_children.each(function() {
 					switch (index) {
 					case 0:
@@ -114,6 +104,20 @@
 			}
 		}
 	}
+ 	
+ 	function resetRows() {
+ 		for (var i = 0; i < 20; i++) {
+			var $tr = $("#user_" + i);
+			if ($tr) {
+				$tr.attr("rel", i);
+				var $tr_children = $tr.children();
+				$tr_children.each(function(){
+					$(this).text("");
+				});
+				$tr.hide();
+			}
+ 		}
+ 	}
 </script>
 
 <form id="pagerForm" method="post" action="userlist.jsp">
@@ -180,140 +184,140 @@
 			</tr>
 		</thead>
 		<tbody id="userList">
-			<tr id="0" target="sid_user" rel="0">
+			<tr id="user_0" target="sid_user" rel="0">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="1" target="sid_user" rel="1">
+			<tr id="user_1" target="sid_user" rel="1">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="2" target="sid_user" rel="2">
+			<tr id="user_2" target="sid_user" rel="2">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="3" target="sid_user" rel="3">
+			<tr id="user_3" target="sid_user" rel="3">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="4" target="sid_user" rel="4">
+			<tr id="user_4" target="sid_user" rel="4">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="5" target="sid_user" rel="5">
+			<tr id="user_5" target="sid_user" rel="5">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="6" target="sid_user" rel="6">
+			<tr id="user_6" target="sid_user" rel="6">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="7" target="sid_user" rel="7">
+			<tr id="user_7" target="sid_user" rel="7">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="8" target="sid_user" rel="8">
+			<tr id="user_8" target="sid_user" rel="8">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="9" target="sid_user" rel="9">
+			<tr id="user_9" target="sid_user" rel="9">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="10" target="sid_user" rel="10">
+			<tr id="user_10" target="sid_user" rel="10">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="11" target="sid_user" rel="11">
+			<tr id="user_11" target="sid_user" rel="11">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="12" target="sid_user" rel="12">
+			<tr id="user_12" target="sid_user" rel="12">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="13" target="sid_user" rel="13">
+			<tr id="user_13" target="sid_user" rel="13">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="14" target="sid_user" rel="14">
+			<tr id="user_14" target="sid_user" rel="14">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="15" target="sid_user" rel="15">
+			<tr id="user_15" target="sid_user" rel="15">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="16" target="sid_user" rel="16">
+			<tr id="user_16" target="sid_user" rel="16">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="17" target="sid_user" rel="17">
+			<tr id="user_17" target="sid_user" rel="17">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="18" target="sid_user" rel="18">
+			<tr id="user_18" target="sid_user" rel="18">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="19" target="sid_user" rel="19">
+			<tr id="user_19" target="sid_user" rel="19">
 				<td></td>
 				<td></td>
 				<td></td>

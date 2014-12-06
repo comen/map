@@ -16,6 +16,9 @@
 
 <%
 	String uid = (String)request.getParameter("uid");
+	if (uid == null) {
+		uid = "";
+	}
 	out.println("<input type=\"hidden\" id=\"uid\" value=\"" + uid +"\">");
 %>
 
@@ -61,23 +64,6 @@
 			}
 		}
 	}
-	
-	function save() {
-		var formData = new FormData();
-		formData.append("username", $("#uid").val());
-		formData.append("role", $("#role").val());
-		formData.append("resetpassword", $("#resetpassword").val());
-		formData.append("realname", $("#realname").val());
-		formData.append("department", $("#department").val());
-		
-		$.ajax({
-		  url: "editUser",
-		  type: "POST",
-		  data: formData,
-		  processData: false,  // 告诉jQuery不要去处理发送的数据
-		  contentType: false   // 告诉jQuery不要去设置Content-Type请求头
-		});
-	}
 </script>
 
 <div class="pageContent">
@@ -118,7 +104,7 @@
 			<ul>
 				<li><div class="buttonActive">
 						<div class="buttonContent">
-							<button type="submit" onclick="save()">保存</button>
+							<button type="submit">保存</button>
 						</div>
 					</div></li>
 				<li>

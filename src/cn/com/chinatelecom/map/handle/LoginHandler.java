@@ -42,7 +42,7 @@ public class LoginHandler implements IHandler {
 //						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					String log = StringUtils.getLogPrefix(Level.WARNING);
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
 				}

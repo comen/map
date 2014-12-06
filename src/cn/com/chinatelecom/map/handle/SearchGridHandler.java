@@ -42,7 +42,7 @@ public class SearchGridHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					String log = StringUtils.getLogPrefix(Level.WARNING);
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
 				}
@@ -56,23 +56,25 @@ public class SearchGridHandler implements IHandler {
 		List<Grid> gridList = Grid.findList(grid.toString());
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		for (int i = 0; i < gridList.size(); i++) {
-			/* Ignore GRID_CODE:0,1,2,3,4 */
-			switch (gridList.get(i).getCode()) {
-			case "0":
-			case "1":
-			case "2":
-			case "3":
-			case "4":
-				continue;
-			}
-			
-			/* Clear coordinates */
-			gridList.get(i).setCoordinates(null);
-			
-			sb.append(gridList.get(i).toString());
-			if (i < gridList.size()-1) {
-				sb.append(",");
+		if (gridList != null) {
+			for (int i = 0; i < gridList.size(); i++) {
+				/* Ignore GRID_CODE:0,1,2,3,4 */
+				switch (gridList.get(i).getCode()) {
+				case "0":
+				case "1":
+				case "2":
+				case "3":
+				case "4":
+					continue;
+				}
+				
+				/* Clear coordinates */
+				gridList.get(i).setCoordinates(null);
+				
+				sb.append(gridList.get(i).toString());
+				if (i < gridList.size()-1) {
+					sb.append(",");
+				}
 			}
 		}
 		sb.append("]");

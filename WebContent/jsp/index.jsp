@@ -260,20 +260,16 @@ $(function(){
 				<div class="navTab-panel tabsPageContent layoutBox">
 					<div class="page unitBox">
 						<div class="accountInfo">
-							<!-- <p>这里用来显示日历控件...</p> -->
+							<p>说明：北区局为顶级数据，显示整个北区局的用户数据；地图放大一层，可以看到各分局的用户数据；继续放大，则是各网格的用户数据。</p>
 						</div>
 						<div class="pageFormContent" layoutH="80">
 							<iframe src="map.jsp" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
-
 	</div>
-
 	<div id="footer">Copyright &copy; 2014 上海电信北区局 沪ICP备05019125号-10</div>
-
 </body>
 </html>

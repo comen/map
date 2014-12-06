@@ -260,7 +260,6 @@ public class Grid {
 
 	@Override
 	public String toString() {
-		//StringBuffer sb = new StringBuffer("{GRID_CODE:'" + code + "'");
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		if (code != null) {

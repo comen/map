@@ -16,7 +16,7 @@ import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
- * @author swei019
+ * @author Shelwin
  *
  */
 public class AddUserHandler implements IHandler {
@@ -63,7 +63,7 @@ public class AddUserHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					String log = StringUtils.getLogPrefix(Level.WARNING);
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
 				}

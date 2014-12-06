@@ -18,7 +18,7 @@
 	String longitude = "";
 	String latitude = "";
 	String address = request.getParameter("address");
-	if (address == null) {
+	if (address == null || address.equals("")) {
 		return;
 	}
 	out.println("<input type=\"hidden\" id=\"address\" value=\"" + address + "\">");

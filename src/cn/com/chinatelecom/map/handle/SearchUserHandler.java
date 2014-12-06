@@ -67,11 +67,13 @@ public class SearchUserHandler implements IHandler {
 							System.out.println("\n" + log + "\n" + e.getClass()
 									+ "\t:\t" + e.getMessage());
 						}*/
-						createDate = DateUtils.getSpecificDate(string, "yyyy-MM-dd");
+						if (!(string == null || string.equals(""))) {
+							createDate = DateUtils.getSpecificDate(string, "yyyy-MM-dd");
+						}
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					String log = StringUtils.getLogPrefix(Level.WARNING);
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
 				}
@@ -97,13 +99,15 @@ public class SearchUserHandler implements IHandler {
 		List<User> userList = User.findList(user.toString());
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		for (int i = 0; i < userList.size(); i++) {
-			/* Clear password */
-			userList.get(i).setPassword(null);
-			
-			sb.append(userList.get(i).toString());
-			if (i < userList.size()-1) {
-				sb.append(",");
+		if (userList != null) {
+			for (int i = 0; i < userList.size(); i++) {
+				/* Clear password */
+				userList.get(i).setPassword(null);
+				
+				sb.append(userList.get(i).toString());
+				if (i < userList.size()-1) {
+					sb.append(",");
+				}
 			}
 		}
 		sb.append("]");

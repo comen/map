@@ -13,6 +13,7 @@ import org.apache.commons.fileupload.FileItem;
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Coordinate;
 import cn.com.chinatelecom.map.entity.Grid;
+import cn.com.chinatelecom.map.utils.MathUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
@@ -43,7 +44,7 @@ public class FetchCoordinatesHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					String log = StringUtils.getLogPrefix(Level.WARNING);
+					String log = StringUtils.getLogPrefix(Level.SEVERE);
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
 				}
@@ -54,10 +55,10 @@ public class FetchCoordinatesHandler implements IHandler {
 		sb.append("[");
 		if (!(address == null || address.equals(""))) {
 			Coordinate coordinate = grid.getCoordinate(address);
-			sb.append("{");
-			sb.append(coordinate.getLongtitude());
-			sb.append(",");
-			sb.append(coordinate.getLatitude());
+			sb.append("{\"longitude\":");
+			sb.append(MathUtils.getTitude(coordinate.getLongtitude(), 5));
+			sb.append(",\"latitude\":");
+			sb.append(MathUtils.getTitude(coordinate.getLatitude(), 5));
 			sb.append("}");
 		}
 		sb.append("]");
