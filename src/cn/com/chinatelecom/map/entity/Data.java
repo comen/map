@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+
+import org.apache.log4j.Logger;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.common.MongoDB;
 import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.MathUtils;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
@@ -43,6 +43,8 @@ public class Data {
 	private int additional_11;
 	private int additional_12;
 	private int additional_13;
+
+	private static Logger logger = Logger.getLogger(Date.class);
 
 	public static String[] getNameOfMemberVariables() {
 		String[] strArray = { "calculatedDate", "gridCode", "telephoneArrive",
@@ -431,9 +433,7 @@ public class Data {
 					fieldQty = Integer.parseInt(data.getValue(namesOfMemVar[i])
 							.toString());
 				} catch (Exception e) {
-					String log = StringUtils.getLogPrefix(Level.SEVERE);
-					System.out.println("\n" + log + "\n" + e.getClass()
-							+ "\t:\t" + e.getMessage());
+					logger.fatal("按日解析数据错误: " + e.getMessage());
 				}
 				sb.append(fieldDesc);
 				sb.append("："); // 冒号

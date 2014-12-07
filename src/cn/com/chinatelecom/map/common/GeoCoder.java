@@ -88,9 +88,10 @@ public class GeoCoder {
 	}
 
 	public String toString() {
-		if (null == parameters)
+		if (null == parameters) {
+			logger.warn("geocoder请求参数为空！");
 			return url;
-
+		}
 		StringBuffer sb = new StringBuffer(url);
 		int index = 0;
 		for (Entry<String, String> es : parameters.entrySet()) {

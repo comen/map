@@ -51,8 +51,11 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		DBObject q = (DBObject) JSON.parse(json);
 		WriteResult wr = coll.save(q, WriteConcern.NORMAL);
-		if (null != wr.getError())
+		String error = wr.getError();
+		if (null != error) {
+			logger.error("插入数据库错误: " + error);
 			return false;
+		}
 		return true;
 	}
 
@@ -60,8 +63,11 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		DBObject q = (DBObject) JSON.parse(json);
 		WriteResult wr = coll.remove(q, WriteConcern.NORMAL);
-		if (null != wr.getError())
+		String error = wr.getError();
+		if (null != error) {
+			logger.error("删除数据错误: " + error);
 			return false;
+		}
 		return true;
 	}
 
@@ -70,8 +76,11 @@ public class MongoDB {
 		DBObject q = (DBObject) JSON.parse(qJson);
 		DBObject o = (DBObject) JSON.parse(oJson);
 		WriteResult wr = coll.update(q, o);
-		if (null != wr.getError())
+		String error = wr.getError();
+		if (null != error) {
+			logger.error("更新数据错误: " + error);
 			return false;
+		}
 		return true;
 	}
 
