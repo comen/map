@@ -15,13 +15,15 @@
 		/* Validate if user login successfully. */
 		try {
 			loginState = (String)session.getAttribute("loginstate");
-			if (loginState.equals("S")) {
-				/* Login successfully, go to index page */
-				String path = "index.jsp";
-				response.sendRedirect(path);
-			} else {
-				session.invalidate();
-				errMsg = "用户名或密码错误！";
+			if (loginState != null) {
+				if (loginState.equals("S")) {
+					/* Login successfully, go to index page */
+					String path = "index.jsp";
+					response.sendRedirect(path);
+				} else {
+					session.invalidate();
+					errMsg = "用户名或密码错误！";
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.getClass() + "\t:\t" + e.getMessage());

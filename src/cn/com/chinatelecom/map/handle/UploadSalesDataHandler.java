@@ -18,6 +18,7 @@ import com.mongodb.util.JSON;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Data;
+import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.FileUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
@@ -71,6 +72,7 @@ public class UploadSalesDataHandler implements IHandler {
 							String office = (String) fileLine.get(Config.getInstance().getValue("officeColumn"));
 							String suboffice = (String) fileLine.get(Config.getInstance().getValue("subofficeColumn"));
 							String dateStr = (String) fileLine.get(Config.getInstance().getValue("dateColumn"));
+							String address = (String) fileLine.get(Config.getInstance().getValue("addressColumn"));
 							
 							if (office == null || office.equals("") || suboffice == null || suboffice.equals("")) {
 								continue;
@@ -144,6 +146,21 @@ public class UploadSalesDataHandler implements IHandler {
 											subOfficeData.insert();
 										}
 										/* Accumulate for Grid */
+										if (gridCode == null || gridCode.equals("")) {
+											if (address == null || address.equals("")) {
+												continue;
+											} else {
+												/*if (!address.startsWith("上海")) {
+													address = "上海市" + address;
+												}*/
+												Grid grid = Grid.search(address);
+												if (grid != null) {
+													gridCode = grid.getCode();
+												} else {
+													continue;
+												}
+											}
+										}
 										Data gridData = new Data();
 										gridData.setCalculatedDate(calculatedDate);
 										gridData.setGridCode(gridCode);

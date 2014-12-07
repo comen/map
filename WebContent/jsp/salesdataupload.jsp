@@ -61,6 +61,7 @@
 		$.ajax({
 			url: "getSalesDataFields",
 			type: "POST",
+			timeout: 600000,
 			data: formData,
 			processData: false,  // 告诉jQuery不要去处理发送的数据
 			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
@@ -89,6 +90,7 @@
 			fileSizeLimit:'10MB',
 			swf:'../dwz/uploadify/scripts/uploadify.swf',
 			uploader:'uploadSalesData',
+			successTimeout: 600,
 			progressData:'speed',
 			queueID:'fileQueue',
 			buttonImage:'../dwz/uploadify/img/add.jpg',

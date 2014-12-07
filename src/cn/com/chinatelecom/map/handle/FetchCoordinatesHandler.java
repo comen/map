@@ -29,7 +29,6 @@ public class FetchCoordinatesHandler implements IHandler {
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
-		Grid grid = new Grid();
 		String address = "";
 		
 		for (FileItem item : items) {
@@ -54,7 +53,10 @@ public class FetchCoordinatesHandler implements IHandler {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
 		if (!(address == null || address.equals(""))) {
-			Coordinate coordinate = grid.getCoordinate(address);
+			if (!(address.startsWith("上海"))) {
+				address = "上海市" + address;
+			}
+			Coordinate coordinate = Grid.getCoordinate(address);
 			sb.append("{\"longitude\":");
 			sb.append(MathUtils.getTitude(coordinate.getLongtitude(), 5));
 			sb.append(",\"latitude\":");

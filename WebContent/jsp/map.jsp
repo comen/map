@@ -41,9 +41,9 @@ label {
 	height: 94%;
 }
 
-/* #status {
+#status {
 	height: 2%;
-} */
+}
 </style>
 <link rel="stylesheet" href="../css/jquery-ui.min.css">
 <script type="text/javascript" src="../js/HashMap.js"></script>
@@ -68,7 +68,7 @@ label {
 	</div>
 	<p></p>
 	<div id="mapcontainer"></div>
-	<!-- <div id="status"></div> -->
+	<div id="status"></div>
 	<script type="text/javascript">
 		var currAjax;
 		var map = (function() {
@@ -94,7 +94,7 @@ label {
 			map.setCurrentCity("上海");
 			map.addEventListener("mousemove", function(event) {
 				var point = event.point;
-				document.getElementById("info").innerHTML = "("
+				document.getElementById("status").innerHTML = "("
 						+ point.lng.toFixed(5) + "," + point.lat.toFixed(5)
 						+ ")";
 			});
@@ -118,7 +118,7 @@ label {
 					window.document.title = "北区局信息";
 					break;
 				}
-				document.getElementById("info").innerHTML = zoomLevel;
+				document.getElementById("status").innerHTML = zoomLevel;
 				if (zoomLevel > 11) {
 					fetch();
 				}
@@ -489,6 +489,5 @@ label {
 			event.target.setFillOpacity(0.5);
 		}
 	</script>
-	<div style="width: 100%;" id="info"></div>
 </body>
 </html>

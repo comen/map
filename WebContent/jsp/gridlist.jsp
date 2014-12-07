@@ -120,6 +120,7 @@
 			<table class="searchContent">
 				<tr>
 					<td>网格编号：<input type="text" name="gridcode" id="gridcode" /></td>
+					<td>说明：编辑网格的地图区域时，第一次右键点击地图表示进入编辑状态，再次右键点击地图表示保存编辑后的数据，期间拖动地图或刷新页面表示撤销编辑。</td>
 				</tr>
 			</table>
 			<div class="subBar">

@@ -27,7 +27,7 @@ public class Grid {
 	private String manager;
 	private String address;
 	private List<Coordinate> coordinates;
-	Logger logger = Logger.getLogger(IHandler.class);
+	private static Logger logger = Logger.getLogger(IHandler.class);
 
 	public String getCode() {
 		return code;
@@ -155,17 +155,16 @@ public class Grid {
 		return gl;
 	}
 
-	public static List<Grid> search(String address) {
+	public static Grid search(String address) {
 		List<Grid> grids = findList(null);
 		if (null == grids || null == address)
 			return null;
-		List<Grid> rtvl = new ArrayList<Grid>();
 		for (Grid grid : grids) {
-			if (grid.contains(address)) {
-				rtvl.add(grid);
+			if (grid.contains(address) && 1 != grid.getCode().length()) {
+				return grid;
 			}
 		}
-		return rtvl;
+		return null;
 	}
 
 	public boolean contains(Coordinate coordinate) {
@@ -212,7 +211,7 @@ public class Grid {
 		return polygon;
 	}
 
-	public Coordinate getCoordinate(String address) {
+	public static Coordinate getCoordinate(String address) {
 		if (null == address)
 			return null;
 		String json = GeoCoder.getInstance().geoCode(address);
@@ -264,7 +263,9 @@ public class Grid {
 			sb.append("网格地址:" + address);
 		}
 		sb.append("</i>");
-		if (null != data && "".equals(data))
+		/*if (null != data && "".equals(data))
+			sb.append("<br/>" + data);*/
+		if (null != data && (!"".equals(data)))
 			sb.append("<br/>" + data);
 		return sb.toString();
 	}

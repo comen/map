@@ -430,11 +430,8 @@ public class Data {
 				sb.append(fieldDesc);
 				sb.append("：");	//冒号
 				sb.append(fieldQty);
-				sb.append("；");	//分号
+				sb.append("；<br />");	//分号
 			}
-		}
-		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '；') { //删除末尾分号
-			sb.deleteCharAt(sb.length() - 1);
 		}
 		return sb.toString();
 	}
@@ -480,15 +477,11 @@ public class Data {
 				sb.append(fieldDesc);
 				sb.append("：");	//冒号
 				sb.append(sumThisWeek);
-				sb.append("，");	//逗号
+				sb.append("，&nbsp;");	//逗号
 				sb.append("环比：");
 				sb.append(huanbiGrowthRate);
-				sb.append("%；");
+				sb.append("%；<br />");
 			}
-		}
-		
-		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '；') { //删除末尾分号
-			sb.deleteCharAt(sb.length() - 1);
 		}
 		return sb.toString();
 	}
@@ -540,20 +533,16 @@ public class Data {
 				sb.append(fieldDesc);
 				sb.append("：");	//冒号
 				sb.append(sumThisMonth);
-				sb.append("，");	//逗号
+				sb.append("，&nbsp;");	//逗号
 				
 				sb.append("环比：");
 				sb.append(huanbiGrowthRate);
-				sb.append("%，");
+				sb.append("%，&nbsp;");
 				
 				sb.append("同比：");
 				sb.append(tongbiGrowthRate);
-				sb.append("%；");
+				sb.append("%；<br />");
 			}
-		}
-		
-		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '；') { //删除末尾分号
-			sb.deleteCharAt(sb.length() - 1);
 		}
 		return sb.toString();
 	}
@@ -623,8 +612,8 @@ public class Data {
 	public static Data getDataOfDay(Date calculatedDate, String gridCode) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
-		sb.append("'calculated_date':'" + calculatedDate.toString() + "'");
-		sb.append(",'grid_code':'" + gridCode + "'");
+		sb.append("'calculatedDate':" + calculatedDate.getTime());
+		sb.append(",'gridCode':'" + gridCode + "'");
 		sb.append("}");
 		return Data.findOne(sb.toString());
 	}
@@ -635,8 +624,8 @@ public class Data {
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
-		sb.append("'calculated_date':{'$gte:" + firstDayOfWeek.getTime() + ",'$lte:'" + lastDayOfWeek.getTime() + "}");
-		sb.append(",'grid_code':'" + gridCode + "'");
+		sb.append("'calculatedDate':{$gte:" + firstDayOfWeek.getTime() + ",$lte:" + lastDayOfWeek.getTime() + "}");
+		sb.append(",'gridCode':'" + gridCode + "'");
 		sb.append("}");
 		return Data.findList(sb.toString());
 	}
@@ -647,8 +636,8 @@ public class Data {
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
-		sb.append("'calculated_date':{'$gte:" + firstDayOfMonth.getTime() + ",'$lte:'" + lastDayOfMonth.getTime() + "}");
-		sb.append(",'grid_code':'" + gridCode + "'");
+		sb.append("'calculatedDate':{$gte:" + firstDayOfMonth.getTime() + ",$lte:" + lastDayOfMonth.getTime() + "}");
+		sb.append(",'gridCode':'" + gridCode + "'");
 		sb.append("}");
 		return Data.findList(sb.toString());
 	}

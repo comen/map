@@ -26,6 +26,7 @@
 
 <script type="text/javascript">
 	getCoordinates($("#address").val());
+	$("#address").remove();
 
 	function getCoordinates(address) {
 		var formData = new FormData();
@@ -42,8 +43,8 @@
 				var $latitude = $("#latitude");
 				var coordinates = eval(responseText);
 				if (coordinates.length > 0) {
-					$longitude.val(coordinates[0].longitude);
-					$latitude.val(coordinates[0].latitude);
+					var src = "map.jsp?longtitude=" + coordinates[0].longitude + "&latitude=" + coordinates[0].latitude;
+					$(".pageFormContent").find("iframe").attr("src", src);
 				}
 			}
 		});
@@ -55,7 +56,7 @@
 <input type="hidden" id="latitude" value="">
 <div class="pageContent">
 	<div class="pageFormContent" layoutH="97">
-		<iframe src="map.jsp?longitude=<%=longitude%>&latitude=<%=latitude%>" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
+		<iframe src="map.jsp" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
 	</div>
 	<div class="formBar">
 		<ul>
