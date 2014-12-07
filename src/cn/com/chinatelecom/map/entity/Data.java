@@ -43,35 +43,19 @@ public class Data {
 	private int additional_11;
 	private int additional_12;
 	private int additional_13;
-	
+
 	public static String[] getNameOfMemberVariables() {
-		String[] strArray = {
-				"calculatedDate",
-				"gridCode",
-				"telephoneArrive",
-				"broadbandArrive",
-				"broadbandNew",
-				"broadbandRemove",
-				"broadbandMoveSetup",
-				"broadbandMoveUnload",
-				"broadbandOrderInTransit",
-				"additional_1",
-				"additional_2",
-				"additional_3",
-				"additional_4",
-				"additional_5",
-				"additional_6",
-				"additional_7",
-				"additional_8",
-				"additional_9",
-				"additional_10",
-				"additional_11",
-				"additional_12",
-				"additional_13"
-		}; 
+		String[] strArray = { "calculatedDate", "gridCode", "telephoneArrive",
+				"broadbandArrive", "broadbandNew", "broadbandRemove",
+				"broadbandMoveSetup", "broadbandMoveUnload",
+				"broadbandOrderInTransit", "additional_1", "additional_2",
+				"additional_3", "additional_4", "additional_5", "additional_6",
+				"additional_7", "additional_8", "additional_9",
+				"additional_10", "additional_11", "additional_12",
+				"additional_13" };
 		return strArray;
 	}
-	
+
 	public void setValue(String nameOfMemberVariable, Object value) {
 		if (nameOfMemberVariable.equalsIgnoreCase("calculatedDate")) {
 			setCalculatedDate(new Date((long) value));
@@ -119,7 +103,7 @@ public class Data {
 			setAdditional_13((int) value);
 		}
 	}
-	
+
 	public Object getValue(String nameOfMemberVariable) {
 		if (nameOfMemberVariable.equalsIgnoreCase("calculatedDate")) {
 			return getCalculatedDate();
@@ -358,7 +342,7 @@ public class Data {
 	public Data(DBObject dbo) {
 		setData(dbo);
 	}
-	
+
 	private void setData(DBObject dbo) {
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		for (int i = 0; i < namesOfMemVar.length; i++) {
@@ -367,7 +351,7 @@ public class Data {
 			}
 		}
 	}
-	
+
 	public boolean exist() {
 		DBObject dbo = MongoDB.getInstance().findOne("data", toString());
 		if (dbo == null) {
@@ -413,7 +397,6 @@ public class Data {
 		if (!data.exist()) {
 			return null;
 		}
-		
 		if (mode.equalsIgnoreCase("Day")) {
 			return getFieldDescAndQtyInDay(calculatedDate, gridCode);
 		} else if (mode.equalsIgnoreCase("Week")) {
@@ -475,7 +458,7 @@ public class Data {
 			if (status < 0) { // field not in use
 				continue;
 			}
-			
+
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			if (onlyDay > 0) { // field should be only displayed in DAY
 				continue;
@@ -498,7 +481,6 @@ public class Data {
 				sb.append("：");	//冒号
 				sb.append(sumThisWeek);
 				sb.append("，");	//逗号
-				
 				sb.append("环比：");
 				sb.append(huanbiGrowthRate);
 				sb.append("%；");
@@ -531,7 +513,6 @@ public class Data {
 			if (status < 0) { // field not in use
 				continue;
 			}
-			
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			if (onlyDay > 0) { // field should be only displayed in DAY
 				continue;
@@ -581,6 +562,7 @@ public class Data {
 		Config config = Config.getInstance();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(memberVariable));
+
 		int status = Integer.parseInt(field.get("status").toString());
 		if (status < 0) { // field not in use
 			return false;
@@ -678,7 +660,6 @@ public class Data {
 		if (!data.exist()) {
 			return null;
 		}
-		
 		if (mode.equalsIgnoreCase("Day")) {
 			return getFieldSpecialDisplayInDay(calculatedDate, gridCode);
 		} else if (mode.equalsIgnoreCase("Week")) {
@@ -704,7 +685,6 @@ public class Data {
 			}
 			@SuppressWarnings("unchecked")
 			Map<String, Object> field = (Map<String, Object>) JSON.parse(config.getValue(namesOfMemVar[i]));
-			
 			int status = Integer.parseInt(field.get("status").toString());
 			if (status < 0) { // field not in use
 				continue;
@@ -747,7 +727,6 @@ public class Data {
 				}
 			}
 		}
-		
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		sb.append("'R':" + Integer.toString(red));
@@ -779,7 +758,6 @@ public class Data {
 			if (status < 0) { // field not in use
 				continue;
 			}
-			
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			if (onlyDay > 0) { // field should be only displayed in DAY
 				continue;
@@ -823,7 +801,6 @@ public class Data {
 				}
 			}
 		}
-		
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		sb.append("'R':" + Integer.toString(red));
@@ -856,7 +833,7 @@ public class Data {
 			if (status < 0) { // field not in use
 				continue;
 			}
-			
+
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			if (onlyDay > 0) { // field should be only displayed in DAY
 				continue;
@@ -924,7 +901,6 @@ public class Data {
 				}
 			}
 		}
-		
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		sb.append("'R':" + Integer.toString(red));
@@ -934,7 +910,7 @@ public class Data {
 		
 		return sb.toString();
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();

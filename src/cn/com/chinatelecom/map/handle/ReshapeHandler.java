@@ -3,12 +3,10 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.entity.Grid;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author joseph
@@ -23,11 +21,10 @@ public class ReshapeHandler implements IHandler {
 	 */
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
-		
+
 		Map<String, Object> result = new HashMap<String, Object>();
-		if (items == null) {
-			String log = StringUtils.getLogPrefix(Level.WARNING);
-			System.out.println("\n" + log + "\nThere is no request item!");
+		if (null == items) {
+			logger.warn("没有请求数据!");
 			return null;
 		}
 
@@ -50,22 +47,17 @@ public class ReshapeHandler implements IHandler {
 			}
 		}
 
-		String log = StringUtils.getLogPrefix(Level.INFO);
-		System.out.println("\n" + log + "\nReshaping grid " + code + "...");
-		System.out.println("Coordinates: " + coordinates);
+		logger.info("编辑网格 " + code + ". 边界坐标: " + coordinates);
 
 		Grid origin = new Grid("{GRID_CODE:'" + code + "'}");
 		Grid target = Grid.findOne(origin.toString());
 		StringBuffer sb = new StringBuffer("{GRID_CODE:'" + code + "'");
-		if (target.getName() != null) {
+		if (null != target.getName())
 			sb.append(",GRID_NAME:'" + target.getName() + "'");
-		}
-		if (target.getManager() != null) {
+		if (null != target.getManager())
 			sb.append(",GRID_MANAGER:'" + target.getManager() + "'");
-		}
-		if (target.getAddress() != null) {
+		if (null != target.getAddress())
 			sb.append(",GRID_ADDRESS:'" + target.getAddress() + "'");
-		}
 		sb.append(",GRID_COORDINATES:" + coordinates + "}");
 		origin.update(sb.toString());
 		result.put("grid", sb.toString());

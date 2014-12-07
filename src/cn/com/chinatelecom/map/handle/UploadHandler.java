@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -29,8 +28,7 @@ public class UploadHandler implements IHandler {
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		if (items == null) {
-			String log = StringUtils.getLogPrefix(Level.WARNING);
-			System.out.println("\n" + log + "\nThere is no request item!");
+			logger.warn("没有请求数据!");
 			return null;
 		}
 
@@ -43,9 +41,7 @@ public class UploadHandler implements IHandler {
 				String filename = item.getName().trim();
 				filename = FileUtils.getFileName(filename);
 				if (!StringUtils.isLegal(filename, ".xls$")) {
-					String log = StringUtils.getLogPrefix(Level.SEVERE);
-					System.out.println("\n" + log + "\n文件格式有误:" + filename);
-					result.put("info", "文件格式有误！");
+					logger.error("文件格式有误: " + filename);
 					return result;
 				}
 				File file = new File(Config.getInstance()
@@ -54,9 +50,7 @@ public class UploadHandler implements IHandler {
 				try {
 					FileUtils.writeFile(item.getInputStream(), file);
 				} catch (Exception e) {
-					String log = StringUtils.getLogPrefix(Level.SEVERE);
-					System.out.println("\n" + log + "\n" + e.getClass()
-							+ "\t:\t" + e.getMessage());
+					logger.fatal("上传文件发生致命错误: " + e.getMessage());
 					return result;
 				}
 
@@ -72,9 +66,7 @@ public class UploadHandler implements IHandler {
 				}
 
 				file.delete();
-				String log = StringUtils.getLogPrefix(Level.INFO);
-				System.out.println("\n" + log + "\n文件上传成功！");
-				result.put("info", "文件上传成功！");
+				logger.info("文件上传成功: " + filename);
 
 				// --------------------Test MongoDB Start--------------------
 				// 北区局

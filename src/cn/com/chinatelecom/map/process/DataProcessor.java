@@ -33,7 +33,8 @@ public class DataProcessor implements IProcessor {
 		
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
-		if (result == null) {
+		if (null == result) {
+			logger.warn("没有响应数据!");
 			return;
 		}
 
