@@ -26,6 +26,12 @@ public class FetchHandler implements IHandler {
 	 */
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
+
+		// List<Grid> exports = Grid.findList(null);
+		// for (Grid export : exports) {
+		// logger.error(export.toString());
+		// }
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (null == items) {
 			logger.warn("没有请求数据!");
@@ -140,7 +146,7 @@ public class FetchHandler implements IHandler {
 		result.put("grids", sb.toString());
 
 		logger.info("网格数量: " + amount);
-		logger.info(result.get("grids"));
+		logger.debug(result.get("grids"));
 
 		return result;
 	}

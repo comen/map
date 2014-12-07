@@ -35,6 +35,7 @@ label {
 
 #menu {
 	height: 4%;
+	text
 }
 
 #mapcontainer {
@@ -63,7 +64,7 @@ label {
 		<input type="radio" name="mode" id ="week" value="week" />按周显示
 		<input type="radio" name="mode" id ="month" value="month" />按月显示
 		<label for="date">选择数据日期: </label>
-		<input type="time" id="date" id="date">
+		<input type="text" id="date" id="date" readonly="readonly">
 		<input type="button" onclick="fetch()" value="重新获取数据">
 	</div>
 	<div id="mapcontainer"></div>
@@ -93,7 +94,7 @@ label {
 			map.setCurrentCity("上海");
 			map.addEventListener("mousemove", function(event) {
 				var point = event.point;
-				document.getElementById("info").innerHTML = "("
+				document.getElementById("status").innerHTML = "("
 						+ point.lng.toFixed(5) + "," + point.lat.toFixed(5)
 						+ ")";
 			});
@@ -117,7 +118,7 @@ label {
 					window.document.title = "北区局信息";
 					break;
 				}
-				document.getElementById("info").innerHTML = zoomLevel;
+				document.getElementById("status").innerHTML = zoomLevel;
 				if (zoomLevel > 11) {
 					fetch();
 				}
@@ -488,6 +489,5 @@ label {
 			event.target.setFillOpacity(0.5);
 		}
 	</script>
-	<div style="width: 100%;" id="info"></div>
 </body>
 </html>

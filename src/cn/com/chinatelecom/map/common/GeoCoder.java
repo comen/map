@@ -19,7 +19,7 @@ public class GeoCoder {
 	private static GeoCoder instance;
 	private String url;
 	private Map<String, String> parameters;
-	private Logger logger = Logger.getLogger(MongoDB.class);
+	private Logger logger = Logger.getLogger(GeoCoder.class);
 
 	private GeoCoder() {
 		url = Config.getInstance().getValue("geocoder");

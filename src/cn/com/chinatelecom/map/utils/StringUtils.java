@@ -84,32 +84,16 @@ public class StringUtils {
 	}
 
 	public static String getHtmlColor(int level) {
-		String color = "";
-		if (-1 < level && level < 10)
-			color += level + level;
-		else {
-			switch (level) {
-			case 10:
-				color = "AA";
-				break;
-			case 11:
-				color = "BB";
-				break;
-			case 12:
-				color = "CC";
-				break;
-			case 13:
-				color = "DD";
-				break;
-			case 14:
-				color = "EE";
-				break;
-			default:
-				color = "FF";
-				break;
-			}
+		if (0 > level) {
+			logger.warn("小于0的颜色值自动设重置为0: " + level);
+			level = 0;
 		}
-		return color;
+		if (15 < level) {
+			logger.warn("大于15的颜色值自动设重置为15: " + level);
+			level = 15;
+		}
+		String color = Integer.toHexString(level);
+		return color + color;
 	}
 
 }
