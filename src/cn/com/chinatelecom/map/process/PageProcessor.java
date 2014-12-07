@@ -33,11 +33,13 @@ public class PageProcessor implements IProcessor {
 		HttpSession session = request.getSession();
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
-		
-		if (result != null) {
-			for (Entry<String, Object> eso : result.entrySet()) {
-				session.setAttribute(eso.getKey(), eso.getValue());
-			}
+
+		if (null == result) {
+			logger.warn("没有响应数据!");
+			return;
+		}
+		for (Entry<String, Object> eso : result.entrySet()) {
+			session.setAttribute(eso.getKey(), eso.getValue());
 		}
 		
 //		String path = "WEB-INF" + request.getServletPath() + ".jsp";

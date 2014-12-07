@@ -2,9 +2,8 @@ package cn.com.chinatelecom.map.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
-import cn.com.chinatelecom.map.utils.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -24,6 +23,7 @@ public class MongoDB {
 
 	private static MongoDB instance;
 	private DB db;
+	private Logger logger = Logger.getLogger(MongoDB.class);
 
 	private MongoDB() {
 		try {
@@ -32,16 +32,13 @@ public class MongoDB {
 					.getValue("dbport")));
 			db = mongoClient.getDB(Config.getInstance().getValue("dbname"));
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("初始化数据库失败: " + e.getMessage());
 		}
 	}
 
 	public static MongoDB getInstance() {
-		if (instance == null) {
+		if (null == instance)
 			instance = new MongoDB();
-		}
 		return instance;
 	}
 
@@ -54,10 +51,8 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		DBObject q = (DBObject) JSON.parse(json);
 		WriteResult wr = coll.save(q, WriteConcern.NORMAL);
-		if (wr.getError() != null) {
-			System.out.println(wr.getError());
+		if (null != wr.getError())
 			return false;
-		}
 		return true;
 	}
 
@@ -65,9 +60,8 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		DBObject q = (DBObject) JSON.parse(json);
 		WriteResult wr = coll.remove(q, WriteConcern.NORMAL);
-		if (wr.getError() != null) {
+		if (null != wr.getError())
 			return false;
-		}
 		return true;
 	}
 
@@ -76,9 +70,8 @@ public class MongoDB {
 		DBObject q = (DBObject) JSON.parse(qJson);
 		DBObject o = (DBObject) JSON.parse(oJson);
 		WriteResult wr = coll.update(q, o);
-		if (wr.getError() != null) {
+		if (null != wr.getError())
 			return false;
-		}
 		return true;
 	}
 
@@ -86,16 +79,15 @@ public class MongoDB {
 		DBCollection coll = db.getCollection(table);
 		List<DBObject> dbl = null;
 		DBCursor cursor = null;
-		if (json != null) {
+		if (null != json) {
 			DBObject dbo = (DBObject) JSON.parse(json);
 			cursor = coll.find(dbo);
 		} else {
 			cursor = coll.find();
 		}
 		dbl = new ArrayList<DBObject>();
-		while (cursor.hasNext()) {
+		while (cursor.hasNext())
 			dbl.add(cursor.next());
-		}
 		return dbl;
 	}
 
