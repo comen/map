@@ -29,15 +29,14 @@ public class MathUtils {
 			return false;
 	}
 	
-	/* Return value is in percentage, e.g. if calculated rate is 1.2345, then it will return 123.45 which means 123.45%. */
 	public static double calcuGrowthRate(int near, int far) {
 		if (far == 0) {
 			return 0.00;
 		}
 		double nearInDouble = (double) near;
 		double farInDouble = (double) far;
-		double rate = 100 * (nearInDouble - farInDouble) / farInDouble;
-		return getTitude(rate, 2);
+		double rate = (nearInDouble - farInDouble) / farInDouble;
+		return getTitude(rate, 4);
 	}
 
 }

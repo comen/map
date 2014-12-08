@@ -51,6 +51,7 @@ public class StringUtils {
 		return null;
 	}
 
+	@Deprecated
 	public static String getLogPrefix(Level level) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[" + level + "]");
@@ -64,18 +65,24 @@ public class StringUtils {
 	}
 
 	public static String getColor(String rgb) {
+		String color = "#FFFFFF";
 		if (null == rgb || "".equals(rgb.trim())) {
 			logger.warn("输入的RGB组合为空！");
-			return "#FFFFFF";
+			return color;
 		}
-		String color = "#FFFFFF";
 		DBObject dbo = null;
 		try {
 			dbo = (DBObject) JSON.parse(rgb);
 			double R = Integer.parseInt(dbo.get("R").toString());
 			double G = Integer.parseInt(dbo.get("G").toString());
+			if (0 == R + G)
+				return color;
 			int r = (int) (R * 15 / (R + G));
 			int g = (int) (G * 15 / (R + G));
+			while (10 > r || 10 > g) {
+				r++;
+				g++;
+			}
 			color = "#" + getHtmlColor(r) + getHtmlColor(g) + "00";
 		} catch (Exception e) {
 			logger.fatal("解析RGB组合错误: " + e.getMessage());
@@ -84,32 +91,16 @@ public class StringUtils {
 	}
 
 	public static String getHtmlColor(int level) {
-		String color = "";
-		if (-1 < level && level < 10)
-			color += level + level;
-		else {
-			switch (level) {
-			case 10:
-				color = "AA";
-				break;
-			case 11:
-				color = "BB";
-				break;
-			case 12:
-				color = "CC";
-				break;
-			case 13:
-				color = "DD";
-				break;
-			case 14:
-				color = "EE";
-				break;
-			default:
-				color = "FF";
-				break;
-			}
+		if (0 > level) {
+			logger.warn("小于0的颜色值自动重置为0: " + level);
+			level = 0;
 		}
-		return color;
+		if (15 < level) {
+			logger.warn("大于15的颜色值自动重置为15: " + level);
+			level = 15;
+		}
+		String color = Integer.toHexString(level);
+		return color + color;
 	}
 
 }

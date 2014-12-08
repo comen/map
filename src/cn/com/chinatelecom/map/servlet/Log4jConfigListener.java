@@ -1,5 +1,7 @@
 package cn.com.chinatelecom.map.servlet;
 
+import java.util.TimeZone;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -32,6 +34,7 @@ public final class Log4jConfigListener implements ServletContextListener {
 	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
 	 */
 	public void contextInitialized(ServletContextEvent arg0) {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		PropertyConfigurator.configure(getClass().getResourceAsStream(
 				properties));
 		Config.getInstance();

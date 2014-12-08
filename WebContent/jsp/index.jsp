@@ -10,7 +10,7 @@
 	/* Validate if user login successfully. */
 	try {
 		loginState = (String)session.getAttribute("loginstate");
-		if (loginState.equals("S")) {
+		if (loginState != null && loginState.equals("S")) {
 			userName = (String)session.getAttribute("username");
 			role = Integer.parseInt((String)session.getAttribute("role"));
 			switch (role) {
@@ -33,11 +33,13 @@
 		} else {
 			String path = "login.jsp";
 			response.sendRedirect(path);
+			return;
 		}
 	} catch (Exception e) {
 		System.out.println(e.getClass() + "\t:\t" + e.getMessage());
 		String path = "login.jsp";
 		response.sendRedirect(path);
+		return;
 	}
 %>
 

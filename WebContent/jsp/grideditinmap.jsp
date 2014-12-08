@@ -43,7 +43,7 @@
 				var $latitude = $("#latitude");
 				var coordinates = eval(responseText);
 				if (coordinates.length > 0) {
-					var src = "map.jsp?longtitude=" + coordinates[0].longitude + "&latitude=" + coordinates[0].latitude;
+					var src = "map.jsp?longitude=" + coordinates[0].longitude + "&latitude=" + coordinates[0].latitude;
 					$(".pageFormContent").find("iframe").attr("src", src);
 				}
 			}

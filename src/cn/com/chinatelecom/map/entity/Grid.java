@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import javafx.scene.shape.Polygon;
 import cn.com.chinatelecom.map.common.GeoCoder;
 import cn.com.chinatelecom.map.common.MongoDB;
-import cn.com.chinatelecom.map.handle.IHandler;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -27,7 +26,7 @@ public class Grid {
 	private String manager;
 	private String address;
 	private List<Coordinate> coordinates;
-	private static Logger logger = Logger.getLogger(IHandler.class);
+	private static Logger logger = Logger.getLogger(Grid.class);
 
 	public String getCode() {
 		return code;
@@ -140,9 +139,10 @@ public class Grid {
 	}
 
 	public static Grid findOne(String json) {
-		if (null == MongoDB.getInstance().findOne("grid", json))
+		DBObject dbo = MongoDB.getInstance().findOne("grid", json);
+		if (null == dbo)
 			return null;
-		return new Grid(MongoDB.getInstance().findOne("grid", json));
+		return new Grid(dbo);
 	}
 
 	public static List<Grid> findList(String json) {
@@ -170,7 +170,7 @@ public class Grid {
 	public boolean contains(Coordinate coordinate) {
 		if (null == coordinates || coordinates.isEmpty() || null == coordinate)
 			return false;
-		if (getPolygon().contains(coordinate.getLongtitude(),
+		if (getPolygon().contains(coordinate.getLongitude(),
 				coordinate.getLatitude()))
 			return true;
 		else
@@ -185,7 +185,7 @@ public class Grid {
 		if (null == points)
 			return contains(grid.getAddress());
 		for (Coordinate point : points) {
-			if (polygon.contains(point.getLongtitude(), point.getLatitude())) {
+			if (polygon.contains(point.getLongitude(), point.getLatitude())) {
 				return true;
 			}
 		}
@@ -204,7 +204,7 @@ public class Grid {
 		int size = coordinates.size();
 		double[] points = new double[size * 2];
 		for (int i = 0; i != size; i++) {
-			points[i * 2] = coordinates.get(i).getLongtitude();
+			points[i * 2] = coordinates.get(i).getLongitude();
 			points[i * 2 + 1] = coordinates.get(i).getLatitude();
 		}
 		Polygon polygon = new Polygon(points);
@@ -224,9 +224,9 @@ public class Grid {
 				if (null != dbo.get("location")) {
 					json = dbo.get("location").toString();
 					dbo = (DBObject) JSON.parse(json);
-					Double longtitude = (Double) dbo.get("lng");
+					Double longitude = (Double) dbo.get("lng");
 					Double latitude = (Double) dbo.get("lat");
-					Coordinate coordinate = new Coordinate(latitude, longtitude);
+					Coordinate coordinate = new Coordinate(latitude, longitude);
 					return coordinate;
 				}
 			}
@@ -234,6 +234,27 @@ public class Grid {
 			logger.fatal("根据网格地址(" + address + ")获取坐标失败: " + e.getMessage());
 		}
 		return null;
+	}
+
+	public BasicDBObject getBasicDBObject() {
+		BasicDBObject bdbo = new BasicDBObject();
+		if (null != code) {
+			bdbo.append("GRID_CODE", code);
+		}
+		if (null != name)
+			bdbo.append("GRID_NAME", name);
+		if (null != manager)
+			bdbo.append("GRID_MANAGER", manager);
+		if (null != address)
+			bdbo.append("GRID_ADDRESS", address);
+		if (null != coordinates && !coordinates.isEmpty()) {
+			BasicDBList bdbl = new BasicDBList();
+			for (Coordinate coordinate : coordinates) {
+				bdbl.add(coordinate);
+			}
+			bdbo.append("GRID_COORDINATES", bdbl);
+		}
+		return bdbo;
 	}
 
 	public String toFetch(String color) {
@@ -245,8 +266,8 @@ public class Grid {
 		if (null != coordinates && !coordinates.isEmpty()) {
 			sb.append(",p:[");
 			for (Coordinate coordinate : coordinates) {
-				sb.append("{a:" + coordinate.getLatitude()
-						+ ",o:" + coordinate.getLongtitude() + "},");
+				sb.append("{a:" + coordinate.getLatitude() + ",o:"
+						+ coordinate.getLongitude() + "},");
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			sb.append("]");
@@ -263,42 +284,13 @@ public class Grid {
 			sb.append("网格地址:" + address);
 		}
 		sb.append("</i>");
-		/*if (null != data && "".equals(data))
-			sb.append("<br/>" + data);*/
-		if (null != data && (!"".equals(data)))
+		if (null != data && !"".equals(data))
 			sb.append("<br/>" + data);
 		return sb.toString();
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("{");
-		if (code != null) {
-			sb.append("GRID_CODE:'" + code + "',");
-		}
-		if (name != null) {
-			sb.append("GRID_NAME:'" + name + "',");
-		}
-		if (manager != null) {
-			sb.append("GRID_MANAGER:'" + manager + "',");
-		}
-		if (address != null) {
-			sb.append("GRID_ADDRESS:'" + address + "',");
-		}
-		if (coordinates != null && !coordinates.isEmpty()) {
-			sb.append("GRID_COORDINATES:[");
-			for (Coordinate coordinate : coordinates) {
-				sb.append("{LATITUDE:" + coordinate.getLatitude()
-						+ ",LONGTITUDE:" + coordinate.getLongtitude() + "},");
-			}
-			sb.deleteCharAt(sb.length() - 1);
-			sb.append("]");
-		}
-		if (sb.charAt(sb.length() - 1) == ',') {
-			sb.deleteCharAt(sb.length() - 1);
-		}
-		sb.append("}");
-		return sb.toString();
+		return getBasicDBObject().toString();
 	}
 }

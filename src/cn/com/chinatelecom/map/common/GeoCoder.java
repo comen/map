@@ -19,7 +19,7 @@ public class GeoCoder {
 	private static GeoCoder instance;
 	private String url;
 	private Map<String, String> parameters;
-	private Logger logger = Logger.getLogger(MongoDB.class);
+	private Logger logger = Logger.getLogger(GeoCoder.class);
 
 	private GeoCoder() {
 		url = Config.getInstance().getValue("geocoder");
@@ -88,9 +88,10 @@ public class GeoCoder {
 	}
 
 	public String toString() {
-		if (null == parameters)
+		if (null == parameters) {
+			logger.warn("geocoder请求参数为空！");
 			return url;
-
+		}
 		StringBuffer sb = new StringBuffer(url);
 		int index = 0;
 		for (Entry<String, String> es : parameters.entrySet()) {

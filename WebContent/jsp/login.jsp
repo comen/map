@@ -20,6 +20,7 @@
 					/* Login successfully, go to index page */
 					String path = "index.jsp";
 					response.sendRedirect(path);
+					return;
 				} else {
 					session.invalidate();
 					errMsg = "用户名或密码错误！";

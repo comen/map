@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%
-	String longtitude = request.getParameter("longtitude");
+	String longitude = request.getParameter("longitude");
 	String latitude = request.getParameter("latitude");
 	Double lng = 0.0;
 	Double lat = 0.0;
-	if (longtitude != null && latitude != null) {
-		lng = Double.parseDouble(longtitude);
+	if (longitude != null && latitude != null) {
+		lng = Double.parseDouble(longitude);
 		lat = Double.parseDouble(latitude);
 	}
 %>
@@ -35,6 +35,7 @@ label {
 
 #menu {
 	height: 4%;
+	text
 }
 
 #mapcontainer {
@@ -63,7 +64,7 @@ label {
 		<input type="radio" name="mode" id ="week" value="week" />按周显示
 		<input type="radio" name="mode" id ="month" value="month" />按月显示
 		<label for="date">选择数据日期: </label>
-		<input type="time" id="date" id="date">
+		<input type="text" id="date" id="date" readonly="readonly">
 		<input type="button" onclick="fetch()" value="重新获取数据">
 	</div>
 	<p></p>
@@ -215,10 +216,10 @@ label {
 									var editable = false;
 									
 									var path = polygon.getPath();
-									var coordinates = "[{LONGTITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
+									var coordinates = "[{LONGITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
 									for (var i = 1; i < path.length; i++) {
 										var point = path[i];
-										coordinates += ",{LONGTITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
+										coordinates += ",{LONGITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
 									}
 									coordinates += "]";
 									
@@ -243,7 +244,7 @@ label {
 										formData.append("zoom", map.getZoom());
 										formData.append("mode", mode);
 										formData.append("date", date);
-										formData.append("longtitude", event.point.lng.toFixed(5));
+										formData.append("longitude", event.point.lng.toFixed(5));
 										formData.append("latitude", event.point.lat.toFixed(5));
 										$.ajax({
 											url : 'info',
@@ -293,10 +294,10 @@ label {
 											event.target.disableEditing();
 											
 											var path = event.target.getPath();
-											var coordinates = "[{LONGTITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
+											var coordinates = "[{LONGITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
 											for (var i = 1; i < path.length; i++) {
 												var point = path[i];
-												coordinates += ",{LONGTITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
+												coordinates += ",{LONGITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
 											}
 											coordinates += "]";
 											
@@ -369,7 +370,7 @@ label {
 							formData.append("zoom", map.getZoom());
 							formData.append("mode", mode);
 							formData.append("date", date);
-							formData.append("longtitude", event.point.lng.toFixed(5));
+							formData.append("longitude", event.point.lng.toFixed(5));
 							formData.append("latitude", event.point.lat.toFixed(5));
 							$.ajax({
 								url : 'info',
@@ -419,10 +420,10 @@ label {
 								event.target.disableEditing();
 								
 								var path = event.target.getPath();
-								var coordinates = "[{LONGTITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
+								var coordinates = "[{LONGITUDE:" + path[0].lng.toFixed(5) + ",LATITUDE:" + path[0].lat.toFixed(5) + "}";
 								for (var i = 1; i < path.length; i++) {
 									var point = path[i];
-									coordinates += ",{LONGTITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
+									coordinates += ",{LONGITUDE:" + point.lng.toFixed(5) + ",LATITUDE:" + point.lat.toFixed(5) + "}";
 								}
 								coordinates += "]";
 								
