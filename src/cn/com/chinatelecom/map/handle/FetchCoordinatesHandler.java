@@ -43,6 +43,7 @@ public class FetchCoordinatesHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
+					@SuppressWarnings("deprecation")
 					String log = StringUtils.getLogPrefix(Level.SEVERE);
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
@@ -58,7 +59,7 @@ public class FetchCoordinatesHandler implements IHandler {
 			}
 			Coordinate coordinate = Grid.getCoordinate(address);
 			sb.append("{\"longitude\":");
-			sb.append(MathUtils.getTitude(coordinate.getLongtitude(), 5));
+			sb.append(MathUtils.getTitude(coordinate.getLongitude(), 5));
 			sb.append(",\"latitude\":");
 			sb.append(MathUtils.getTitude(coordinate.getLatitude(), 5));
 			sb.append("}");

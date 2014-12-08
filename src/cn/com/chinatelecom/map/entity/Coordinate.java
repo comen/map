@@ -11,7 +11,7 @@ import cn.com.chinatelecom.map.utils.MathUtils;
 public class Coordinate {
 
 	private double latitude;
-	private double longtitude;
+	private double longitude;
 
 	public double getLatitude() {
 		return latitude;
@@ -21,28 +21,34 @@ public class Coordinate {
 		this.latitude = latitude;
 	}
 
-	public double getLongtitude() {
-		return longtitude;
+	public double getLongitude() {
+		return longitude;
 	}
 
-	public void setLongtitude(double longtitude) {
-		this.longtitude = longtitude;
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 
-	public Coordinate(double latitude, double longtitude) {
+	public Coordinate(double latitude, double longitude) {
 		this.latitude = MathUtils.getTitude(latitude, 5);
-		this.longtitude = MathUtils.getTitude(longtitude, 5);
+		this.longitude = MathUtils.getTitude(longitude, 5);
 	}
 
 	public Coordinate(BasicDBObject bdbo) {
 		this.latitude = MathUtils.getTitude(bdbo.getDouble("LATITUDE"), 5);
-		this.longtitude = MathUtils.getTitude(bdbo.getDouble("LONGTITUDE"), 5);
+		this.longitude = MathUtils.getTitude(bdbo.getDouble("LONGITUDE"), 5);
+	}
+
+	public BasicDBObject getBasicDBObject() {
+		BasicDBObject bdbo = new BasicDBObject();
+		bdbo.append("LATITUDE", latitude);
+		bdbo.append("LONGITUDE", longitude);
+		return bdbo;
 	}
 
 	@Override
 	public String toString() {
-		return "Coordinate [latitude=" + latitude + ", longtitude="
-				+ longtitude + "]";
+		return getBasicDBObject().toString();
 	}
 
 }

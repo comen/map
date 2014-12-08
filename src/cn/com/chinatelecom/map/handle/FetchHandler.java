@@ -26,6 +26,17 @@ public class FetchHandler implements IHandler {
 	 */
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
+
+		// Record record = new Record(
+		// "{GRID_CODE:'BQ-GQ-GQ-3093',GRID_NAME:'歌林春天小区',GRID_MANAGER:'王瑞德',GRID_ADDRESS:'万容路388弄8号',GRID_ERASE_DATETIME:'2014-11-08 00:35:00'}");
+		// logger.debug(record.toString());
+		// record.insert();
+
+		// List<Grid> exports = Grid.findList(null);
+		// for (Grid export : exports) {
+		// logger.error(export.toString());
+		// }
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (null == items) {
 			logger.warn("没有请求数据!");
@@ -77,11 +88,10 @@ public class FetchHandler implements IHandler {
 		logger.info("抓取数据在缩放级别: " + zoom + ". 模式: " + mode + ". 日期: "
 				+ specific);
 
-		String json = "{GRID_CODE: '-1', GRID_COORDINATES:[{LONGTITUDE:"
-				+ swlng + ",LATITUDE:" + nelat + "},{LONGTITUDE:" + swlng
-				+ ",LATITUDE:" + swlat + "},{LONGTITUDE:" + nelng
-				+ ",LATITUDE:" + swlat + "},{LONGTITUDE:" + nelng
-				+ ",LATITUDE:" + nelat + "}]}";
+		String json = "{GRID_CODE: '-1', GRID_COORDINATES:[{LONGITUDE:" + swlng
+				+ ",LATITUDE:" + nelat + "},{LONGITUDE:" + swlng + ",LATITUDE:"
+				+ swlat + "},{LONGITUDE:" + nelng + ",LATITUDE:" + swlat
+				+ "},{LONGITUDE:" + nelng + ",LATITUDE:" + nelat + "}]}";
 		Grid bounds = new Grid(json);
 
 		StringBuffer sb = new StringBuffer();
@@ -140,7 +150,7 @@ public class FetchHandler implements IHandler {
 		result.put("grids", sb.toString());
 
 		logger.info("网格数量: " + amount);
-		logger.info(result.get("grids"));
+		logger.debug(result.get("grids"));
 
 		return result;
 	}

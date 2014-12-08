@@ -1,10 +1,10 @@
 package cn.com.chinatelecom.map.utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
+
+import org.apache.log4j.Logger;
 
 import cn.com.chinatelecom.map.common.Config;
 
@@ -14,38 +14,49 @@ import cn.com.chinatelecom.map.common.Config;
  */
 public class DateUtils {
 
+	private static Logger logger = Logger.getLogger(DateUtils.class);
+
 	public static Date getCurrentDate() {
 		Date currentDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat(Config.getInstance()
 				.getValue("dateFormat"));
 		try {
 			currentDate = sdf.parse(sdf.format(currentDate));
-		} catch (ParseException e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+		} catch (Exception e) {
+			logger.fatal("解析当前日期错误: " + e.getMessage());
 		}
 		return currentDate;
 	}
 
 	public static Date getSpecificDate(String dateStr, String dateFormat) {
-		if (null == dateStr || null == dateFormat)
+		if (null == dateStr || null == dateFormat) {
+			logger.error("输入日期字符串或格式字符串为空！");
 			return null;
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 		Date date = null;
 		try {
 			date = sdf.parse(dateStr);
 		} catch (Exception e) {
-			String log = StringUtils.getLogPrefix(Level.SEVERE);
-			System.out.println("\n" + log + "\n" + e.getClass() + "\t:\t"
-					+ e.getMessage());
+			logger.fatal("获取指定格式的日期错误: " + e.getMessage());
 		}
 		return date;
 	}
 
-	public static Date getFirstDayOfThisWeek(Date date) {
-		if (null == date)
+	public static String getDateTimeString(Date date, String format) {
+		if (null == date || null == format) {
+			logger.error("输入日期或格式字符串为空！");
 			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(date);
+	}
+
+	public static Date getFirstDayOfThisWeek(Date date) {
+		if (null == date) {
+			logger.error("获取本周第一天的输入为空！");
+			return null;
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		cal.setTime(date);
@@ -56,8 +67,10 @@ public class DateUtils {
 	}
 
 	public static Date getFirstDayOfLastWeek(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取上周第一天的输入为空！");
 			return null;
+		}
 		Date firstDayOfThisWeek = getFirstDayOfThisWeek(date);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisWeek);
@@ -68,8 +81,10 @@ public class DateUtils {
 	}
 
 	public static Date getLastDayOfThisWeek(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取本周最后一天的输入为空！");
 			return null;
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		cal.setTime(date);
@@ -79,8 +94,10 @@ public class DateUtils {
 	}
 
 	public static Date getLastDayOfLastWeek(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取上周最后一天的输入为空！");
 			return null;
+		}
 		Date firstDayOfThisWeek = getFirstDayOfThisWeek(date);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisWeek);
@@ -91,8 +108,10 @@ public class DateUtils {
 	}
 
 	public static Date getFirstDayOfThisMonth(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取本月第一天的输入为空！");
 			return null;
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.set(Calendar.DAY_OF_MONTH, 1); // 设置为当月第一天
@@ -101,8 +120,10 @@ public class DateUtils {
 	}
 
 	public static Date getFirstDayOfLastMonth(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取上月第一天的输入为空！");
 			return null;
+		}
 		Date firstDayOfThisMonth = getFirstDayOfThisMonth(date);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisMonth);
@@ -113,8 +134,10 @@ public class DateUtils {
 	}
 
 	public static Date getLastDayOfThisMonth(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取本月最后一天的输入为空！");
 			return null;
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.set(Calendar.DAY_OF_MONTH, 1); // 设置为当月第一天
@@ -126,9 +149,10 @@ public class DateUtils {
 	}
 
 	public static Date getLastDayOfLastMonth(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取上月最后一天的输入为空！");
 			return null;
-
+		}
 		Date firstDayOfThisMonth = getFirstDayOfThisMonth(date);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisMonth);
@@ -139,8 +163,10 @@ public class DateUtils {
 	}
 
 	public static Date getFirstDayOfThisMonthLastYear(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取上年同月第一天的输入为空！");
 			return null;
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.YEAR, -1);
@@ -149,8 +175,10 @@ public class DateUtils {
 	}
 
 	public static Date getLastDayOfThisMonthLastYear(Date date) {
-		if (null == date)
+		if (null == date) {
+			logger.error("获取上年同月最后一天的输入为空！");
 			return null;
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.YEAR, -1);

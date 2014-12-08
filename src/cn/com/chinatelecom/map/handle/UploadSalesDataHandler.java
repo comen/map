@@ -4,8 +4,6 @@
 package cn.com.chinatelecom.map.handle;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,13 +30,12 @@ public class UploadSalesDataHandler implements IHandler {
 	/* (non-Javadoc)
 	 * @see cn.com.chinatelecom.map.handle.IHandler#handle(java.util.List)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
 		String salesDataType = "";
-		
-		SimpleDateFormat format = new SimpleDateFormat(Config.getInstance().getValue("dateFormat"));
 		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -80,13 +77,7 @@ public class UploadSalesDataHandler implements IHandler {
 							
 							Date calculatedDate = DateUtils.getCurrentDate();
 							if (!(dateStr == null || dateStr.equals(""))) {
-								try {
-									calculatedDate = format.parse(dateStr);
-								} catch (ParseException e) {
-									String log = StringUtils.getLogPrefix(Level.SEVERE);
-									System.out.println("\n" + log + "\n" + e.getClass()
-											+ "\t:\t" + e.getMessage());
-								}
+								calculatedDate = DateUtils.getSpecificDate(dateStr, Config.getInstance().getValue("dateFormat"));
 							}
 							
 							try {

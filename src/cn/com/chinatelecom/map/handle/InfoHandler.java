@@ -34,7 +34,7 @@ public class InfoHandler implements IHandler {
 		int zoom = 0;
 		String mode = null;
 		String date = null;
-		double longtitude = 0.0;
+		double longitude = 0.0;
 		double latitude = 0.0;
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -50,8 +50,8 @@ public class InfoHandler implements IHandler {
 				case "date":
 					date = string;
 					break;
-				case "longtitude":
-					longtitude = Double.parseDouble(string);
+				case "longitude":
+					longitude = Double.parseDouble(string);
 					break;
 				case "latitude":
 					latitude = Double.parseDouble(string);
@@ -65,10 +65,10 @@ public class InfoHandler implements IHandler {
 		String format = "MM/dd/yyyy";
 		Date specific = DateUtils.getSpecificDate(date, format);
 
-		logger.info("获取信息在缩放级别: " + zoom + ". 经度: " + longtitude + ". 纬度: "
+		logger.info("获取信息在缩放级别: " + zoom + ". 经度: " + longitude + ". 纬度: "
 				+ latitude + ". 模式: " + mode + ". 日期: " + specific);
 
-		Coordinate coordinate = new Coordinate(latitude, longtitude);
+		Coordinate coordinate = new Coordinate(latitude, longitude);
 		String data = null;
 		Grid grid = null;
 		switch (zoom) {
