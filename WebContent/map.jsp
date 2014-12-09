@@ -153,7 +153,7 @@ label {
 				url : 'fetch',
 				type : 'POST',
 				data : formData,
-				timeout: 10000,
+				timeout: 5000,
 				async : true,
 				cache : true,
 				contentType : false,
