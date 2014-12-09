@@ -50,7 +50,7 @@ label {
 <script type="text/javascript" src="js/HashMap.js"></script>
 <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="//api.map.baidu.com/api?v=1.5&ak=msbblC5TGVpnQnafevVen547"></script>
+<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&SvTvb6HBqRByIoT4WGYC4zAW"></script>
 <script>
 	$(function() {
 		$("#date").datepicker();
@@ -153,7 +153,7 @@ label {
 				url : 'fetch',
 				type : 'POST',
 				data : formData,
-				timeout: 5000,
+				timeout: 10000,
 				async : true,
 				cache : true,
 				contentType : false,
@@ -170,6 +170,27 @@ label {
 						case 13:
 						case 14:
 						case 15:
+							if (code.length == 1) {
+								var coordinates = grids[i].p;
+								for (var j = 0; j < coordinates.length; j++) {
+									var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
+									points.push(point);
+								}
+								var polygon = new BMap.Polygon(points, {
+									strokeColor : getRandomColor(),
+									strokeWeight : 2,
+									strokeOpacity : 0.5,
+									fillColor: grids[i].r,
+									fillOpacity : 0.5,
+								});
+								polygons.put(code, polygon);
+							} else {
+								independ.put(code, grids[i].d);
+							}
+						case 16:
+						case 17:
+							independ.put(code, grids[i]);
+							break;
 						case 18:
 						case 19:
 							if (grids[i].p != null && grids[i].p.length > 2) {
@@ -187,17 +208,16 @@ label {
 								});
 								polygons.put(code, polygon);
 							} else {
-								independ.put(code, grids[i].d);
+								independ.put(code, grids[i]);
 							}
 							break;
-						case 16:
-						case 17:
-							independ.put(code, grids[i].d);
+						default:
 							break;
 						}
 					}
 					
-					independ.foreach(function(index, code, address) {
+					independ.foreach(function(index, code, grid) {
+						var address = grid.d;
 						var geo = new BMap.Geocoder();
 						geo.getPoint(address, function(point){
 							if (point && map.getBounds().containsPoint(point)) {
@@ -338,6 +358,12 @@ label {
 									map.addOverlay(marker);
 									var text = code + "<br/>" + address;
 									var label = new BMap.Label(code,{offset:new BMap.Size(-10,-5)});
+									label.setStyle({
+										color : "#000000",
+										borderColor : "#000000",
+										backgroudColor : grid.r,
+										fontSize : "12px"
+									});
 									marker.setLabel(label);
 									
 									function openLabel(event) {

@@ -44,7 +44,7 @@ public class Data {
 	private int additional_12;
 	private int additional_13;
 
-	private static Logger logger = Logger.getLogger(Date.class);
+	private static Logger logger = Logger.getLogger(Data.class);
 
 	public static String[] getNameOfMemberVariables() {
 		String[] strArray = { "calculatedDate", "gridCode", "telephoneArrive",

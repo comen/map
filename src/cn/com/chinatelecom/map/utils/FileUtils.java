@@ -9,6 +9,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.mongodb.BasicDBObject;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.DateCell;
 import jxl.Sheet;
 import jxl.Workbook;
 
@@ -43,13 +48,14 @@ public class FileUtils {
 		}
 	}
 
-	public static String readFile(File file) {
+	public static List<String> readFile(File file) {
 		if (null == file) {
 			logger.error("待读取文件为空！");
 			return null;
 		}
-		String result = null;
-		StringBuffer sb = new StringBuffer();
+		List<String> result = new ArrayList<String>();
+		BasicDBObject bdbo = new BasicDBObject();
+		String title;
 		if (file.getName().endsWith(".xls")) {
 			try {
 				Workbook book = Workbook.getWorkbook(file);
@@ -58,27 +64,25 @@ public class FileUtils {
 				int columns = sheet.getColumns();
 				List<String> titles = new ArrayList<String>();
 				for (int row = 0; row != rows; row++) {
-					if (0 != row)
-						sb.append("{");
 					for (int column = 0; column != columns; column++) {
-						String content = sheet.getCell(column, row)
-								.getContents();
+						Cell cell = sheet.getCell(column, row);
 						if (0 == row) {
-							titles.add(content);
+							titles.add(cell.getContents());
 						} else {
-							sb.append("'" + titles.get(column) + "':'"
-									+ content + "'");
-							if (column != columns - 1) {
-								sb.append(",");
+							title = titles.get(column);
+							if (cell.getType() == CellType.DATE) {
+								bdbo.append(title, ((DateCell) cell).getDate());
+							} else {
+								bdbo.append(title, cell.getContents());
 							}
 						}
 					}
 					if (0 != row)
-						sb.append("}<br/>");
+						result.add(bdbo.toString());
 				}
-				result = sb.toString();
 			} catch (Exception e) {
 				logger.fatal("读取文件错误: " + e.getMessage());
+				return null;
 			}
 		}
 		return result;

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import cn.com.chinatelecom.map.handle.IHandler;
 import cn.com.chinatelecom.map.handle.UploadHandler;
 import cn.com.chinatelecom.map.process.IProcessor;
-import cn.com.chinatelecom.map.process.PageProcessor;
+import cn.com.chinatelecom.map.process.DataProcessor;
 
 /**
  * Servlet implementation class UploadServlet
@@ -28,7 +28,7 @@ public class UploadServlet extends HttpServlet {
 	 */
 	public UploadServlet() {
 		super();
-		processor = new PageProcessor();
+		processor = new DataProcessor();
 		handler = new UploadHandler();
 	}
 
