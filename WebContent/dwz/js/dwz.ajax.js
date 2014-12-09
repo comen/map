@@ -254,7 +254,7 @@ function _getPagerForm($parent, args) {
 function dwzPageBreak(options){
 	var op = $.extend({ targetType:"navTab", rel:"", data:{pageNum:"", numPerPage:"", orderField:"", orderDirection:""}, callback:null}, options);
 	var $parent = op.targetType == "dialog" ? $.pdialog.getCurrent() : navTab.getCurrentPanel();
-
+	
 	if (op.rel) {
 		var $box = $parent.find("#" + op.rel);
 		var form = _getPagerForm($box, op.data);
@@ -267,7 +267,10 @@ function dwzPageBreak(options){
 		}
 	} else {
 		var form = _getPagerForm($parent, op.data);
+		/* Modified by Shelwin - Transform request parameters into FormData */
 		var params = $(form).serializeArray();
+		//var params = new FormData(form);
+		/* End */
 		
 		if (op.targetType == "dialog") {
 			if (form) $.pdialog.reload($(form).attr("action"), {data: params, callback: op.callback});

@@ -4,10 +4,14 @@
 package cn.com.chinatelecom.map.handle;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
@@ -16,7 +20,6 @@ import com.mongodb.util.JSON;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Data;
-import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.FileUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
@@ -34,6 +37,10 @@ public class UploadSalesDataHandler implements IHandler {
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
+		
+		// 这里Data实现了Runnable接口
+		List<Data> tasks = new ArrayList<Data>();
+	  
 		Map<String, Object> result = new HashMap<String, Object>();
 		String salesDataType = "";
 		
@@ -144,28 +151,29 @@ public class UploadSalesDataHandler implements IHandler {
 												/*if (!address.startsWith("上海")) {
 													address = "上海市" + address;
 												}*/
-												Grid grid = Grid.search(address);
-												if (grid != null) {
-													gridCode = grid.getCode();
-												} else {
-													continue;
-												}
+												Data gridData = new Data();
+												gridData.setCalculatedDate(calculatedDate);
+												gridData.setAddress(address);
+												gridData.setSalesDataType(salesDataType);
+												/* Added to multi-threads processing list */
+												tasks.add(gridData);
 											}
-										}
-										Data gridData = new Data();
-										gridData.setCalculatedDate(calculatedDate);
-										gridData.setGridCode(gridCode);
-										if (gridData.exist()) {
-											Data dataTmp = Data.findOne(gridData.toString());
-											if (dataTmp.getValue(salesDataType) != null) {
-												dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
-											} else {
-												dataTmp.setValue(salesDataType, 1);
-											}
-											gridData.update(dataTmp.toString());
 										} else {
-											gridData.setValue(salesDataType, 1);
-											gridData.insert();
+											Data gridData = new Data();
+											gridData.setCalculatedDate(calculatedDate);
+											gridData.setGridCode(gridCode);
+											if (gridData.exist()) {
+												Data dataTmp = Data.findOne(gridData.toString());
+												if (dataTmp.getValue(salesDataType) != null) {
+													dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
+												} else {
+													dataTmp.setValue(salesDataType, 1);
+												}
+												gridData.update(dataTmp.toString());
+											} else {
+												gridData.setValue(salesDataType, 1);
+												gridData.insert();
+											}
 										}
 									}
 								}
@@ -177,8 +185,31 @@ public class UploadSalesDataHandler implements IHandler {
 						}
 					}
 					
-					file.delete();
-					result.put("info", "文件上传成功！");
+					if (tasks.isEmpty()) {
+						file.delete();
+						result.put("info", "文件上传成功！");
+					} else {
+						// 根据CPU和任务数动态分配线程池大小
+						int cpu = Runtime.getRuntime().availableProcessors();
+						int size = Math.floorDiv(cpu * tasks.size(), 10) + 1;
+						ExecutorService threadPool = Executors.newFixedThreadPool(size);
+						// 执行所有任务并关闭线程池
+						for (Data task : tasks) {
+							threadPool.execute(task);
+						}
+						threadPool.shutdown();
+						// 等待所有线程结束后的后续操作
+						try {
+							if (threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS)) {
+								// TODO
+								file.delete();
+								result.put("info", "文件上传成功！");
+							}
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}

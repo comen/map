@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
@@ -11,6 +12,7 @@ import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.common.MongoDB;
 import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.MathUtils;
+import cn.com.chinatelecom.map.utils.StringUtils;
 
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
@@ -19,7 +21,7 @@ import com.mongodb.util.JSON;
  * @author Shelwin
  *
  */
-public class Data {
+public class Data implements Runnable {
 
 	private Date calculatedDate;
 	private String gridCode;
@@ -43,6 +45,9 @@ public class Data {
 	private int additional_11;
 	private int additional_12;
 	private int additional_13;
+	
+	private String address;
+	private String salesDataType;
 
 	private static Logger logger = Logger.getLogger(Date.class);
 
@@ -244,6 +249,14 @@ public class Data {
 		this.additional_13 = additional_13;
 	}
 	
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	public void setSalesDataType(String salesDataType) {
+		this.salesDataType = salesDataType;
+	}
+	
 	public Date getCalculatedDate() {
 		return calculatedDate;
 	}
@@ -330,6 +343,14 @@ public class Data {
 	
 	public int getAdditional_13() {
 		return additional_13;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public String getSalesDataType() {
+		return salesDataType;
 	}
 	
 	public Data() {
@@ -968,6 +989,35 @@ public class Data {
 		}
 		sb.append("}");
 		return sb.toString();
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		if (address == null || address.equals("")) {
+			return;
+		}
+		Grid grid = Grid.search(address);
+		if (grid == null) {
+			@SuppressWarnings("deprecation")
+			String log = StringUtils.getLogPrefix(Level.INFO);
+			System.out.println("\n" + log + "\n" + "Failed to find GRID for address " + address);
+			return;
+		} else {
+			gridCode = grid.getCode();
+		}
+		if (exist()) {
+			Data dataTmp = Data.findOne(toString());
+			if (dataTmp.getValue(salesDataType) == null) {
+				dataTmp.setValue(salesDataType, 1);
+			} else {
+				dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
+			}
+			update(dataTmp.toString());
+		} else {
+			setValue(salesDataType, 1);
+			insert();
+		}
 	}
 
 }

@@ -12,6 +12,11 @@
 <%
 		return;
 	}
+
+	String pageNum = request.getParameter("pageNum");
+	if (pageNum == null) {
+		pageNum = "1";
+	}
 %>
 
 <script type="text/javascript">
@@ -42,12 +47,15 @@
  	function generateUserList(userListArray) {
  		resetRows();
 		var userList = eval(userListArray);
-		for (var i = 0; i < userList.length; i++) {
-			if (i >= 20 ) {
+		$("#totalCount").text("共计" + userList.length + "条");
+		$("#pageNumShown").val(userList.length / 20 + 1);
+		var start = ($("#pageNum").val() - 1) * 20;
+		for (var i = start; i < userList.length; i++) {
+			if (i - start >= 20 ) {
 				continue;
 			}
 			/* Modify rows */
-			var $tr = $("#user_" + i);
+			var $tr = $("#user_" + (i - start));
 			if ($tr) {
 				$tr.attr("rel", userList[i].username);
 				$tr.show();
@@ -121,12 +129,10 @@
 </script>
 
 <form id="pagerForm" method="post" action="userlist.jsp">
-	<input type="hidden" name="status" value="${param.status}">
-	<input type="hidden" name="username" value="${param.username}" />
-	<input type="hidden" name="pageNum" value="1" />
-	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
-	<input type="hidden" name="orderField" value="${param.orderField}" />
+	<input type="hidden" id="pageNum" name="pageNum" value="<%=pageNum%>" />
 </form>
+
+<input type="hidden" id="pageNumShown" name="pageNumShown" value="0" />
 
 <div class="pageHeader">
 	<!-- <form action="userlist.jsp" method="post" onsubmit="search()"> -->
@@ -328,17 +334,18 @@
 	</table>
 	<div class="panelBar">
 		<div class="pages">
-			<span>显示</span> <select class="combox" name="numPerPage"
+			<!-- <span>显示</span> <select class="combox" name="numPerPage"
 				onchange="navTabPageBreak({numPerPage:this.value})">
 				<option value="20">20</option>
 				<option value="50">50</option>
 				<option value="100">100</option>
 				<option value="200">200</option>
-			</select> <span>条，共${totalCount}条</span>
+			</select> <span>条，共${totalCount}条</span> -->
+			<span id="totalCount"></span>
 		</div>
 
 		<div class="pagination" targetType="navTab" totalCount="200"
-			numPerPage="20" pageNumShown="10" currentPage="1"></div>
+			numPerPage="20" pageNumShown="0" currentPage="1"></div>
 
 	</div>
 	
