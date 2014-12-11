@@ -49,7 +49,9 @@ public class SearchUserHandler implements IHandler {
 						userName = string;
 						break;
 					case "role":
-						role = Integer.parseInt(string);
+						try {
+							role = Integer.parseInt(string);
+						} catch (Exception e) {}
 						break;
 					case "realname":
 						realName = string;

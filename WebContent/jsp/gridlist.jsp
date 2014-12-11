@@ -12,13 +12,40 @@
 <%
 		return;
 	}
+	
+	Boolean firstLoad = Boolean.parseBoolean(request.getParameter("firstload"));
+	String pageNum = request.getParameter("pageNum");
+	String totalCount = request.getParameter("totalCount");
+	String pageNumShown = request.getParameter("pageNumShown");
+	String searchGridCode = request.getParameter("searchGridCode");
+	
+	if (firstLoad == null) {
+		firstLoad = false;
+	}
+	if (pageNum == null) {
+		pageNum = "1";
+	}
+	if (totalCount == null) {
+		totalCount = "";
+	}
+	if (pageNumShown == null) {
+		pageNumShown = "";
+	}
+	if (searchGridCode == null) {
+		searchGridCode = "";
+	}
 %>
 
 <script type="text/javascript">
-	getGridList("");	// Search all grids
 
-	function search() {
-		getGridList($("#gridcode").val());
+	getGridList("<%=searchGridCode%>");
+
+	function searchGrid() {
+		$("#gridPageNum").val("1");
+		$("#searchGridCode").val($("#gridcode").val());
+		var params = $("gridPagerForm").serializeArray();
+		navTab.reload("gridlist.jsp?firstload=true", {data: params, callback: null});
+		return;
 	}
 
 	function getGridList(gridCode) {
@@ -40,9 +67,38 @@
  	function generateGridList(gridListArray) {
  		resetRows();
 		var gridList = eval(gridListArray);
+		
+		/* Set for hidden fields */
+		if (gridList.length > 200) {
+			$("#gridTotalCount").val(200);
+			$("#gridPageNumShown").val(10);
+		} else {
+			$("#gridTotalCount").val(gridList.length);
+			$("#gridPageNumShown").val(Math.ceil(gridList.length/20));
+		}
+		
+		<%
+			if (firstLoad) {
+		%>
+				var params = $("gridPagerForm").serializeArray();
+				navTab.reload("gridlist.jsp", {data: params, callback: null});
+				return;
+		<%
+			}
+		%>
+		
+		/* Set for pager info */
+		$("#gridTotalCountText").text("每页最多显示20条，共计" + gridList.length + "条网格数据");
+		$("#gridListPager").attr("totalCount", gridList.length);
+		$("#gridListPager").attr("pageNumShown", Math.ceil(gridList.length/20));
+		
+		var start = ($("#gridPageNum").val() - 1) * 20;
 		for (var i = 0; i < gridList.length; i++) {
+			if (i - start >= 20 ) {
+				continue;
+			}
 			/* Modify rows */
-			var $tr = $("#gird_" + i);
+			var $tr = $("#gird_" + (i - start));
 			if ($tr) {
 				$tr.show();
 				$tr.attr("rel", gridList[i].GRID_CODE);
@@ -104,37 +160,32 @@
  	}
 </script>
 
-<form id="pagerForm" method="post" action="gridlist.jsp">
-	<input type="hidden" name="status" value="${param.status}" />
-	<input type="hidden" name="keywords" value="${param.keywords}" />
-	<input type="hidden" name="pageNum" value="1" />
-	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
-	<input type="hidden" name="orderField" value="${param.orderField}" />
+<form id="pagerForm" name="gridPagerForm" method="post" action="gridlist.jsp">
+	<input type="hidden" id="gridPageNum" name="pageNum" value="<%=pageNum%>" />
+	<input type="hidden" id="gridTotalCount" name="totalCount" value="<%=totalCount%>" />
+	<input type="hidden" id="gridPageNumShown" name="pageNumShown" value="<%=pageNumShown%>" />
+	<input type="hidden" id="searchGridCode" name="searchGridCode" value="<%=searchGridCode%>" />
 </form>
 
-
 <div class="pageHeader">
-	<!-- <form onsubmit="return navTabSearch(this);" action="gridlist.jsp"
-		method="post"> -->
-		<div class="searchBar">
-			<table class="searchContent">
-				<tr>
-					<td>网格编号：<input type="text" name="gridcode" id="gridcode" /></td>
-					<td>说明：编辑网格的地图区域时，第一次右键点击地图表示进入编辑状态，再次右键点击地图表示保存编辑后的数据，期间拖动地图或刷新页面表示撤销编辑。</td>
-				</tr>
-			</table>
-			<div class="subBar">
-				<ul>
-					<li><div class="buttonActive">
-							<div class="buttonContent">
-								<button type="submit" onclick="search()">检索</button>
-							</div>
-						</div></li>
-					<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="360" mask="true" title="查询框"><span>高级检索</span></a></li>
-				</ul>
-			</div>
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>网格编号：<input type="text" name="gridcode" id="gridcode" value="<%=searchGridCode%>" /></td>
+				<td>说明：编辑网格的地图区域时，第一次右键点击地图表示进入编辑状态，再次右键点击地图表示保存编辑后的数据，期间拖动地图或刷新页面表示撤销编辑。</td>
+			</tr>
+		</table>
+		<div class="subBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit" onclick="searchGrid()">检索</button>
+						</div>
+					</div></li>
+				<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="360" mask="true" title="查询框"><span>高级检索</span></a></li>
+			</ul>
 		</div>
-	<!-- </form> -->
+	</div>
 </div>
 <div class="pageContent">
 	<div class="panelBar">
@@ -308,17 +359,18 @@
 	</table>
 	<div class="panelBar">
 		<div class="pages">
-			<span>显示</span> <select class="combox" name="numPerPage"
+			<!-- <span>显示</span> <select class="combox" name="numPerPage"
 				onchange="navTabPageBreak({numPerPage:this.value})">
 				<option value="20">20</option>
 				<option value="50">50</option>
 				<option value="100">100</option>
 				<option value="200">200</option>
-			</select> <span>条，共${totalCount}条</span>
+			</select> <span>条，共${totalCount}条</span> -->
+			<span id="gridTotalCountText"></span>
 		</div>
 
-		<div class="pagination" targetType="navTab" totalCount="200"
-			numPerPage="20" pageNumShown="10" currentPage="1"></div>
+		<div id="gridListPager" class="pagination" targetType="navTab" totalCount="<%=totalCount%>"
+			numPerPage="20" pageNumShown="<%=pageNumShown%>" currentPage="<%=pageNum%>"></div>
 
 	</div>
 </div>

@@ -186,11 +186,7 @@ function dialogAjaxDone(json){
 function navTabSearch(form, navTabId){
 	var $form = $(form);
 	if (form[DWZ.pageInfo.pageNum]) form[DWZ.pageInfo.pageNum].value = 1;
-	var $formData = new FormData(form);
-//	{ Modified by Shelwin
-//	navTab.reload($form.attr('action'), {data: $form.serializeArray(), navTabId:navTabId});
-	navTab.reload($form.attr('action'), {contentType: false, processData: false, data: $formData, navTabId:navTabId});
-//	} End
+	navTab.reload($form.attr('action'), {data: $form.serializeArray(), navTabId:navTabId});
 	return false;
 }
 /**
@@ -267,10 +263,7 @@ function dwzPageBreak(options){
 		}
 	} else {
 		var form = _getPagerForm($parent, op.data);
-		/* Modified by Shelwin - Transform request parameters into FormData */
 		var params = $(form).serializeArray();
-		//var params = new FormData(form);
-		/* End */
 		
 		if (op.targetType == "dialog") {
 			if (form) $.pdialog.reload($(form).attr("action"), {data: params, callback: op.callback});

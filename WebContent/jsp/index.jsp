@@ -199,7 +199,7 @@ $(function(){
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a href="userlist.jsp" target="navTab" rel="userlist" title="浏览用户">浏览用户</a></li>
+							<li><a href="userlist.jsp?firstload=true" target="navTab" rel="userlist" title="浏览用户">浏览用户</a></li>
 							<li><a href="useradd.jsp" target="navTab" rel="useradd" title="添加用户">添加用户</a></li>
 						</ul>
 					</div>
@@ -214,7 +214,7 @@ $(function(){
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a href="gridlist.jsp" target="navTab" rel="gridlist" title="浏览网格">浏览网格</a></li>
+							<li><a href="gridlist.jsp?firstload=true" target="navTab" rel="gridlist" title="浏览网格">浏览网格</a></li>
 						</ul>
 					</div>
 					<%

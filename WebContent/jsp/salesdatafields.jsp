@@ -79,35 +79,119 @@
 						}
 						break;
 					case 7:
+						if (fieldList[i].status > 0) {
+							$(this).find("select").val(1);
+						} else {
+							$(this).find("select").val(-1);
+						}
 						break;
 					}
 					index = index + 1;
 				});
 			}
-/* 			var $tr = $("<tr id=\"field_0\"></tr>");
-			var $td1 = $("<td>1</td>");
-			var $td2 = $("<td><input name=\"description\" style=\"text-align:center\" type=\"text\" size=\"27\" value=\"固话到达数\" /></td>");
-			var $td3 = $("<td><input name=\"onlyday\" type=\"checkbox\" checked=\"checked\" /></td>");
-			var $td4 = $("<td><input name=\"jueduizhiThreshold\" style=\"text-align: center\" type=\"text\" size=\"10\" value=\"*\" /></td>");
-			var $td5 = $("<td><input name=\"huanbiThreshold\" style=\"text-align: center\" type=\"text\" size=\"10\" value=\"*\" /></td>");
-			var $td6 = $("<td><input name=\"tongbiThreshold\" style=\"text-align: center\" type=\"text\" size=\"10\" value=\"*\" /></td>");
-			var $td7 = $("<td>" + 
-							"<select name=\"status\" disabled=\"disabled\">" +
-								"<option value=\"1\">增值类</option>" +
-								"<option value=\"-1\">减值类</option>" +
-							"</select>" +
-						"</td>");
-			var $td8 = $("<td><a href=\"javascript:void(0)\" target=\"ajaxToDo\" title=\"确定要删除吗?\" onclick=\"changeState(this)\">正常</a></td>");
-			$tr.append($td1);
-			$tr.append($td2);
-			$tr.append($td3);
-			$tr.append($td4);
-			$tr.append($td5);
-			$tr.append($td6);
-			$tr.append($td7);
-			$tr.append($td8);
-			$parent.append($tr); */
 		}
+	}
+	
+	function dataChanged(tr) {
+		var $tr = $(tr);
+		if ($tr == null) {
+			return;
+		}
+		
+		var formData = new FormData();
+		formData.append("salesDataType", $tr.attr("rel"));
+		
+		var index = 0;
+		var $tr_children = $tr.children();
+		$tr_children.each(function() {
+			switch (index) {
+			case 1:
+				formData.append("description", $(this).find('input').val());
+				break;
+			case 2:
+				if ($(this).find('input').attr("checked") == true) {
+					formData.append("onlyday", "1");
+				} else {
+					formData.append("onlyday", "-1");
+				}
+				break;
+			case 3:
+				var jueduizhiThreshold = $(this).find('input').val();
+				if ( jueduizhiThreshold == "*") {
+					formData.append("jueduizhiThreshold", jueduizhiThreshold);
+				} else {
+					try {
+						jueduizhiThreshold = Number(jueduizhiThreshold);
+						if (jueduizhiThreshold < 0) {
+							alert("绝对值阈值必须大于等于零！");
+							return;
+						} else {
+							formData.append("jueduizhiThreshold", jueduizhiThreshold);
+						}
+					} catch (e) {
+						alert("绝对值阈值只接受数字！");
+						return;
+					}
+				}
+				break;
+			case 4:
+				var huanbiThreshold = $(this).find('input').val();
+				if ( huanbiThreshold == "*") {
+					formData.append("huanbiThreshold", huanbiThreshold);
+				} else {
+					try {
+						huanbiThreshold = Number(huanbiThreshold);
+						if (huanbiThreshold < 0) {
+							alert("环比阈值必须大于等于零！");
+							return;
+						} else {
+							formData.append("huanbiThreshold", huanbiThreshold);
+						}
+					} catch (e) {
+						alert("环比阈值只接受数字！");
+						return;
+					}
+				}
+				break;
+			case 5:
+				var tongbiThreshold = $(this).find('input').val();
+				if ( tongbiThreshold == "*") {
+					formData.append("tongbiThreshold", tongbiThreshold);
+				} else {
+					try {
+						tongbiThreshold = Number(tongbiThreshold);
+						if (tongbiThreshold < 0) {
+							alert("同比阈值必须大于等于零！");
+							return;
+						} else {
+							formData.append("tongbiThreshold", tongbiThreshold);
+						}
+					} catch (e) {
+						alert("同比阈值只接受数字！");
+						return;
+					}
+				}
+				break;
+			case 6:
+				formData.append("category", $(this).find('select').val());
+				break;
+			case 7:
+				formData.append("status", $(this).find('select').val());
+				break;
+			}
+			index = index + 1;
+		});
+
+		$.ajax({
+			url: "updateSalesDataField",
+			type: "POST",
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+			success: function(responseText) {
+				alert(responseText);
+			}
+		});
 	}
 </script>
 
@@ -120,7 +204,7 @@
 	<p>&nbsp;</p>
 	<p>（4）“宽带新装”和“宽带移机（装）”等需设置为增值类，“宽带拆机”和“宽带移机（拆）”等需设置为减值类；</p>
 	<p>&nbsp;</p>
-	<p>（5）“删除”表示地图上不显示该数据字段，“正常”表示在地图上显示该数据字段。</p>
+	<p>（5）“删除”表示地图上不显示该数据字段，“正常”表示在地图上显示该数据字段（注：“删除”操作不会真正地删除该字段）。</p>
 </div>
 <div class="pageContent">
 	<table class="table" width="900" layoutH="138">
@@ -137,7 +221,7 @@
 			</tr>
 		</thead>
 		<tbody id="fieldList">
-			<tr id="field_0" target="sid_field" rel="telephoneArrive">
+			<tr id="field_0" target="sid_field" rel="telephoneArrive" onchange="dataChanged(this)">
 				<td>1</td>
 				<td><input name="description" style="text-align:center" type="text" size="27" value="固话到达数" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -150,9 +234,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" target="ajaxToDo" title="确定要删除吗?" onmouseover="showTooltip(this)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_1" target="sid_field" rel="broadbandArrive">
+			<tr id="field_1" target="sid_field" rel="broadbandArrive" onchange="dataChanged(this)">
 				<td>2</td>
 				<td><input style="text-align: center" type="text" size="27" value="宽带到达数" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -165,9 +254,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_2" target="sid_field" rel="broadbandNew">
+			<tr id="field_2" target="sid_field" rel="broadbandNew" onchange="dataChanged(this)">
 				<td>3</td>
 				<td><input style="text-align: center" type="text" size="27" value="宽带新装" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -180,9 +274,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_3" target="sid_field" rel="broadbandRemove">
+			<tr id="field_3" target="sid_field" rel="broadbandRemove" onchange="dataChanged(this)">
 				<td>4</td>
 				<td><input style="text-align: center" type="text" size="27" value="宽带拆机" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -195,9 +294,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_4" target="sid_field" rel="broadbandMoveSetup">
+			<tr id="field_4" target="sid_field" rel="broadbandMoveSetup" onchange="dataChanged(this)">
 				<td>5</td>
 				<td><input style="text-align: center" type="text" size="27" value="宽带移机（装）" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -210,9 +314,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_5" target="sid_field" rel="broadbandMoveUnload">
+			<tr id="field_5" target="sid_field" rel="broadbandMoveUnload" onchange="dataChanged(this)">
 				<td>6</td>
 				<td><input style="text-align: center" type="text" size="27" value="宽带移机（拆）" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -225,9 +334,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_6" target="sid_field" rel="broadbandOrderInTransit">
+			<tr id="field_6" target="sid_field" rel="broadbandOrderInTransit" onchange="dataChanged(this)">
 				<td>7</td>
 				<td><input style="text-align: center" type="text" size="27" value="宽带在途订单" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -240,9 +354,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_7" target="sid_field" rel="additional_1">
+			<tr id="field_7" target="sid_field" rel="additional_1" onchange="dataChanged(this)">
 				<td>8</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段1" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -255,9 +374,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_8" target="sid_field" rel="additional_2">
+			<tr id="field_8" target="sid_field" rel="additional_2" onchange="dataChanged(this)">
 				<td>9</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段2" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -270,9 +394,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_9" target="sid_field" rel="additional_3">
+			<tr id="field_9" target="sid_field" rel="additional_3" onchange="dataChanged(this)">
 				<td>10</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段3" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -285,9 +414,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_10" target="sid_field" rel="additional_4">
+			<tr id="field_10" target="sid_field" rel="additional_4" onchange="dataChanged(this)">
 				<td>11</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段4" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -300,9 +434,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_11" target="sid_field" rel="additional_5">
+			<tr id="field_11" target="sid_field" rel="additional_5" onchange="dataChanged(this)">
 				<td>12</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段5" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -315,9 +454,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_12" target="sid_field" rel="additional_6">
+			<tr id="field_12" target="sid_field" rel="additional_6" onchange="dataChanged(this)">
 				<td>13</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段6" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -330,9 +474,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_13" target="sid_field" rel="additional_7">
+			<tr id="field_13" target="sid_field" rel="additional_7" onchange="dataChanged(this)">
 				<td>14</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段7" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -345,9 +494,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_14" target="sid_field" rel="additional_8">
+			<tr id="field_14" target="sid_field" rel="additional_8" onchange="dataChanged(this)">
 				<td>15</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段8" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -360,9 +514,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_15" target="sid_field" rel="additional_9">
+			<tr id="field_15" target="sid_field" rel="additional_9" onchange="dataChanged(this)">
 				<td>16</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段9" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -375,9 +534,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_16" target="sid_field" rel="additional_10">
+			<tr id="field_16" target="sid_field" rel="additional_10" onchange="dataChanged(this)">
 				<td>17</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段10" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -390,9 +554,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_17" target="sid_field" rel="additional_11">
+			<tr id="field_17" target="sid_field" rel="additional_11" onchange="dataChanged(this)">
 				<td>18</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段11" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -405,9 +574,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_18" target="sid_field" rel="additional_12">
+			<tr id="field_18" target="sid_field" rel="additional_12" onchange="dataChanged(this)">
 				<td>19</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段12" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -420,9 +594,14 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
-			<tr id="field_19" target="sid_field" rel="additional_13">
+			<tr id="field_19" target="sid_field" rel="additional_13" onchange="dataChanged(this)">
 				<td>20</td>
 				<td><input style="text-align: center" type="text" size="27" value="附加字段13" /></td>
 				<td><input name="onlyday" type="checkbox" checked="checked" /></td>
@@ -435,7 +614,12 @@
 						<option value="-1">减值类</option>
 					</select>
 				</td>
-				<td><a href="javascript:void(0)" onclick="changeState(this)">正常</a></td>
+				<td>
+					<select name="status">
+						<option value="1">正常</option>
+						<option value="-1">删除</option>
+					</select>
+				</td>
 			</tr>
 		</tbody>
 	</table>
