@@ -7,6 +7,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import cn.com.chinatelecom.map.common.Config;
@@ -19,9 +20,10 @@ import cn.com.chinatelecom.map.common.Repository;
  *
  */
 @WebListener
-public final class Log4jConfigListener implements ServletContextListener {
+public final class ConfigListener implements ServletContextListener {
 
-	public static final String properties = "/conf.properties";
+	public final String properties = "/conf.properties";
+	public final Logger logger = Logger.getLogger(ConfigListener.class);
 
 	/**
 	 * @see ServletContextListener#contextDestroyed(ServletContextEvent)
@@ -35,12 +37,18 @@ public final class Log4jConfigListener implements ServletContextListener {
 	 */
 	public void contextInitialized(ServletContextEvent arg0) {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		PropertyConfigurator.configure(getClass().getResourceAsStream(
-				properties));
-		Config.getInstance();
-		GeoCoder.getInstance();
-		MongoDB.getInstance();
-		Repository.getInstance();
+		try {
+			PropertyConfigurator.configure(getClass().getResourceAsStream(
+					properties));
+			Config.getInstance();
+			GeoCoder.getInstance();
+			Repository.getInstance();
+			MongoDB.getInstance();
+			MongoDB.getInstance().indexOn("record", "GRID_CODE");
+			MongoDB.getInstance().indexOn("grid", "GRID_CODE");
+		} catch (Exception e) {
+			logger.fatal("初始化环境配置错误: " + e.getMessage());
+		}
 	}
 
 }

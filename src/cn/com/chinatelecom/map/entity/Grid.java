@@ -4,29 +4,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import javafx.scene.shape.Polygon;
 import cn.com.chinatelecom.map.common.GeoCoder;
 import cn.com.chinatelecom.map.common.MongoDB;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
 /**
  * @author joseph
  *
  */
-public class Grid {
+public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 
 	private String code;
 	private String name;
 	private String manager;
 	private String address;
 	private List<Coordinate> coordinates;
-	private static Logger logger = Logger.getLogger(Grid.class);
 
 	public String getCode() {
 		return code;
@@ -75,8 +71,8 @@ public class Grid {
 	public Grid(String json) {
 		if (null != json) {
 			try {
-				DBObject dbo = (DBObject) JSON.parse(json);
-				setGrid(dbo);
+				BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+				setGrid(bdbo);
 			} catch (Exception e) {
 				logger.warn("解析网格字符串错误: " + e.getMessage());
 			}
@@ -85,73 +81,79 @@ public class Grid {
 		}
 	}
 
-	public Grid(DBObject dbo) {
-		if (null != dbo)
-			setGrid(dbo);
+	public Grid(BasicDBObject bdbo) {
+		if (null != bdbo)
+			setGrid(bdbo);
 		else
 			logger.error("待设置网格数据库对象为空！");
 	}
 
-	private void setGrid(DBObject dbo) {
-		if (null != dbo && null != dbo.get("GRID_CODE")) {
-			code = dbo.get("GRID_CODE").toString();
+	private void setGrid(BasicDBObject bdbo) {
+		if (null != bdbo && null != bdbo.get("GRID_CODE")) {
+			code = bdbo.getString("GRID_CODE");
 		} else {
 			logger.error("待设置网格ID为空！");
 			return;
 		}
-		if (null != dbo.get("GRID_NAME"))
-			name = dbo.get("GRID_NAME").toString();
-		if (null != dbo.get("GRID_MANAGER"))
-			manager = dbo.get("GRID_MANAGER").toString();
-		if (null != dbo.get("GRID_ADDRESS"))
-			address = dbo.get("GRID_ADDRESS").toString();
-		if (dbo.containsField("GRID_COORDINATES")) {
+		name = bdbo.getString("GRID_NAME");
+		manager = bdbo.getString("GRID_MANAGER");
+		address = bdbo.getString("GRID_ADDRESS");
+		if (bdbo.containsField("GRID_COORDINATES")) {
 			coordinates = new ArrayList<Coordinate>();
-			BasicDBList bdbl = (BasicDBList) dbo.get("GRID_COORDINATES");
+			BasicDBList bdbl = (BasicDBList) bdbo.get("GRID_COORDINATES");
 			Iterator<Object> i = bdbl.iterator();
 			while (i.hasNext()) {
-				BasicDBObject bdbo = (BasicDBObject) i.next();
-				Coordinate coordinate = new Coordinate(bdbo);
+				BasicDBObject o = (BasicDBObject) i.next();
+				Coordinate coordinate = new Coordinate(o);
 				coordinates.add(coordinate);
 			}
 		}
-		MongoDB.getInstance().indexOn("grid", "GRID_CODE");
+	}
+
+	@Override
+	public void run() {
+		insert();
 	}
 
 	public boolean exist() {
-		DBObject dbo = MongoDB.getInstance().findOne("grid", toString());
-		if (null == dbo)
+		BasicDBObject bdbo = MongoDB.getInstance().findOne("grid",
+				getBasicDBObject());
+		if (null == bdbo)
 			return false;
 		else
 			return true;
 	}
 
 	public boolean insert() {
-		return MongoDB.getInstance().insert("grid", toString());
+		return MongoDB.getInstance().insert("grid", getBasicDBObject());
 	}
 
 	public boolean delete() {
-		return MongoDB.getInstance().delete("grid", toString());
+		return MongoDB.getInstance().delete("grid", getBasicDBObject());
 	}
 
 	public boolean update(String json) {
-		return MongoDB.getInstance().update("grid", toString(), json);
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		return MongoDB.getInstance().update("grid", getBasicDBObject(), bdbo);
 	}
 
 	public static Grid findOne(String json) {
-		DBObject dbo = MongoDB.getInstance().findOne("grid", json);
-		if (null == dbo)
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		bdbo = MongoDB.getInstance().findOne("grid", bdbo);
+		if (null == bdbo)
 			return null;
-		return new Grid(dbo);
+		return new Grid(bdbo);
 	}
 
 	public static List<Grid> findList(String json) {
 		List<Grid> gl = new ArrayList<Grid>();
-		List<DBObject> dbl = MongoDB.getInstance().findList("grid", json);
-		if (null == dbl || dbl.isEmpty())
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		List<BasicDBObject> bdbol = MongoDB.getInstance()
+				.findList("grid", bdbo);
+		if (null == bdbol || bdbol.isEmpty())
 			return null;
-		for (DBObject dbo : dbl)
-			gl.add(new Grid(dbo));
+		for (BasicDBObject o : bdbol)
+			gl.add(new Grid(o));
 		return gl;
 	}
 
@@ -183,7 +185,8 @@ public class Grid {
 		Polygon polygon = getPolygon();
 		List<Coordinate> points = grid.getCoordinates();
 		if (null == points)
-			return contains(grid.getAddress());
+			return true;
+		// return contains(grid.getAddress()); //网格按照地址判断实在太慢
 		for (Coordinate point : points) {
 			if (polygon.contains(point.getLongitude(), point.getLatitude())) {
 				return true;
@@ -215,17 +218,17 @@ public class Grid {
 		if (null == address)
 			return null;
 		String json = GeoCoder.getInstance().geoCode(address);
-		DBObject dbo = null;
+		BasicDBObject bdbo = null;
 		try {
-			dbo = (DBObject) JSON.parse(json);
-			if (null != dbo && null != dbo.get("result")) {
-				json = dbo.get("result").toString();
-				dbo = (DBObject) JSON.parse(json);
-				if (null != dbo.get("location")) {
-					json = dbo.get("location").toString();
-					dbo = (DBObject) JSON.parse(json);
-					Double longitude = (Double) dbo.get("lng");
-					Double latitude = (Double) dbo.get("lat");
+			bdbo = (BasicDBObject) JSON.parse(json);
+			if (null != bdbo && null != bdbo.getString("result")) {
+				json = bdbo.getString("result");
+				bdbo = (BasicDBObject) JSON.parse(json);
+				if (null != bdbo.getString("location")) {
+					json = bdbo.getString("location");
+					bdbo = (BasicDBObject) JSON.parse(json);
+					Double longitude = bdbo.getDouble("lng");
+					Double latitude = bdbo.getDouble("lat");
 					Coordinate coordinate = new Coordinate(latitude, longitude);
 					return coordinate;
 				}
@@ -289,8 +292,4 @@ public class Grid {
 		return sb.toString();
 	}
 
-	@Override
-	public String toString() {
-		return getBasicDBObject().toString();
-	}
 }

@@ -47,10 +47,15 @@ public class MongoDB {
 		coll.ensureIndex(new BasicDBObject(index, 1), index, true);
 	}
 
+	@Deprecated
 	public boolean insert(String table, String json) {
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		return insert(table, bdbo);
+	}
+
+	public boolean insert(String table, BasicDBObject bdbo) {
 		DBCollection coll = db.getCollection(table);
-		DBObject q = (DBObject) JSON.parse(json);
-		WriteResult wr = coll.save(q, WriteConcern.NORMAL);
+		WriteResult wr = coll.save(bdbo, WriteConcern.NORMAL);
 		String error = wr.getError();
 		if (null != error) {
 			logger.error("插入数据库错误: " + error);
@@ -59,10 +64,15 @@ public class MongoDB {
 		return true;
 	}
 
+	@Deprecated
 	public boolean delete(String table, String json) {
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		return delete(table, bdbo);
+	}
+
+	public boolean delete(String table, BasicDBObject bdbo) {
 		DBCollection coll = db.getCollection(table);
-		DBObject q = (DBObject) JSON.parse(json);
-		WriteResult wr = coll.remove(q, WriteConcern.NORMAL);
+		WriteResult wr = coll.remove(bdbo, WriteConcern.NORMAL);
 		String error = wr.getError();
 		if (null != error) {
 			logger.error("删除数据错误: " + error);
@@ -71,10 +81,15 @@ public class MongoDB {
 		return true;
 	}
 
+	@Deprecated
 	public boolean update(String table, String qJson, String oJson) {
+		BasicDBObject q = (BasicDBObject) JSON.parse(qJson);
+		BasicDBObject o = (BasicDBObject) JSON.parse(oJson);
+		return update(table, q, o);
+	}
+
+	public boolean update(String table, BasicDBObject q, BasicDBObject o) {
 		DBCollection coll = db.getCollection(table);
-		DBObject q = (DBObject) JSON.parse(qJson);
-		DBObject o = (DBObject) JSON.parse(oJson);
 		WriteResult wr = coll.update(q, o);
 		String error = wr.getError();
 		if (null != error) {
@@ -84,6 +99,7 @@ public class MongoDB {
 		return true;
 	}
 
+	@Deprecated
 	public List<DBObject> findList(String table, String json) {
 		DBCollection coll = db.getCollection(table);
 		List<DBObject> dbl = null;
@@ -100,10 +116,33 @@ public class MongoDB {
 		return dbl;
 	}
 
+	public List<BasicDBObject> findList(String table, BasicDBObject bdbo) {
+		DBCollection coll = db.getCollection(table);
+		DBCursor cursor = null;
+		if (null != bdbo)
+			cursor = coll.find(bdbo);
+		else
+			cursor = coll.find();
+		List<BasicDBObject> bdbol = new ArrayList<BasicDBObject>();
+		while (cursor.hasNext()) {
+			DBObject dbo = cursor.next();
+			bdbol.add((BasicDBObject) dbo);
+		}
+		return bdbol;
+	}
+
+	@Deprecated
 	public DBObject findOne(String table, String json) {
 		DBCollection coll = db.getCollection(table);
 		DBObject o = (DBObject) JSON.parse(json);
 		return coll.findOne(o);
+	}
+
+	public BasicDBObject findOne(String table, BasicDBObject bdbo) {
+		DBCollection coll = db.getCollection(table);
+		if (null == bdbo)
+			return null;
+		return (BasicDBObject) coll.findOne(bdbo);
 	}
 
 	@Override

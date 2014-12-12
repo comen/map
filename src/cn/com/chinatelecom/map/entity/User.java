@@ -124,6 +124,7 @@ public class User {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean exist() {
 		DBObject dbo = MongoDB.getInstance().findOne("user", toString());
 		if (dbo == null) {
@@ -133,22 +134,27 @@ public class User {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean insert() {
 		return MongoDB.getInstance().insert("user", toString());
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean delete() {
 		return MongoDB.getInstance().delete("user", toString());
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean update(String json) {
 		return MongoDB.getInstance().update("user", toString(), json);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static User findOne(String json) {
 		return new User(MongoDB.getInstance().findOne("user", json));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static List<User> findList(String json) {
 		List<User> ul = new ArrayList<User>();
 		List<DBObject> dbl = MongoDB.getInstance().findList("user", json);

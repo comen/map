@@ -49,7 +49,7 @@ public class Data implements Runnable {
 	private String address;
 	private String salesDataType;
 
-	private static Logger logger = Logger.getLogger(Date.class);
+	private static Logger logger = Logger.getLogger(Data.class);
 
 	public static String[] getNameOfMemberVariables() {
 		String[] strArray = { "calculatedDate", "gridCode", "telephoneArrive",
@@ -375,6 +375,7 @@ public class Data implements Runnable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean exist() {
 		DBObject dbo = MongoDB.getInstance().findOne("data", toString());
 		if (dbo == null) {
@@ -384,22 +385,27 @@ public class Data implements Runnable {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean insert() {
 		return MongoDB.getInstance().insert("data", toString());
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean delete() {
 		return MongoDB.getInstance().delete("data", toString());
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean update(String json) {
 		return MongoDB.getInstance().update("data", toString(), json);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static Data findOne(String json) {
 		return new Data(MongoDB.getInstance().findOne("data", json));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static List<Data> findList(String json) {
 		List<Data> dl = new ArrayList<Data>();
 		List<DBObject> dbl = MongoDB.getInstance().findList("data", json);

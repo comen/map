@@ -65,17 +65,16 @@ public class UploadSalesDataHandler implements IHandler {
 						return result;
 					}
 					
-					String content = FileUtils.readFile(file);
-					String[] splits = content.split("<br/>");
+					List<String> lines = FileUtils.readFile(file);
 					
-					for (String split : splits) {
-						if (!split.trim().equals("")) {
+					for (String line : lines) {
+						if (!line.trim().equals("")) {
 							@SuppressWarnings("unchecked")
-							Map<String, Object> fileLine = (Map<String, Object>) JSON.parse(split);
+							Map<String, Object> fileLine = (Map<String, Object>) JSON.parse(line);
 							String gridCode = (String) fileLine.get(Config.getInstance().getValue("gridCodeColumn"));
 							String office = (String) fileLine.get(Config.getInstance().getValue("officeColumn"));
 							String suboffice = (String) fileLine.get(Config.getInstance().getValue("subofficeColumn"));
-							String dateStr = (String) fileLine.get(Config.getInstance().getValue("dateColumn"));
+							String dateStr = fileLine.get(Config.getInstance().getValue("dateColumn")).toString();
 							String address = (String) fileLine.get(Config.getInstance().getValue("addressColumn"));
 							
 							if (office == null || office.equals("") || suboffice == null || suboffice.equals("")) {

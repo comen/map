@@ -28,7 +28,13 @@ public class MathUtils {
 		else
 			return false;
 	}
-	
+
+	public static int getThreadSize(int tasks) {
+		int cpu = Runtime.getRuntime().availableProcessors();
+		int size = Math.floorDiv(cpu * tasks, 10) + 1;
+		return size;
+	}
+
 	public static double calcuGrowthRate(int near, int far) {
 		if (far == 0) {
 			return 0.00;

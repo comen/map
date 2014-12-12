@@ -272,6 +272,6 @@ $(function(){
 			</div>
 		</div>
 	</div>
-	<div id="footer">Copyright &copy; 2014 上海电信北区局 沪ICP备05019125号-10</div>
+	<div id="footer">Copyright &copy; 2014 上海电信北区局</div>
 </body>
 </html>
