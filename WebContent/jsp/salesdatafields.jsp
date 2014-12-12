@@ -95,7 +95,7 @@
 	function dataChanged(tr) {
 		var $tr = $(tr);
 		if ($tr == null) {
-			return;
+			return false;
 		}
 		
 		var formData = new FormData();
@@ -109,68 +109,20 @@
 				formData.append("description", $(this).find('input').val());
 				break;
 			case 2:
-				if ($(this).find('input').attr("checked") == true) {
-					formData.append("onlyday", "1");
+				if ($(this).find('input').attr("checked") == "checked") {
+					formData.append("onlyDay", "1");
 				} else {
-					formData.append("onlyday", "-1");
+					formData.append("onlyDay", "-1");
 				}
 				break;
 			case 3:
-				var jueduizhiThreshold = $(this).find('input').val();
-				if ( jueduizhiThreshold == "*") {
-					formData.append("jueduizhiThreshold", jueduizhiThreshold);
-				} else {
-					try {
-						jueduizhiThreshold = Number(jueduizhiThreshold);
-						if (jueduizhiThreshold < 0) {
-							alert("绝对值阈值必须大于等于零！");
-							return;
-						} else {
-							formData.append("jueduizhiThreshold", jueduizhiThreshold);
-						}
-					} catch (e) {
-						alert("绝对值阈值只接受数字！");
-						return;
-					}
-				}
+				formData.append("jueduizhiThreshold", $(this).find('input').val());
 				break;
 			case 4:
-				var huanbiThreshold = $(this).find('input').val();
-				if ( huanbiThreshold == "*") {
-					formData.append("huanbiThreshold", huanbiThreshold);
-				} else {
-					try {
-						huanbiThreshold = Number(huanbiThreshold);
-						if (huanbiThreshold < 0) {
-							alert("环比阈值必须大于等于零！");
-							return;
-						} else {
-							formData.append("huanbiThreshold", huanbiThreshold);
-						}
-					} catch (e) {
-						alert("环比阈值只接受数字！");
-						return;
-					}
-				}
+				formData.append("huanbiThreshold", $(this).find('input').val());
 				break;
 			case 5:
-				var tongbiThreshold = $(this).find('input').val();
-				if ( tongbiThreshold == "*") {
-					formData.append("tongbiThreshold", tongbiThreshold);
-				} else {
-					try {
-						tongbiThreshold = Number(tongbiThreshold);
-						if (tongbiThreshold < 0) {
-							alert("同比阈值必须大于等于零！");
-							return;
-						} else {
-							formData.append("tongbiThreshold", tongbiThreshold);
-						}
-					} catch (e) {
-						alert("同比阈值只接受数字！");
-						return;
-					}
-				}
+				formData.append("tongbiThreshold", $(this).find('input').val());
 				break;
 			case 6:
 				formData.append("category", $(this).find('select').val());
@@ -190,6 +142,7 @@
 			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
 			success: function(responseText) {
 				alert(responseText);
+				navTab.reload("salesdatafields.jsp");
 			}
 		});
 	}

@@ -3,7 +3,6 @@
  */
 package cn.com.chinatelecom.map.handle;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +11,6 @@ import java.util.logging.Level;
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
-import cn.com.chinatelecom.map.entity.User;
-import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
@@ -78,6 +75,46 @@ public class UpdateSalesDataFieldHandler implements IHandler {
 							+ "\t:\t" + e.getMessage());
 				}
 			}
+		}		
+		
+		/* Validate jueduizhiThreshold */
+		if (!jueduizhiThreshold.equals("*")) {
+			try {
+				double jueduizhi = Double.parseDouble(jueduizhiThreshold);
+				if (jueduizhi < 0.0) {
+					result.put("UpdateFailed", description + " 修改失败！\n失败原因：绝对值阈值必须大于等于零");
+					return result;
+				}
+			} catch (Exception e) {
+				result.put("UpdateFailed", description + " 修改失败！\n失败原因：绝对值阈值非法输入");
+				return result;
+			}
+		}
+		/* Validate huanbiThreshold */
+		if (!huanbiThreshold.equals("*")) {
+			try {
+				double huanbi = Double.parseDouble(huanbiThreshold);
+				if (huanbi < 0.0) {
+					result.put("UpdateFailed", description + " 修改失败！\n失败原因：环比阈值必须大于等于零");
+					return result;
+				}
+			} catch (Exception e) {
+				result.put("UpdateFailed", description + " 修改失败！\n失败原因：环比阈值非法输入");
+				return result;
+			}
+		}
+		/* Validate tongbiThreshold */
+		if (!tongbiThreshold.equals("*")) {
+			try {
+				double tongbi = Double.parseDouble(tongbiThreshold);
+				if (tongbi < 0.0) {
+					result.put("UpdateFailed", description + " 修改失败！\n失败原因：同比阈值必须大于等于零");
+					return result;
+				}
+			} catch (Exception e) {
+				result.put("UpdateFailed", description + " 修改失败！\n失败原因：同比阈值非法输入");
+				return result;
+			}
 		}
 		
 		sb.append("{");
@@ -93,7 +130,7 @@ public class UpdateSalesDataFieldHandler implements IHandler {
 		Config config = Config.getInstance();
 		config.setValue(salesDataType, sb.toString());
 		
-		result.put("UpdateSalesDataFieldResult", salesDataType + " 修改成功！");
+		result.put("UpdateSuccess", description + " 修改成功！");
 		
 		return result;
 	}
