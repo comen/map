@@ -1,6 +1,7 @@
 package cn.com.chinatelecom.map.servlet;
 
-import java.util.TimeZone;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -36,7 +37,6 @@ public final class ConfigListener implements ServletContextListener {
 	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
 	 */
 	public void contextInitialized(ServletContextEvent arg0) {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		try {
 			PropertyConfigurator.configure(getClass().getResourceAsStream(
 					properties));
@@ -44,7 +44,10 @@ public final class ConfigListener implements ServletContextListener {
 			GeoCoder.getInstance();
 			Repository.getInstance();
 			MongoDB.getInstance();
-			MongoDB.getInstance().indexOn("record", "GRID_CODE");
+			List<String> indexes = new ArrayList<String>();
+			indexes.add("GRID_CODE");
+			indexes.add("GRID_DATETIME");
+			MongoDB.getInstance().indexOn("record", indexes);
 			MongoDB.getInstance().indexOn("grid", "GRID_CODE");
 		} catch (Exception e) {
 			logger.fatal("初始化环境配置错误: " + e.getMessage());
