@@ -48,7 +48,7 @@ public class StringUtils {
 		index = path.lastIndexOf("\\");
 		if (0 < index)
 			return path.substring(index);
-		return null;
+		return path;
 	}
 
 	@Deprecated
@@ -66,10 +66,8 @@ public class StringUtils {
 
 	public static String getColor(String rgb) {
 		String color = "#FFFFFF";
-		if (null == rgb || "".equals(rgb.trim())) {
-			logger.warn("输入的RGB组合为空！");
+		if (null == rgb || "".equals(rgb.trim()))
 			return color;
-		}
 		DBObject dbo = null;
 		try {
 			dbo = (DBObject) JSON.parse(rgb);
