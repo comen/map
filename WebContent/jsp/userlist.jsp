@@ -14,15 +14,27 @@
 	}
 	
 	Boolean firstLoad = Boolean.parseBoolean(request.getParameter("firstload"));
+	Boolean advSearch = Boolean.parseBoolean(request.getParameter("advSearch"));
 	String pageNum = request.getParameter("pageNum");
 	String totalCount = request.getParameter("totalCount");
 	String pageNumShown = request.getParameter("pageNumShown");
+	/* For User Normal Search */
 	String searchUserName = request.getParameter("searchUserName");
 	String searchRole = request.getParameter("searchRole");
 	String searchCreateDate = request.getParameter("searchCreateDate");
+	/* For User Advanced Search */
+	String advSearchUserName = request.getParameter("advSearchUserName");
+	String advSearchRealName = request.getParameter("advSearchRealName");
+	String advSearchDepartment = request.getParameter("advSearchDepartment");
+	String advSearchStartDate = request.getParameter("advSearchStartDate");
+	String advSearchEndDate = request.getParameter("advSearchEndDate");
+	String advSearchSortUser = request.getParameter("advSearchSortUser");
 	
 	if (firstLoad == null) {
 		firstLoad = false;
+	}
+	if (advSearch == null) {
+		advSearch = false;
 	}
 	if (pageNum == null) {
 		pageNum = "1";
@@ -33,6 +45,7 @@
 	if (pageNumShown == null) {
 		pageNumShown = "";
 	}
+	/* For User Normal Search */
 	if (searchUserName == null) {
 		searchUserName = "";
 	}
@@ -42,27 +55,95 @@
 	if (searchCreateDate == null) {
 		searchCreateDate = "";
 	}
+	/* For User Advanced Search */
+	if (advSearchUserName == null) {
+		advSearchUserName = "";
+	}
+	if (advSearchRealName == null) {
+		advSearchRealName = "";
+	}
+	if (advSearchDepartment == null) {
+		advSearchDepartment = "";
+	}
+	if (advSearchStartDate == null) {
+		advSearchStartDate = "";
+	}
+	if (advSearchEndDate == null) {
+		advSearchEndDate = "";
+	}
+	if (advSearchSortUser == null) {
+		advSearchSortUser = "";
+	}
 %>
 
 <script type="text/javascript">
 	
-	getUserList("<%=searchUserName%>", "<%=searchRole%>", "<%=searchCreateDate%>");
+<%
+	if (advSearch == false) {
+%>
+		getUserList("<%=searchUserName%>", "<%=searchRole%>", "<%=searchCreateDate%>", "<%=advSearchSortUser%>");
+<%
+	} else {
+%>
+		advGetUserList("<%=advSearchUserName%>", "<%=advSearchRealName%>", "<%=advSearchDepartment%>", 
+			"<%=advSearchStartDate%>", "<%=advSearchEndDate%>", "<%=advSearchSortUser%>");
+<%
+	}
+%>
 	
 	function searchUser() {
 		$("#userPageNum").val("1");
 		$("#searchUserName").val($("#username").val());
 		$("#searchRole").val($("#role").val());
 		$("#searchCreateDate").val($("#createdate").val());
-		var params = $("#gridPagerForm").serializeArray();
+		$("#advSearchSortUser").val(""); // Set sort criterion to default
+		var params = $("#userPagerForm").serializeArray();
 		navTab.reload("userlist.jsp?firstload=true", {data: params, callback: null});
 		return;
 	}
+	
+	function advSearchUser() {
+		$("#userPageNum").val("1");
+		$("#advSearchUserName").val($("#adv_username").val());
+		$("#advSearchRealName").val($("#adv_realname").val());
+		$("#advSearchDepartment").val($("#adv_department").val());
+		$("#advSearchStartDate").val($("#adv_startdate").val());
+		$("#advSearchEndDate").val($("#adv_enddate").val());
+		$("#advSearchSortUser").val($("#adv_sortuser").val());
+		var params = $("#userPagerForm").serializeArray();
+		navTab.reload("userlist.jsp?firstload=true&advSearch=true", {data: params, callback: null});
+		return;
+	}
 
-	function getUserList(userName, role, createDate) {
+	function getUserList(userName, role, createDate, sort) {
 		var formData = new FormData();
+		formData.append("advsearch", "<%=advSearch%>");
 		formData.append("username", userName);
 		formData.append("role", role);
 		formData.append("createdate", createDate);
+		formData.append("adv_sort", sort);
+		
+		$.ajax({
+			url: "searchUser",
+			type: "POST",
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+			success: function(responseText) {
+				generateUserList(responseText);
+			}
+		});
+	}
+	
+	function advGetUserList(userName, realName, department, startDate, endDate, sort) {
+		var formData = new FormData();
+		formData.append("advsearch", "<%=advSearch%>");
+		formData.append("adv_username", userName);
+		formData.append("adv_realname", realName);
+		formData.append("adv_department", department);
+		formData.append("adv_startdate", startDate);
+		formData.append("adv_enddate", endDate);
+		formData.append("adv_sort", sort);
 		
 		$.ajax({
 			url: "searchUser",
@@ -91,8 +172,18 @@
 		<%
 			if (firstLoad) {
 		%>
-				var params = $("#gridPagerForm").serializeArray();
-				navTab.reload("userlist.jsp", {data: params, callback: null});
+				var params = $("#userPagerForm").serializeArray();
+			<%
+				if (advSearch) {
+			%>
+					navTab.reload("userlist.jsp?advSearch=true", {data: params, callback: null});
+			<%
+				} else {
+			%>
+					navTab.reload("userlist.jsp", {data: params, callback: null});
+			<%
+				}
+			%>
 				return;
 		<%
 			}
@@ -182,13 +273,21 @@
  	}
 </script>
 
-<form id="pagerForm" name="gridPagerForm" method="post" action="userlist.jsp">
+<form id="pagerForm" name="userPagerForm" method="post" action="userlist.jsp">
 	<input type="hidden" id="userPageNum" name="pageNum" value="<%=pageNum%>" />
 	<input type="hidden" id="userTotalCount" name="totalCount" value="<%=totalCount%>" />
 	<input type="hidden" id="userPageNumShown" name="pageNumShown" value="<%=pageNumShown%>" />
+	<!-- For User Normal Search -->
 	<input type="hidden" id="searchUserName" name="searchUserName" value="<%=searchUserName%>" />
 	<input type="hidden" id="searchRole" name="searchRole" value="<%=searchRole%>" />
 	<input type="hidden" id="searchCreateDate" name="searchCreateDate" value="<%=searchCreateDate%>" />
+	<!-- For User Advanced Search -->
+	<input type="hidden" id="advSearchUserName" name="advSearchUserName" value="<%=advSearchUserName%>" />
+	<input type="hidden" id="advSearchRealName" name="advSearchRealName" value="<%=advSearchRealName%>" />
+	<input type="hidden" id="advSearchDepartment" name="advSearchDepartment" value="<%=advSearchDepartment%>" />
+	<input type="hidden" id="advSearchStartDate" name="advSearchStartDate" value="<%=advSearchStartDate%>" />
+	<input type="hidden" id="advSearchEndDate" name="advSearchEndDate" value="<%=advSearchEndDate%>" />
+	<input type="hidden" id="advSearchSortUser" name="advSearchSortUser" value="<%=advSearchSortUser%>" />
 </form>
 
 <div class="pageHeader">
@@ -205,7 +304,7 @@
 						<option value="4" <% if (searchRole.equals("4")) { out.println("selected"); } %>>普通用户</option>
 					</select>
 				</td>
-				<td>账户开通日期：<input type="text" class="date" id="createdate" name="createdate" value="<%=searchCreateDate%>" readonly="true" /></td>
+				<td>账户开通日期：<input type="text" class="date" id="createdate" name="createdate" value="<%=searchCreateDate%>" readonly="readonly" /></td>
 			</tr>
 		</table>
 		<div class="subBar">
@@ -215,8 +314,7 @@
 							<button type="submit" onclick="searchUser()">检索</button>
 						</div>
 					</div></li>
-				<li><a class="button" href="useradvsearch.jsp" target="dialog"
-					height="360" mask="true" title="查询框"><span>高级检索</span></a></li>
+				<li><a class="button" href="useradvsearch.jsp" target="dialog" height="330" mask="true" title="查询框"><span>高级检索</span></a></li>
 			</ul>
 		</div>
 	</div>

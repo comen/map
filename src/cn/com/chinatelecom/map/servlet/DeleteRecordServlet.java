@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.com.chinatelecom.map.handle.DeleteRecordHandler;
 import cn.com.chinatelecom.map.handle.IHandler;
-import cn.com.chinatelecom.map.handle.SearchGridHandler;
 import cn.com.chinatelecom.map.process.DataProcessor;
 import cn.com.chinatelecom.map.process.IProcessor;
 
 /**
- * Servlet implementation class SearchGridServlet
+ * Servlet implementation class DeleteRecordServlet
  */
-@WebServlet(description = "Search Grid", urlPatterns = { "/jsp/searchGrid" })
-public class SearchGridServlet extends HttpServlet {
+@WebServlet("/jsp/deleteRecord")
+public class DeleteRecordServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;
@@ -26,11 +26,11 @@ public class SearchGridServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SearchGridServlet() {
+    public DeleteRecordServlet() {
         super();
         // TODO Auto-generated constructor stub
         processor = new DataProcessor();
-		handler = new SearchGridHandler();
+		handler = new DeleteRecordHandler();
     }
 
 	/**

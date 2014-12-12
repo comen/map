@@ -14,13 +14,24 @@
 	}
 	
 	Boolean firstLoad = Boolean.parseBoolean(request.getParameter("firstload"));
+	Boolean advSearch = Boolean.parseBoolean(request.getParameter("advSearch"));
 	String pageNum = request.getParameter("pageNum");
 	String totalCount = request.getParameter("totalCount");
 	String pageNumShown = request.getParameter("pageNumShown");
+	/* For Grid Normal Search */
 	String searchGridCode = request.getParameter("searchGridCode");
+	/* For Grid Advanced Search */
+	String advSearchGridCode = request.getParameter("advSearchGridCode");
+	String advSearchGridName = request.getParameter("advSearchGridName");
+	String advSearchGridManager = request.getParameter("advSearchGridManager");
+	String advSearchGridAddress = request.getParameter("advSearchGridAddress");
+	String advSearchSortGrid = request.getParameter("advSearchSortGrid");
 	
 	if (firstLoad == null) {
 		firstLoad = false;
+	}
+	if (advSearch == null) {
+		advSearch = false;
 	}
 	if (pageNum == null) {
 		pageNum = "1";
@@ -31,26 +42,90 @@
 	if (pageNumShown == null) {
 		pageNumShown = "";
 	}
+	/* For Grid Normal Search */
 	if (searchGridCode == null) {
 		searchGridCode = "";
+	}
+	/* For Grid Advanced Search */
+	if (advSearchGridCode == null) {
+		advSearchGridCode = "";
+	}
+	if (advSearchGridName == null) {
+		advSearchGridName = "";
+	}
+	if (advSearchGridManager == null) {
+		advSearchGridManager = "";
+	}
+	if (advSearchGridAddress == null) {
+		advSearchGridAddress = "";
+	}
+	if (advSearchSortGrid == null) {
+		advSearchSortGrid = "";
 	}
 %>
 
 <script type="text/javascript">
 
-	getGridList("<%=searchGridCode%>");
+<%
+	if (advSearch == false) {
+%>
+		getGridList("<%=searchGridCode%>", "<%=advSearchSortGrid%>");
+<%
+	} else {
+%>
+		advGetGridList("<%=advSearchGridCode%>", "<%=advSearchGridName%>", "<%=advSearchGridManager%>", 
+			"<%=advSearchGridAddress%>", "<%=advSearchSortGrid%>");
+<%
+	}
+%>
 
 	function searchGrid() {
 		$("#gridPageNum").val("1");
 		$("#searchGridCode").val($("#gridcode").val());
+		$("#advSearchSortGrid").val(""); // Set sort criterion to default
 		var params = $("gridPagerForm").serializeArray();
 		navTab.reload("gridlist.jsp?firstload=true", {data: params, callback: null});
 		return;
 	}
+	
+	function advSearchGrid() {
+		$("#gridPageNum").val("1");
+		$("#advSearchGridCode").val($("#adv_gridcode").val());
+		$("#advSearchGridName").val($("#adv_gridname").val());
+		$("#advSearchGridManager").val($("#adv_gridmanager").val());
+		$("#advSearchGridAddress").val($("#adv_gridaddress").val());
+		$("#advSearchSortGrid").val($("#adv_sortgrid").val());
+		var params = $("gridPagerForm").serializeArray();
+		navTab.reload("gridlist.jsp?firstload=true&advSearch=true", {data: params, callback: null});
+		return;
+	}
 
-	function getGridList(gridCode) {
+	function getGridList(gridCode, sort) {
 		var formData = new FormData();
+		formData.append("advsearch", "<%=advSearch%>");
 		formData.append("gridcode", gridCode);
+		formData.append("adv_sort", sort);
+		
+		$.ajax({
+			url: "searchGrid",
+			type: "POST",
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+			success: function(responseText) {
+				generateGridList(responseText);
+			}
+		});
+	}
+	
+	function advGetGridList(gridCode, gridName, gridManager, gridAddress, sort) {
+		var formData = new FormData();
+		formData.append("advsearch", "<%=advSearch%>");
+		formData.append("adv_gridcode", gridCode);
+		formData.append("adv_gridname", gridName);
+		formData.append("adv_gridmanager", gridManager);
+		formData.append("adv_gridaddress", gridAddress);
+		formData.append("adv_sort", sort);
 		
 		$.ajax({
 			url: "searchGrid",
@@ -80,8 +155,18 @@
 		<%
 			if (firstLoad) {
 		%>
-				var params = $("gridPagerForm").serializeArray();
-				navTab.reload("gridlist.jsp", {data: params, callback: null});
+				var params = $("#gridPagerForm").serializeArray();
+			<%
+				if (advSearch) {
+			%>
+					navTab.reload("gridlist.jsp?advSearch=true", {data: params, callback: null});
+			<%
+				} else {
+			%>
+					navTab.reload("gridlist.jsp", {data: params, callback: null});
+			<%
+				}
+			%>
 				return;
 		<%
 			}
@@ -98,7 +183,7 @@
 				continue;
 			}
 			/* Modify rows */
-			var $tr = $("#gird_" + (i - start));
+			var $tr = $("#grid_" + (i - start));
 			if ($tr) {
 				$tr.show();
 				$tr.attr("rel", gridList[i].GRID_CODE);
@@ -134,7 +219,7 @@
  	
  	function resetRows() {
  		for (var i = 0; i < 20; i++) {
-			var $tr = $("#gird_" + i);
+			var $tr = $("#grid_" + i);
 			if ($tr) {
 				$tr.attr("rel", i);
 				var $tr_children = $tr.children();
@@ -164,7 +249,14 @@
 	<input type="hidden" id="gridPageNum" name="pageNum" value="<%=pageNum%>" />
 	<input type="hidden" id="gridTotalCount" name="totalCount" value="<%=totalCount%>" />
 	<input type="hidden" id="gridPageNumShown" name="pageNumShown" value="<%=pageNumShown%>" />
+	<!-- For Grid Normal Search -->
 	<input type="hidden" id="searchGridCode" name="searchGridCode" value="<%=searchGridCode%>" />
+	<!-- For Grid Advanced Search -->
+	<input type="hidden" id="advSearchGridCode" name="advSearchGridCode" value="<%=advSearchGridCode%>" />
+	<input type="hidden" id="advSearchGridName" name="advSearchGridName" value="<%=advSearchGridName%>" />
+	<input type="hidden" id="advSearchGridManager" name="advSearchGridManager" value="<%=advSearchGridManager%>" />
+	<input type="hidden" id="advSearchGridAddress" name="advSearchGridAddress" value="<%=advSearchGridAddress%>" />
+	<input type="hidden" id="advSearchSortGrid" name="advSearchSortGrid" value="<%=advSearchSortGrid%>" />
 </form>
 
 <div class="pageHeader">
@@ -182,7 +274,7 @@
 							<button type="submit" onclick="searchGrid()">检索</button>
 						</div>
 					</div></li>
-				<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="360" mask="true" title="查询框"><span>高级检索</span></a></li>
+				<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="330" mask="true" title="查询框"><span>高级检索</span></a></li>
 			</ul>
 		</div>
 	</div>
@@ -215,140 +307,140 @@
 			</tr>
 		</thead>
 		<tbody id="gridList">
-			<tr id="gird_0" target="sid_grid" rel="0">
+			<tr id="grid_0" target="sid_grid" rel="0">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_1" target="sid_grid" rel="1">
+			<tr id="grid_1" target="sid_grid" rel="1">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_2" target="sid_grid" rel="2">
+			<tr id="grid_2" target="sid_grid" rel="2">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_3" target="sid_grid" rel="3">
+			<tr id="grid_3" target="sid_grid" rel="3">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_4" target="sid_grid" rel="4">
+			<tr id="grid_4" target="sid_grid" rel="4">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_5" target="sid_grid" rel="5">
+			<tr id="grid_5" target="sid_grid" rel="5">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_6" target="sid_grid" rel="6">
+			<tr id="grid_6" target="sid_grid" rel="6">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_7" target="sid_grid" rel="7">
+			<tr id="grid_7" target="sid_grid" rel="7">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_8" target="sid_grid" rel="8">
+			<tr id="grid_8" target="sid_grid" rel="8">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_9" target="sid_grid" rel="9">
+			<tr id="grid_9" target="sid_grid" rel="9">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_10" target="sid_grid" rel="10">
+			<tr id="grid_10" target="sid_grid" rel="10">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_11" target="sid_grid" rel="11">
+			<tr id="grid_11" target="sid_grid" rel="11">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_12" target="sid_grid" rel="12">
+			<tr id="grid_12" target="sid_grid" rel="12">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_13" target="sid_grid" rel="13">
+			<tr id="grid_13" target="sid_grid" rel="13">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_14" target="sid_grid" rel="14">
+			<tr id="grid_14" target="sid_grid" rel="14">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_15" target="sid_grid" rel="15">
+			<tr id="grid_15" target="sid_grid" rel="15">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_16" target="sid_grid" rel="16">
+			<tr id="grid_16" target="sid_grid" rel="16">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_17" target="sid_grid" rel="17">
+			<tr id="grid_17" target="sid_grid" rel="17">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_18" target="sid_grid" rel="18">
+			<tr id="grid_18" target="sid_grid" rel="18">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a href="grideditinmap.jsp?address=" target="dialog" width="800" height="600" title="">{编辑地图区域}</a></td>
 			</tr>
-			<tr id="gird_19" target="sid_grid" rel="19">
+			<tr id="grid_19" target="sid_grid" rel="19">
 				<td></td>
 				<td></td>
 				<td></td>

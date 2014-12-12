@@ -11,16 +11,14 @@ import java.util.logging.Level;
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
-import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.entity.Record;
-import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
  *
  */
-public class DeleteGridHandler implements IHandler {
+public class DeleteRecordHandler implements IHandler {
 
 	/* (non-Javadoc)
 	 * @see cn.com.chinatelecom.map.handle.IHandler#handle(java.util.List)
@@ -30,7 +28,7 @@ public class DeleteGridHandler implements IHandler {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
 		StringBuffer sb = new StringBuffer();
-		Grid grid = new Grid();
+		Record record = new Record();
 		String code = "";
 		
 		for (FileItem item : items) {
@@ -40,7 +38,7 @@ public class DeleteGridHandler implements IHandler {
 					String string = item.getString(Config.getInstance().getValue("charset").toString());
 					
 					switch(fieldName) {
-					case "gid":
+					case "rid":
 						code = string;
 						break;
 					}
@@ -53,22 +51,12 @@ public class DeleteGridHandler implements IHandler {
 			}
 		}
 		
-		grid.setCode(code);
-		if(grid.exist()) {
-			Grid gridTmp = Grid.findOne(grid.getBasicDBObject().toString());
-			if (grid.delete()) {
-				/* Record Delete Operation */
-				Record record = new Record();
-				record.setCode(gridTmp.getCode());
-				record.setName(gridTmp.getName());
-				record.setManager(gridTmp.getManager());
-				record.setAddress(gridTmp.getAddress());
-				record.setDate(DateUtils.getCurrentDate());
-				record.insert();
-				
+		record.setCode(code);
+		if(record.exist()) {
+			if (record.delete()) {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"200\"");
-				sb.append(",\"message\":" + "\"网格删除成功！\"");
+				sb.append(",\"message\":" + "\"网格变动记录删除成功！\"");
 				sb.append(",\"navTabId\":" + "\"\"");
 				sb.append(",\"rel\":" + "\"\"");
 				sb.append(",\"callbackType\":" + "\"\"");
@@ -77,7 +65,7 @@ public class DeleteGridHandler implements IHandler {
 			} else {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"300\"");
-				sb.append(",\"message\":" + "\"网格删除失败，请重新操作！\"");
+				sb.append(",\"message\":" + "\"网格变动记录删除失败，请重新操作！\"");
 				sb.append(",\"navTabId\":" + "\"\"");
 				sb.append(",\"rel\":" + "\"\"");
 				sb.append(",\"callbackType\":" + "\"\"");
@@ -87,7 +75,7 @@ public class DeleteGridHandler implements IHandler {
 		} else {
 			sb.append("{");
 			sb.append("\"statusCode\":" + "\"300\"");
-			sb.append(",\"message\":" + "\"网格 " + code + " 不存在！\"");
+			sb.append(",\"message\":" + "\"网格 " + code + " 变动记录不存在！\"");
 			sb.append(",\"navTabId\":" + "\"\"");
 			sb.append(",\"rel\":" + "\"\"");
 			sb.append(",\"callbackType\":" + "\"\"");

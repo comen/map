@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.com.chinatelecom.map.handle.IHandler;
-import cn.com.chinatelecom.map.handle.SearchGridHandler;
+import cn.com.chinatelecom.map.handle.SearchRecordHandler;
 import cn.com.chinatelecom.map.process.DataProcessor;
 import cn.com.chinatelecom.map.process.IProcessor;
 
 /**
- * Servlet implementation class SearchGridServlet
+ * Servlet implementation class SearchRecordServlet
  */
-@WebServlet(description = "Search Grid", urlPatterns = { "/jsp/searchGrid" })
-public class SearchGridServlet extends HttpServlet {
+@WebServlet(description = "Search Record", urlPatterns = { "/jsp/searchRecord" })
+public class SearchRecordServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;
@@ -26,11 +26,11 @@ public class SearchGridServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SearchGridServlet() {
+    public SearchRecordServlet() {
         super();
         // TODO Auto-generated constructor stub
         processor = new DataProcessor();
-		handler = new SearchGridHandler();
+		handler = new SearchRecordHandler();
     }
 
 	/**

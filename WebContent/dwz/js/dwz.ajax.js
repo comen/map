@@ -185,8 +185,14 @@ function dialogAjaxDone(json){
  */
 function navTabSearch(form, navTabId){
 	var $form = $(form);
+	/* Added by Shelwin */
+	var $formData = new FormData(form);
+	/* End */
 	if (form[DWZ.pageInfo.pageNum]) form[DWZ.pageInfo.pageNum].value = 1;
-	navTab.reload($form.attr('action'), {data: $form.serializeArray(), navTabId:navTabId});
+	/* Modified by Shelwin - Transform request parameters into FormData */
+	//navTab.reload($form.attr('action'), {data: $form.serializeArray(), navTabId:navTabId});
+	navTab.reload($form.attr('action'), {data: $formData, navTabId:navTabId});
+	/* End */
 	return false;
 }
 /**

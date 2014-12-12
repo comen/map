@@ -60,6 +60,10 @@ public class Record extends BasicMapObject implements IMapDBObject, Runnable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	public Record() {
+		
+	}
 
 	public Record(String json) {
 		if (null != json) {
@@ -143,7 +147,9 @@ public class Record extends BasicMapObject implements IMapDBObject, Runnable {
 	}
 
 	public BasicDBObject getBasicDBObject() {
-		BasicDBObject bdbo = new BasicDBObject("GRID_CODE", code);
+		BasicDBObject bdbo = new BasicDBObject();
+		if (null != code)
+			bdbo.append("GRID_CODE", code);
 		if (null != name)
 			bdbo.append("GRID_NAME", name);
 		if (null != manager)

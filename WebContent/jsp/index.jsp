@@ -9,9 +9,9 @@
 	
 	/* Validate if user login successfully. */
 	try {
-		loginState = (String)session.getAttribute("loginstate");
+		loginState = (String) session.getAttribute("loginstate");
 		if (loginState != null && loginState.equals("S")) {
-			userName = (String)session.getAttribute("username");
+			userName = (String) session.getAttribute("username");
 			role = Integer.parseInt((String)session.getAttribute("role"));
 			switch (role) {
 			case 1:
@@ -177,18 +177,6 @@ $(function(){
 				</div>
 
 				<div class="accordion" fillSpace="sidebar">
-					<!-- <div class="accordionHeader">
-						<h2>
-							<span>Folder</span>地图数据展示
-						</h2>
-					</div>
-					<div class="accordionContent">
-						<ul class="tree treeFolder">
-							<li>
-								<a href="map.jsp" target="navTab" rel="map" title="百度地图" external="true">百度地图</a>
-							</li>
-						</ul>
-					</div> -->
 					<%
 						if (role == 1) {
 					%>
@@ -219,6 +207,18 @@ $(function(){
 					</div>
 					<%
 						}
+					%>
+					<div class="accordionHeader">
+						<h2>
+							<span>Folder</span>网格变动记录
+						</h2>
+					</div>
+					<div class="accordionContent">
+						<ul class="tree treeFolder">
+							<li><a href="recordlist.jsp?firstload=true" target="navTab"rel="recordlist">查询</a></li>
+						</ul>
+					</div>
+					<%
 						if (role == 1 || role == 3) {
 					%>
 					<div class="accordionHeader">
