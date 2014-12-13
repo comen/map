@@ -14,6 +14,7 @@ import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.MathUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
@@ -377,39 +378,47 @@ public class Data implements Runnable {
 
 	@SuppressWarnings("deprecation")
 	public boolean exist() {
-		DBObject dbo = MongoDB.getInstance().findOne("data", toString());
-		if (dbo == null) {
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
+		bdbo = MongoDB.getInstance().findOne("grid", bdbo);
+		if (null == bdbo)
 			return false;
-		} else {
+		else
 			return true;
-		}
 	}
 	
 	@SuppressWarnings("deprecation")
 	public boolean insert() {
-		return MongoDB.getInstance().insert("data", toString());
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
+		return MongoDB.getInstance().insert("data", bdbo);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public boolean delete() {
-		return MongoDB.getInstance().delete("data", toString());
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
+		return MongoDB.getInstance().delete("data", bdbo);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public boolean update(String json) {
-		return MongoDB.getInstance().update("data", toString(), json);
+		BasicDBObject q = (BasicDBObject) JSON.parse(toString());
+		BasicDBObject o = (BasicDBObject) JSON.parse(json);
+		return MongoDB.getInstance().update("data", q, o);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static Data findOne(String json) {
-		return new Data(MongoDB.getInstance().findOne("data", json));
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		DBObject dbo = MongoDB.getInstance().findOne("data", bdbo);
+		return new Data(dbo);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static List<Data> findList(String json) {
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		List<BasicDBObject> bdbol = MongoDB.getInstance()
+				.findList("data", bdbo);
 		List<Data> dl = new ArrayList<Data>();
-		List<DBObject> dbl = MongoDB.getInstance().findList("data", json);
-		for (DBObject dbo : dbl) {
+		for (DBObject dbo : bdbol) {
 			dl.add(new Data(dbo));
 		}
 		return dl;

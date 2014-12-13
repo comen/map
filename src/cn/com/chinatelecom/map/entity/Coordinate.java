@@ -8,7 +8,7 @@ import cn.com.chinatelecom.map.utils.MathUtils;
  * @author joseph
  *
  */
-public class Coordinate extends BasicMapObject{
+public class Coordinate {
 
 	private double latitude;
 	private double longitude;
@@ -44,6 +44,10 @@ public class Coordinate extends BasicMapObject{
 		bdbo.append("LATITUDE", latitude);
 		bdbo.append("LONGITUDE", longitude);
 		return bdbo;
+	}
+
+	public String toString() {
+		return getBasicDBObject().toString();
 	}
 
 }

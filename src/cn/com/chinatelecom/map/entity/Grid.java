@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.shape.Polygon;
 import cn.com.chinatelecom.map.common.GeoCoder;
 import cn.com.chinatelecom.map.common.MongoDB;
@@ -16,7 +18,9 @@ import com.mongodb.util.JSON;
  * @author joseph
  *
  */
-public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
+public class Grid {
+
+	public static Logger logger = Logger.getLogger(Grid.class);
 
 	private String code;
 	private String name;
@@ -110,11 +114,6 @@ public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 		}
 	}
 
-	@Override
-	public void run() {
-		insert();
-	}
-
 	public boolean exist() {
 		BasicDBObject bdbo = MongoDB.getInstance().findOne("grid",
 				getBasicDBObject());
@@ -157,18 +156,6 @@ public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 		return gl;
 	}
 
-	public static Grid search(String address) {
-		List<Grid> grids = findList(null);
-		if (null == grids || null == address)
-			return null;
-		for (Grid grid : grids) {
-			if (grid.contains(address) && 1 != grid.getCode().length()) {
-				return grid;
-			}
-		}
-		return null;
-	}
-
 	public boolean contains(Coordinate coordinate) {
 		if (null == coordinates || coordinates.isEmpty() || null == coordinate)
 			return false;
@@ -186,7 +173,7 @@ public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 		List<Coordinate> points = grid.getCoordinates();
 		if (null == points)
 			return true;
-		// return contains(grid.getAddress()); //网格按照地址判断实在太慢
+		// return contains(grid.getAddress()); //网格按照地址判断效率过低
 		for (Coordinate point : points) {
 			if (polygon.contains(point.getLongitude(), point.getLatitude())) {
 				return true;
@@ -214,6 +201,28 @@ public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 		return polygon;
 	}
 
+	public boolean comparePolygon(Polygon plg) {
+		if (null == plg)
+			return false;
+		Polygon polygon = getPolygon();
+		if (polygon.getPoints().size() != plg.getPoints().size())
+			return false;
+		if (polygon.toString().equals(plg.toString()))
+			return true;
+		return false;
+	}
+
+	public static List<Coordinate> getCoordinates(List<String> addresses) {
+		if (null == addresses)
+			return null;
+		List<Coordinate> coordinates = new ArrayList<Coordinate>();
+		for (String address : addresses) {
+			Coordinate coordinate = getCoordinate(address);
+			coordinates.add(coordinate);
+		}
+		return coordinates;
+	}
+
 	public static Coordinate getCoordinate(String address) {
 		if (null == address)
 			return null;
@@ -239,6 +248,32 @@ public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 		return null;
 	}
 
+	public static Grid search(String address) {
+		Coordinate coordinate = getCoordinate(address);
+		return search(coordinate);
+	}
+
+	public static Grid search(Coordinate coordinate) {
+		List<Grid> grids = findList(null);
+		if (null == grids || null == coordinate)
+			return null;
+		for (Grid grid : grids) {
+			if (grid.contains(coordinate) && 1 != grid.getCode().length())
+				return grid;
+		}
+		return null;
+	}
+
+	public static List<Grid> search(List<Coordinate> coordinates) {
+		if (null == coordinates)
+			return null;
+		List<Grid> result = new ArrayList<Grid>();
+		for (Coordinate coordinate : coordinates) {
+			result.add(search(coordinate));
+		}
+		return result;
+	}
+
 	public BasicDBObject getBasicDBObject() {
 		BasicDBObject bdbo = new BasicDBObject();
 		if (null != code) {
@@ -253,7 +288,7 @@ public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 		if (null != coordinates && !coordinates.isEmpty()) {
 			BasicDBList bdbl = new BasicDBList();
 			for (Coordinate coordinate : coordinates) {
-				bdbl.add(coordinate);
+				bdbl.add(coordinate.getBasicDBObject());
 			}
 			bdbo.append("GRID_COORDINATES", bdbl);
 		}
@@ -290,6 +325,10 @@ public class Grid extends BasicMapObject implements IMapDBObject, Runnable {
 		if (null != data && !"".equals(data))
 			sb.append("<br/>" + data);
 		return sb.toString();
+	}
+
+	public String toString() {
+		return getBasicDBObject().toString();
 	}
 
 }

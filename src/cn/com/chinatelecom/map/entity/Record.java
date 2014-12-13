@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import cn.com.chinatelecom.map.common.MongoDB;
 
 import com.mongodb.BasicDBObject;
@@ -13,7 +15,9 @@ import com.mongodb.util.JSON;
  * @author joseph
  *
  */
-public class Record extends BasicMapObject implements IMapDBObject, Runnable {
+public class Record {
+
+	public static Logger logger = Logger.getLogger(Record.class);
 
 	private String code;
 	private String name;
@@ -95,7 +99,7 @@ public class Record extends BasicMapObject implements IMapDBObject, Runnable {
 		name = bdbo.getString("GRID_NAME");
 		manager = bdbo.getString("GRID_MANAGER");
 		address = bdbo.getString("GRID_ADDRESS");
-		date = bdbo.getDate("GRID_ERASE_DATETIME");
+		date = bdbo.getDate("GRID_DATETIME");
 	}
 
 	public boolean exist() {
@@ -105,11 +109,6 @@ public class Record extends BasicMapObject implements IMapDBObject, Runnable {
 			return false;
 		else
 			return true;
-	}
-
-	@Override
-	public void run() {
-		insert();
 	}
 
 	public boolean insert() {
@@ -157,8 +156,12 @@ public class Record extends BasicMapObject implements IMapDBObject, Runnable {
 		if (null != address)
 			bdbo.append("GRID_ADDRESS", address);
 		if (null != date)
-			bdbo.append("GRID_ERASE_DATETIME", date);
+			bdbo.append("GRID_DATETIME", date);
 		return bdbo;
+	}
+
+	public String toString() {
+		return getBasicDBObject().toString();
 	}
 
 }
