@@ -150,6 +150,22 @@
 			}
  		}
  	}
+ 	
+ 	function addDateToURLParam(tr) {
+ 		var $tr = $(tr);
+ 		var href ="deleteRecord?rid={sid_record}&date=";
+ 		var index = 0;
+		var $tr_children = $tr.children();
+		$tr_children.each(function() {
+			switch (index) {
+			case 4:
+				href = href + $(this).text();
+				break;
+			}
+			index = index + 1;
+		});
+ 		$("#deleteRecord").attr("href", href);
+ 	}
 </script>
 
 <form id="pagerForm" name="recordPagerForm" method="post" action="recordlist.jsp">
@@ -185,7 +201,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a id="delete" class="delete" href="deleteRecord?rid={sid_record}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
+			<li><a id="deleteRecord" class="delete" href="deleteRecord?rid={sid_record}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="138">
@@ -199,140 +215,140 @@
 			</tr>
 		</thead>
 		<tbody id="gridList">
-			<tr id="record_0" target="sid_record" rel="0">
+			<tr id="record_0" target="sid_record" rel="0" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_1" target="sid_record" rel="1">
+			<tr id="record_1" target="sid_record" rel="1" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_2" target="sid_record" rel="2">
+			<tr id="record_2" target="sid_record" rel="2" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_3" target="sid_record" rel="3">
+			<tr id="record_3" target="sid_record" rel="3" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_4" target="sid_record" rel="4">
+			<tr id="record_4" target="sid_record" rel="4" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_5" target="sid_record" rel="5">
+			<tr id="record_5" target="sid_record" rel="5" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_6" target="sid_record" rel="6">
+			<tr id="record_6" target="sid_record" rel="6" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_7" target="sid_record" rel="7">
+			<tr id="record_7" target="sid_record" rel="7" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_8" target="sid_record" rel="8">
+			<tr id="record_8" target="sid_record" rel="8" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_9" target="sid_record" rel="9">
+			<tr id="record_9" target="sid_record" rel="9" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_10" target="sid_record" rel="10">
+			<tr id="record_10" target="sid_record" rel="10" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_11" target="sid_record" rel="11">
+			<tr id="record_11" target="sid_record" rel="11" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_12" target="sid_record" rel="12">
+			<tr id="record_12" target="sid_record" rel="12" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_13" target="sid_record" rel="13">
+			<tr id="record_13" target="sid_record" rel="13" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_14" target="sid_record" rel="14">
+			<tr id="record_14" target="sid_record" rel="14" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_15" target="sid_record" rel="15">
+			<tr id="record_15" target="sid_record" rel="15" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_16" target="sid_record" rel="16">
+			<tr id="record_16" target="sid_record" rel="16" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_17" target="sid_record" rel="17">
+			<tr id="record_17" target="sid_record" rel="17" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_18" target="sid_record" rel="18">
+			<tr id="record_18" target="sid_record" rel="18" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-			<tr id="record_19" target="sid_record" rel="19">
+			<tr id="record_19" target="sid_record" rel="19" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
 				<td></td>

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
@@ -140,8 +139,25 @@ public class UploadSalesDataHandler implements IHandler {
 										subOfficeData.insert();
 									}
 									/* Accumulate for Grid */
-									String[] gridCodeSplit = gridCode.split("-"); // Ignore invalid grid code
-									if (gridCode == null || gridCode.equals("") || gridCodeSplit.length < 4) {
+									if (gridCode != null) {
+										String[] gridCodeSplit = gridCode.split("-");
+										if (gridCodeSplit.length < 4) { // Grid code is invalid
+											if (address == null || address.equals("")) {
+												continue;
+											} else {
+												/*if (!address.startsWith("上海")) {
+													address = "上海市" + address;
+												}*/
+												Data gridData = new Data();
+												gridData.setCalculatedDate(calculatedDate);
+												gridData.setAddress(address);
+												gridData.setSalesDataType(salesDataType);
+												/* Added to multi-threads processing list */
+												tasks.add(gridData);
+												continue;
+											}
+										}
+									} else {
 										if (address == null || address.equals("")) {
 											continue;
 										} else {
@@ -154,23 +170,24 @@ public class UploadSalesDataHandler implements IHandler {
 											gridData.setSalesDataType(salesDataType);
 											/* Added to multi-threads processing list */
 											tasks.add(gridData);
+											continue;
 										}
-									} else {
-										Data gridData = new Data();
-										gridData.setCalculatedDate(calculatedDate);
-										gridData.setGridCode(gridCode);
-										if (gridData.exist()) {
-											Data dataTmp = Data.findOne(gridData.toString());
-											if (dataTmp.getValue(salesDataType) != null) {
-												dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
-											} else {
-												dataTmp.setValue(salesDataType, 1);
-											}
-											gridData.update(dataTmp.toString());
+									}
+									
+									Data gridData = new Data();
+									gridData.setCalculatedDate(calculatedDate);
+									gridData.setGridCode(gridCode);
+									if (gridData.exist()) {
+										Data dataTmp = Data.findOne(gridData.toString());
+										if (dataTmp.getValue(salesDataType) != null) {
+											dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
 										} else {
-											gridData.setValue(salesDataType, 1);
-											gridData.insert();
+											dataTmp.setValue(salesDataType, 1);
 										}
+										gridData.update(dataTmp.toString());
+									} else {
+										gridData.setValue(salesDataType, 1);
+										gridData.insert();
 									}
 								}
 							} catch (Exception e) {
@@ -194,7 +211,7 @@ public class UploadSalesDataHandler implements IHandler {
 							threadPool.execute(task);
 						}
 						threadPool.shutdown();
-						// 等待所有线程结束后的后续操作
+						/*// 等待所有线程结束后的后续操作
 						try {
 							if (threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS)) {
 								// TODO
@@ -204,7 +221,9 @@ public class UploadSalesDataHandler implements IHandler {
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
+						file.delete();
+						result.put("info", "文件上传成功！");
 					}
 				}
 			}

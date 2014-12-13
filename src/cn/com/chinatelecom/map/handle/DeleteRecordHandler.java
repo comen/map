@@ -3,6 +3,7 @@
  */
 package cn.com.chinatelecom.map.handle;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Record;
+import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
@@ -23,6 +25,7 @@ public class DeleteRecordHandler implements IHandler {
 	/* (non-Javadoc)
 	 * @see cn.com.chinatelecom.map.handle.IHandler#handle(java.util.List)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
@@ -30,6 +33,7 @@ public class DeleteRecordHandler implements IHandler {
 		StringBuffer sb = new StringBuffer();
 		Record record = new Record();
 		String code = "";
+		String dateStr = "";
 		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
@@ -41,9 +45,11 @@ public class DeleteRecordHandler implements IHandler {
 					case "rid":
 						code = string;
 						break;
+					case "date":
+						dateStr = string;
+						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					@SuppressWarnings("deprecation")
 					String log = StringUtils.getLogPrefix(Level.SEVERE);
 					System.out.println("\n" + log + "\n" + e.getClass()
 							+ "\t:\t" + e.getMessage());
@@ -52,8 +58,22 @@ public class DeleteRecordHandler implements IHandler {
 		}
 		
 		record.setCode(code);
-		if(record.exist()) {
-			if (record.delete()) {
+		List<Record> recordList = Record.findList(record.getBasicDBObject().toString());
+		if(recordList != null) {
+			Date date = DateUtils.getSpecificDate(dateStr, "yyyy-MM-dd");
+			int year1 = date.getYear();
+			int month1 = date.getMonth() + 1;
+			int day1 = date.getDate();
+			Boolean deleteSuccess = false;
+			for (Record list : recordList) {
+				int year2 = list.getDate().getYear();
+				int month2 = list.getDate().getMonth() + 1;
+				int day2 = list.getDate().getDate();
+				if (year2 == year1 && month2 == month1 && day2 == day1) {
+					deleteSuccess = list.delete();
+				}
+			}
+			if (deleteSuccess) {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"200\"");
 				sb.append(",\"message\":" + "\"网格变动记录删除成功！\"");
@@ -83,7 +103,7 @@ public class DeleteRecordHandler implements IHandler {
 			sb.append("}");
 		}
 		
-		result.put("DelUserResult", sb.toString());
+		result.put("DeleteRecordResult", sb.toString());
 		return result;
 	}
 

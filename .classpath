@@ -38,5 +38,9 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/jar/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/jar/poi-3.10.1.jar"/>
+	<classpathentry kind="lib" path="C:/jar/poi-ooxml-3.10.1.jar"/>
+	<classpathentry kind="lib" path="C:/jar/poi-ooxml-schemas-3.10.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

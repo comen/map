@@ -87,16 +87,16 @@
 
 	<input id="file_upload" type="file" name="image"
 		uploaderOption="{
-			fileSizeLimit:'10MB',
+			fileSizeLimit:'30MB',
 			swf:'../dwz/uploadify/scripts/uploadify.swf',
 			uploader:'uploadSalesData',
 			successTimeout: 600,
-			progressData:'speed',
+			progressData:'percentage',
 			queueID:'fileQueue',
 			buttonImage:'../dwz/uploadify/img/add.jpg',
 			buttonClass:'my-uploadify-button',
 			fileTypeDesc:'Excel file',
-			fileTypeExts:'*.xls',
+			fileTypeExts:'*.xls;*.xlsx',
 			width:102,
 			auto:false,
 			multi:true
@@ -106,13 +106,24 @@
 		<option value="请选择">请选择</option>
 	</select>
 	<p>&nbsp;</p>
-	<span class="inputInfo">仅支持 Microsoft Excel 97-2003 Worksheet(.xls)</span>
+	<!-- <span class="inputInfo">仅支持 Microsoft Excel 97-2003 Worksheet(.xls)</span> -->
 	<div id="fileQueue" class="fileQueue"></div>
 
 	<input type="image" src="../dwz/uploadify/img/upload.jpg"
 		onclick="doUpload()" />
 	<input type="image" src="../dwz/uploadify/img/cancel.jpg"
 		onclick="$('#file_upload').uploadify('cancel', '*');" />
+	
+	<div>
+		<br /><br /><br /><br /><br /><br /><br /><br />
+		<h2>说明：</h2>
+		<br />
+		<p>1. “<span style="color:red">行政分局</span>”列必需；</p>
+		<br />
+		<p>2. “<span style="color:red">网格编号</span>”或“<span style="color:red">安装地址</span>”至少存在一列；当“网格编号”存在时系统将根据编号匹配其所属的网格（执行效率高），“网格编号”不存在时根据“安装地址”查找其所属网格（执行效率低）；</p>
+		<br />
+		<p>3. “<span style="color:red">完工时间</span>”列可选；当“完工时间”存在时，系统将以该时间作为营销数据的生成时间，否则将以上传当天的日期作为营销数据的生成时间；</p>
+	</div>
 
 </div>
 

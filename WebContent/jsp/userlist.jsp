@@ -340,10 +340,10 @@
 			<li><a class="add" href="useradd.jsp"
 				target="dialog" height="360"><span>添加</span></a></li>
 			<li class="line">line</li>
-			<li><a id="delete" class="delete" href="deleteUser?uid={sid_user}"
+			<li><a class="delete" href="deleteUser?uid={sid_user}"
 				target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li class="line">line</li>
-			<li><a id="edit" class="edit" href="useredit.jsp?uid={sid_user}"
+			<li><a class="edit" href="useredit.jsp?uid={sid_user}"
 				target="dialog" height="360"><span>修改</span></a></li>
 		</ul>
 	</div>
