@@ -43,7 +43,10 @@ public class Config {
 		try {
 			properties.setProperty(key, value);
 			String uri = "C:/eclipse-workspace/Map/src/conf.properties";
-			properties.store(new FileOutputStream(new File(uri)), null);
+			FileOutputStream fos = new FileOutputStream(new File(uri));
+			properties.store(fos, null);
+			fos.flush();
+			fos.close();
 		} catch (Exception e) {
 			logger.fatal("修改配置文件(" + key + "-->" + value + ")错误: "
 					+ e.getMessage());
