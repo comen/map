@@ -24,8 +24,7 @@ public class Repository {
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(Integer.parseInt(config.getValue("cacheSize")));
 		sfu = new ServletFileUpload(factory);
-		sfu.setSizeMax((int) Math.pow(
-				Integer.parseInt(config.getValue("cacheSize")), 2));
+		sfu.setSizeMax(Long.parseLong(config.getValue("maxSize")));
 		sfu.setHeaderEncoding(config.getValue("charset"));
 	}
 

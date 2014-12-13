@@ -2,6 +2,7 @@ package cn.com.chinatelecom.map.servlet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -37,6 +38,7 @@ public final class ConfigListener implements ServletContextListener {
 	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
 	 */
 	public void contextInitialized(ServletContextEvent arg0) {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		try {
 			PropertyConfigurator.configure(getClass().getResourceAsStream(
 					properties));

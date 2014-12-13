@@ -51,7 +51,7 @@ label {
 <script type="text/javascript" src="js/HashMap.js"></script>
 <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&SvTvb6HBqRByIoT4WGYC4zAW"></script>
+<script type="text/javascript" src="//api.map.baidu.com/api?v=1.5&SvTvb6HBqRByIoT4WGYC4zAW"></script>
 <script>
 	$(function() {
 		$("#date").datepicker();
@@ -73,7 +73,9 @@ label {
 	<script type="text/javascript">
 		var currAjax;
 		var map = (function() {
-			map = new BMap.Map("mapcontainer");
+			map = new BMap.Map("mapcontainer", {
+				enableMapClick : 'false'
+			});
 			var center = new BMap.Point(121.42000, 31.29336);
 			var zoom = 13;
 <%
@@ -129,6 +131,7 @@ label {
 		})();
 
 		function fetch() {
+			var editing = false;
 			if (currAjax != null) {
 				currAjax.abort();
 			}
@@ -256,6 +259,8 @@ label {
 									});
 									
 									function openInfo(event) {
+										if (editing)
+											return;
 										var message;
 										var formData = new FormData();
 										var mode = $('input[name="mode"]:checked').val();
@@ -317,6 +322,7 @@ label {
 									%>	
 										if (editable) {
 											editable = false;
+											editing = false;
 											event.target.disableEditing();
 											
 											var path = event.target.getPath();
@@ -352,6 +358,7 @@ label {
 											});
 										} else {
 											editable = true;
+											editing = true;
 											event.target.enableEditing();
 										}
 									}
@@ -395,6 +402,8 @@ label {
 						var editable = false;
 						
 						function openInfo(event) {
+							if (editing)
+								return;
 							var message;
 							var formData = new FormData();
 							var mode = $('input[name="mode"]:checked').val();
@@ -456,6 +465,7 @@ label {
 						%>								
 							if (editable) {
 								editable = false;
+								editing = false;
 								event.target.disableEditing();
 								
 								var path = event.target.getPath();
@@ -491,6 +501,7 @@ label {
 								});
 							} else {
 								editable = true;
+								editing = true;
 								event.target.enableEditing();
 							}
 						}

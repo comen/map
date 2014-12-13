@@ -77,7 +77,7 @@ public class StringUtils {
 				return color;
 			int r = (int) (R * 15 / (R + G));
 			int g = (int) (G * 15 / (R + G));
-			while (10 > r || 10 > g) {
+			while (10 > r && 10 > g) {
 				r++;
 				g++;
 			}
@@ -97,7 +97,7 @@ public class StringUtils {
 			logger.warn("大于15的颜色值自动重置为15: " + level);
 			level = 15;
 		}
-		String color = Integer.toHexString(level);
+		String color = Integer.toHexString(level).toUpperCase();
 		return color + color;
 	}
 
