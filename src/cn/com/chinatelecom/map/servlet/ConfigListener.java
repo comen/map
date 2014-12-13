@@ -2,6 +2,7 @@ package cn.com.chinatelecom.map.servlet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -37,6 +38,8 @@ public final class ConfigListener implements ServletContextListener {
 	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
 	 */
 	public void contextInitialized(ServletContextEvent arg0) {
+		TimeZone utc =TimeZone.getTimeZone("UTC");
+		TimeZone.setDefault(utc);
 		try {
 			PropertyConfigurator.configure(getClass().getResourceAsStream(
 					properties));
@@ -44,11 +47,20 @@ public final class ConfigListener implements ServletContextListener {
 			GeoCoder.getInstance();
 			Repository.getInstance();
 			MongoDB.getInstance();
-			List<String> indexes = new ArrayList<String>();
-			indexes.add("GRID_CODE");
-			indexes.add("GRID_DATETIME");
-			MongoDB.getInstance().indexOn("record", indexes);
+			/* Set index for Record */
+			List<String> recordIndexes = new ArrayList<String>();
+			recordIndexes.add("GRID_CODE");
+			recordIndexes.add("GRID_DATETIME");
+			MongoDB.getInstance().indexOn("record", recordIndexes);
+			/* Set index for Data */
+			List<String> dataIndexes = new ArrayList<String>();
+			dataIndexes.add("calculatedDate");
+			dataIndexes.add("gridCode");
+			MongoDB.getInstance().indexOn("data", dataIndexes);
+			/* Set index for Grid */
 			MongoDB.getInstance().indexOn("grid", "GRID_CODE");
+			/* Set index for User */
+			MongoDB.getInstance().indexOn("user", "username");
 		} catch (Exception e) {
 			logger.fatal("初始化环境配置错误: " + e.getMessage());
 		}

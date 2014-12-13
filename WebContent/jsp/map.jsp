@@ -1,9 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+	
+<%-- Validate if user login successfully. --%>
+<%@include file="validate.jsp"%>
+	
 <%
 	String longitude = request.getParameter("longitude");
 	String latitude = request.getParameter("latitude");
-	boolean available = true;
+	
+	boolean available = false;
+	if (role == 1 || role == 2) {
+		available = true;
+	}
+	
 	Double lng = 0.0;
 	Double lat = 0.0;
 	if (longitude != null && latitude != null) {
@@ -60,7 +69,7 @@ label {
 </head>
 <body>
 	<div id="menu">
-		<label for="chance">选择数据显示方式：</label>
+		<label>选择数据显示方式：</label>
 		<input type="radio" name="mode" id ="day" value="day" checked="checked" />按天显示
 		<input type="radio" name="mode" id ="week" value="week" />按周显示
 		<input type="radio" name="mode" id ="month" value="month" />按月显示

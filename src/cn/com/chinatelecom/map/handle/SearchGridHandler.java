@@ -132,15 +132,17 @@ public class SearchGridHandler implements IHandler {
 		}
 		
 		/* Sort Grid List */
-		switch (advSort) {
-		case "g_asending":
-			Collections.sort(gridList, new SortByGridCodeAsc());
-			break;
-		case "g_descending":
-			Collections.sort(gridList, new SortByGridCodeDsc());
-			break;
-		default:
-			Collections.sort(gridList, new SortByGridCodeAsc());
+		if (gridList != null) {
+			switch (advSort) {
+			case "g_asending":
+				Collections.sort(gridList, new SortByGridCodeAsc());
+				break;
+			case "g_descending":
+				Collections.sort(gridList, new SortByGridCodeDsc());
+				break;
+			default:
+				Collections.sort(gridList, new SortByGridCodeAsc());
+			}
 		}
 		
 		sb.append("[");

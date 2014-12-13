@@ -178,21 +178,23 @@ public class SearchUserHandler implements IHandler {
 		}
 		
 		/* Sort User List */
-		switch (advSort) {
-		case "u_asending":
-			Collections.sort(userList, new SortByUserNameAsc());
-			break;
-		case "d_asending":
-			Collections.sort(userList, new SortByCreateDateAsc());
-			break;
-		case "u_descending":
-			Collections.sort(userList, new SortByUserNameDsc());
-			break;
-		case "d_descending":
-			Collections.sort(userList, new SortByCreateDateDsc());
-			break;
-		default:
-			Collections.sort(userList, new SortByUserNameAsc());
+		if (userList != null) {
+			switch (advSort) {
+			case "u_asending":
+				Collections.sort(userList, new SortByUserNameAsc());
+				break;
+			case "d_asending":
+				Collections.sort(userList, new SortByCreateDateAsc());
+				break;
+			case "u_descending":
+				Collections.sort(userList, new SortByUserNameDsc());
+				break;
+			case "d_descending":
+				Collections.sort(userList, new SortByCreateDateDsc());
+				break;
+			default:
+				Collections.sort(userList, new SortByUserNameAsc());
+			}
 		}
 		
 		/* Prepare Output */

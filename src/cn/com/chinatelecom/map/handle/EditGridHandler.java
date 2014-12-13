@@ -29,6 +29,7 @@ public class EditGridHandler implements IHandler {
 		Map<String, Object> result = new HashMap<String, Object>();
 		StringBuffer sb = new StringBuffer();
 		Grid grid = new Grid();
+		String originalGridCode = "";
 		String gridCode = "";
 		String gridName = "";
 		String gridManager = "";
@@ -40,6 +41,9 @@ public class EditGridHandler implements IHandler {
 				try {
 					String string = item.getString(Config.getInstance().getValue("charset").toString());
 					switch(fieldName) {
+					case "original_grid_code":
+						originalGridCode = string;
+						break;
 					case "grid_code":
 						gridCode = string;
 						break;
@@ -62,25 +66,45 @@ public class EditGridHandler implements IHandler {
 			}
 		}
 		
-		grid.setCode(gridCode);
-		if(grid.exist()) {
-			Grid gridTmp = Grid.findOne(grid.toString());
-			gridTmp.setName(gridName);
-			gridTmp.setManager(gridManager);
-			gridTmp.setAddress(gridAddress);
-			if (grid.update(gridTmp.toString())) {
-				sb.append("{");
-				sb.append("\"statusCode\":" + "\"200\"");
-				sb.append(",\"message\":" + "\"网格信息修改成功！\"");
-				sb.append(",\"navTabId\":" + "\"\"");
-				sb.append(",\"rel\":" + "\"\"");
-				sb.append(",\"callbackType\":" + "\"\"");
-				sb.append(",\"forwardUrl\":" + "\"\"");
-				sb.append("}");
+		/* Check if grid code is changed */
+		Boolean gridCodeChanged = false;
+		if (originalGridCode.equals(gridCode)) { // No change
+			gridCodeChanged = false;
+		} else {
+			gridCodeChanged = true;
+		}
+		
+		if (gridCodeChanged) {
+			grid.setCode(originalGridCode);
+			if(grid.exist()) {
+				Grid gridTmp = Grid.findOne(grid.toString());
+				gridTmp.setCode(gridCode);
+				gridTmp.setName(gridName);
+				gridTmp.setManager(gridManager);
+				gridTmp.setAddress(gridAddress);
+				if (grid.delete() && gridTmp.insert()) {
+					sb.append("{");
+					sb.append("\"statusCode\":" + "\"200\"");
+					sb.append(",\"message\":" + "\"网格信息修改成功！\"");
+					sb.append(",\"navTabId\":" + "\"\"");
+					sb.append(",\"rel\":" + "\"\"");
+					sb.append(",\"callbackType\":" + "\"\"");
+					sb.append(",\"forwardUrl\":" + "\"\"");
+					sb.append("}");
+				} else {
+					sb.append("{");
+					sb.append("\"statusCode\":" + "\"300\"");
+					sb.append(",\"message\":" + "\"网格信息修改失败，请重新操作！\"");
+					sb.append(",\"navTabId\":" + "\"\"");
+					sb.append(",\"rel\":" + "\"\"");
+					sb.append(",\"callbackType\":" + "\"\"");
+					sb.append(",\"forwardUrl\":" + "\"\"");
+					sb.append("}");
+				}
 			} else {
 				sb.append("{");
 				sb.append("\"statusCode\":" + "\"300\"");
-				sb.append(",\"message\":" + "\"网格信息修改失败，请重新操作！\"");
+				sb.append(",\"message\":" + "\"网格 " + originalGridCode + " 不存在！\"");
 				sb.append(",\"navTabId\":" + "\"\"");
 				sb.append(",\"rel\":" + "\"\"");
 				sb.append(",\"callbackType\":" + "\"\"");
@@ -88,14 +112,41 @@ public class EditGridHandler implements IHandler {
 				sb.append("}");
 			}
 		} else {
-			sb.append("{");
-			sb.append("\"statusCode\":" + "\"300\"");
-			sb.append(",\"message\":" + "\"网格 " + gridCode + " 不存在！\"");
-			sb.append(",\"navTabId\":" + "\"\"");
-			sb.append(",\"rel\":" + "\"\"");
-			sb.append(",\"callbackType\":" + "\"\"");
-			sb.append(",\"forwardUrl\":" + "\"\"");
-			sb.append("}");
+			grid.setCode(originalGridCode);
+			if(grid.exist()) {
+				Grid gridTmp = Grid.findOne(grid.toString());
+				gridTmp.setName(gridName);
+				gridTmp.setManager(gridManager);
+				gridTmp.setAddress(gridAddress);
+				if (grid.update(gridTmp.toString())) {
+					sb.append("{");
+					sb.append("\"statusCode\":" + "\"200\"");
+					sb.append(",\"message\":" + "\"网格信息修改成功！\"");
+					sb.append(",\"navTabId\":" + "\"\"");
+					sb.append(",\"rel\":" + "\"\"");
+					sb.append(",\"callbackType\":" + "\"\"");
+					sb.append(",\"forwardUrl\":" + "\"\"");
+					sb.append("}");
+				} else {
+					sb.append("{");
+					sb.append("\"statusCode\":" + "\"300\"");
+					sb.append(",\"message\":" + "\"网格信息修改失败，请重新操作！\"");
+					sb.append(",\"navTabId\":" + "\"\"");
+					sb.append(",\"rel\":" + "\"\"");
+					sb.append(",\"callbackType\":" + "\"\"");
+					sb.append(",\"forwardUrl\":" + "\"\"");
+					sb.append("}");
+				}
+			} else {
+				sb.append("{");
+				sb.append("\"statusCode\":" + "\"300\"");
+				sb.append(",\"message\":" + "\"网格 " + originalGridCode + " 不存在！\"");
+				sb.append(",\"navTabId\":" + "\"\"");
+				sb.append(",\"rel\":" + "\"\"");
+				sb.append(",\"callbackType\":" + "\"\"");
+				sb.append(",\"forwardUrl\":" + "\"\"");
+				sb.append("}");
+			}
 		}
 		
 		result.put("EditGridResult", sb.toString());

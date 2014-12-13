@@ -376,43 +376,38 @@ public class Data implements Runnable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public boolean exist() {
-		BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
-		bdbo = MongoDB.getInstance().findOne("grid", bdbo);
+		BasicDBObject bdbo = MongoDB.getInstance().findOne("data",
+				getBasicDBObject());
 		if (null == bdbo)
 			return false;
 		else
 			return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean insert() {
-		BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
-		return MongoDB.getInstance().insert("data", bdbo);
+		/*BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
+		return MongoDB.getInstance().insert("data", bdbo);*/
+		return MongoDB.getInstance().insert("data", getBasicDBObject());
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean delete() {
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
 		return MongoDB.getInstance().delete("data", bdbo);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean update(String json) {
 		BasicDBObject q = (BasicDBObject) JSON.parse(toString());
 		BasicDBObject o = (BasicDBObject) JSON.parse(json);
 		return MongoDB.getInstance().update("data", q, o);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static Data findOne(String json) {
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 		DBObject dbo = MongoDB.getInstance().findOne("data", bdbo);
 		return new Data(dbo);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static List<Data> findList(String json) {
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 		List<BasicDBObject> bdbol = MongoDB.getInstance()
@@ -935,10 +930,79 @@ public class Data implements Runnable {
 		
 		return sb.toString();
 	}
+	
+	public BasicDBObject getBasicDBObject() {
+		BasicDBObject bdbo = new BasicDBObject();
+		bdbo.append("calculatedDate", calculatedDate.getTime());
+		bdbo.append("gridCode", gridCode);
+		if (telephoneArrive > 0) {
+			bdbo.append("telephoneArrive", telephoneArrive);
+		}
+		if (broadbandArrive > 0) {
+			bdbo.append("broadbandArrive", broadbandArrive);
+		}
+		if (broadbandNew > 0) {
+			bdbo.append("broadbandNew", broadbandNew);
+		}
+		if (broadbandRemove > 0) {
+			bdbo.append("broadbandRemove", broadbandRemove);
+		}
+		if (broadbandMoveSetup > 0) {
+			bdbo.append("broadbandMoveSetup", broadbandMoveSetup);
+		}
+		if (broadbandMoveUnload > 0) {
+			bdbo.append("broadbandMoveUnload", broadbandMoveUnload);
+		}
+		if (broadbandOrderInTransit > 0) {
+			bdbo.append("broadbandOrderInTransit", broadbandOrderInTransit);
+		}
+		if (additional_1 > 0) {
+			bdbo.append("additional_1", additional_1);
+		}
+		if (additional_2 > 0) {
+			bdbo.append("additional_2", additional_2);
+		}
+		if (additional_3 > 0) {
+			bdbo.append("additional_3", additional_3);
+		}
+		if (additional_4 > 0) {
+			bdbo.append("additional_4", additional_4);
+		}
+		if (additional_5 > 0) {
+			bdbo.append("additional_5", additional_5);
+		}
+		if (additional_6 > 0) {
+			bdbo.append("additional_6", additional_6);
+		}
+		if (additional_7 > 0) {
+			bdbo.append("additional_7", additional_7);
+		}
+		if (additional_8 > 0) {
+			bdbo.append("additional_8", additional_8);
+		}
+		if (additional_9 > 0) {
+			bdbo.append("additional_9", additional_9);
+		}
+		if (additional_10 > 0) {
+			bdbo.append("additional_10", additional_10);
+		}
+		if (additional_11 > 0) {
+			bdbo.append("additional_11", additional_11);
+		}
+		if (additional_12 > 0) {
+			bdbo.append("additional_12", additional_12);
+		}
+		if (additional_13 > 0) {
+			bdbo.append("additional_13", additional_13);
+		}
+		
+		return bdbo;
+	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		return getBasicDBObject().toString();
+		/*StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		sb.append("'calculatedDate':" + calculatedDate.getTime());
 		sb.append(",'gridCode':'" + gridCode + "'");
@@ -1003,7 +1067,7 @@ public class Data implements Runnable {
 			sb.append(",'additional_13':" + additional_13);
 		}
 		sb.append("}");
-		return sb.toString();
+		return sb.toString();*/
 	}
 
 	@Override

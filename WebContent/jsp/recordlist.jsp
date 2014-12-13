@@ -102,7 +102,7 @@
 				$tr.attr("rel", recordList[i].GRID_CODE);
 				
 				/* Format created date */
-				var changeDate = new Date(recordList[i].GRID_ERASE_DATETIME.$date);
+				var changeDate = new Date(recordList[i].GRID_DATETIME.$date);
 				var year = changeDate.getFullYear().toString();
 				var month = (changeDate.getMonth() + 1).toString();
 				var day = changeDate.getDate().toString();
@@ -164,12 +164,12 @@
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
-				<td>网格编号：<input type="text" name="gridcode" id="gridcode" value="<%=searchGridCode%>" /></td>
-				<td>变动日期：<input type="text" class="date" id="changedate" name="changedate" value="<%=searchChangeDate%>" readonly="true" /></td>
-				<td>说明：系统只记录网格的删除、在地图中区域的变化等操作；网格变动后的环比、同比等数据不再精确，仅供大致参考。</td>
+				<%-- <td>网格编号：<input type="text" name="gridcode" id="gridcode" value="<%=searchGridCode%>" /></td>
+				<td>变动日期：<input type="text" class="date" id="changedate" name="changedate" value="<%=searchChangeDate%>" readonly="true" /></td> --%>
+				<td><p>说明：</p><p>&nbsp;</p><p>系统只记录网格的删除、在地图中区域的变化等操作；网格变动后的环比、同比等数据不再精确，仅供大致参考。</p><p>&nbsp;</p></td>
 			</tr>
 		</table>
-		<div class="subBar">
+		<!-- <div class="subBar">
 			<ul>
 				<li>
 					<div class="buttonActive">
@@ -179,7 +179,7 @@
 					</div>
 				</li>
 			</ul>
-		</div>
+		</div> -->
 	</div>
 </div>
 <div class="pageContent">

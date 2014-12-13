@@ -77,8 +77,21 @@
 %>
 
 <script type="text/javascript">
+
+	var advSearch = false;
+	var $advGridCode = $("#adv_username");
+	if ($advGridCode.length > 0) {
+		advSearch = true;
+	}
 	
-<%
+	if (!advSearch) {
+		getUserList("<%=searchUserName%>", "<%=searchRole%>", "<%=searchCreateDate%>", "<%=advSearchSortUser%>");
+	} else {
+		advGetUserList("<%=advSearchUserName%>", "<%=advSearchRealName%>", "<%=advSearchDepartment%>", 
+				"<%=advSearchStartDate%>", "<%=advSearchEndDate%>", "<%=advSearchSortUser%>");
+	}
+	
+<%-- <%
 	if (advSearch == false) {
 %>
 		getUserList("<%=searchUserName%>", "<%=searchRole%>", "<%=searchCreateDate%>", "<%=advSearchSortUser%>");
@@ -89,7 +102,7 @@
 			"<%=advSearchStartDate%>", "<%=advSearchEndDate%>", "<%=advSearchSortUser%>");
 <%
 	}
-%>
+%> --%>
 	
 	function searchUser() {
 		$("#userPageNum").val("1");
@@ -117,7 +130,8 @@
 
 	function getUserList(userName, role, createDate, sort) {
 		var formData = new FormData();
-		formData.append("advsearch", "<%=advSearch%>");
+		<%-- formData.append("advsearch", "<%=advSearch%>"); --%>
+		formData.append("advsearch", advSearch);
 		formData.append("username", userName);
 		formData.append("role", role);
 		formData.append("createdate", createDate);
@@ -137,7 +151,8 @@
 	
 	function advGetUserList(userName, realName, department, startDate, endDate, sort) {
 		var formData = new FormData();
-		formData.append("advsearch", "<%=advSearch%>");
+		<%-- formData.append("advsearch", "<%=advSearch%>"); --%>
+		formData.append("advsearch", advSearch);
 		formData.append("adv_username", userName);
 		formData.append("adv_realname", realName);
 		formData.append("adv_department", department);
@@ -201,7 +216,7 @@
 			}
 			/* Modify rows */
 			var $tr = $("#user_" + (i - start));
-			if ($tr) {
+			if ($tr.length > 0) {
 				$tr.attr("rel", userList[i].username);
 				$tr.show();
 				/* Get role description */
@@ -261,13 +276,13 @@
  	function resetRows() {
  		for (var i = 0; i < 20; i++) {
 			var $tr = $("#user_" + i);
-			if ($tr) {
+			if ($tr.length > 0) {
+				$tr.hide();
 				$tr.attr("rel", i);
 				var $tr_children = $tr.children();
 				$tr_children.each(function(){
 					$(this).text("");
 				});
-				$tr.hide();
 			}
  		}
  	}
@@ -314,7 +329,7 @@
 							<button type="submit" onclick="searchUser()">检索</button>
 						</div>
 					</div></li>
-				<li><a class="button" href="useradvsearch.jsp" target="dialog" height="330" mask="true" title="查询框"><span>高级检索</span></a></li>
+				<li><a class="button" href="useradvsearch.jsp" target="dialog" height="330" mask="false" title="查询框"><span>高级检索</span></a></li>
 			</ul>
 		</div>
 	</div>

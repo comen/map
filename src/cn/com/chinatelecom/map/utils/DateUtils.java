@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import cn.com.chinatelecom.map.common.Config;
+//import java.text.DateFormat;
 
 /**
  * @author Shelwin
@@ -27,6 +28,22 @@ public class DateUtils {
 		}
 		return currentDate;
 	}
+	
+/*	 去掉时分秒，精确到日 
+	public static Date getDateToDay(Date date) {
+		if (null == date) {
+			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		DateFormat df1 = DateFormat.getDateInstance();
+		Date dateToDay = null;
+		try {
+			dateToDay = sdf.parse(df1.format(date));
+		} catch (Exception e) {
+			logger.fatal("获取指定格式的日期错误: " + e.getMessage());
+		}
+		return dateToDay;
+	}*/
 
 	public static Date getSpecificDate(String dateStr, String dateFormat) {
 		if (null == dateStr || null == dateFormat) {

@@ -43,6 +43,7 @@
 			if (gridList[i].GRID_CODE != $("#gid").val()) {
 				continue;
 			}
+			$("#original_grid_code").val(gridList[i].GRID_CODE);
 			$("#grid_code").val(gridList[i].GRID_CODE);
 			$("#grid_name").val(gridList[i].GRID_NAME);
 			$("#grid_manager").val(gridList[i].GRID_MANAGER);
@@ -53,10 +54,11 @@
 
 <div class="pageContent">
 	<form method="post" action="editGrid" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<input type="hidden" id="original_grid_code" name="original_grid_code" />
 		<div class="pageFormContent" layoutH="56">
 			<div class="unit">
 				<label>网格编号：</label> <input id="grid_code" name="grid_code" class="required"
-					type="text" size="30" readonly="readonly" />
+					type="text" size="30" />
 			</div>
 			<div class="unit">
 				<label>网格名称：</label> <input id="grid_name" name="grid_name" class="required"

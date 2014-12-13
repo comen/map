@@ -65,8 +65,21 @@
 %>
 
 <script type="text/javascript">
+	
+	var advSearch = false;
+	var $advGridCode = $("#adv_gridcode");
+	if ($advGridCode.length > 0) {
+		advSearch = true;
+	}
+	
+	if (!advSearch) {
+		getGridList("<%=searchGridCode%>", "<%=advSearchSortGrid%>");
+	} else {
+		advGetGridList("<%=advSearchGridCode%>", "<%=advSearchGridName%>", "<%=advSearchGridManager%>", 
+				"<%=advSearchGridAddress%>", "<%=advSearchSortGrid%>");
+	}
 
-<%
+<%-- <%
 	if (advSearch == false) {
 %>
 		getGridList("<%=searchGridCode%>", "<%=advSearchSortGrid%>");
@@ -77,7 +90,7 @@
 			"<%=advSearchGridAddress%>", "<%=advSearchSortGrid%>");
 <%
 	}
-%>
+%> --%>
 
 	function searchGrid() {
 		$("#gridPageNum").val("1");
@@ -102,7 +115,8 @@
 
 	function getGridList(gridCode, sort) {
 		var formData = new FormData();
-		formData.append("advsearch", "<%=advSearch%>");
+		<%-- formData.append("advsearch", "<%=advSearch%>"); --%>
+		formData.append("advsearch", advSearch);
 		formData.append("gridcode", gridCode);
 		formData.append("adv_sort", sort);
 		
@@ -120,7 +134,8 @@
 	
 	function advGetGridList(gridCode, gridName, gridManager, gridAddress, sort) {
 		var formData = new FormData();
-		formData.append("advsearch", "<%=advSearch%>");
+		<%-- formData.append("advsearch", "<%=advSearch%>"); --%>
+		formData.append("advsearch", advSearch);
 		formData.append("adv_gridcode", gridCode);
 		formData.append("adv_gridname", gridName);
 		formData.append("adv_gridmanager", gridManager);
@@ -184,7 +199,7 @@
 			}
 			/* Modify rows */
 			var $tr = $("#grid_" + (i - start));
-			if ($tr) {
+			if ($tr.length > 0) {
 				$tr.show();
 				$tr.attr("rel", gridList[i].GRID_CODE);
 				
@@ -220,7 +235,8 @@
  	function resetRows() {
  		for (var i = 0; i < 20; i++) {
 			var $tr = $("#grid_" + i);
-			if ($tr) {
+			if ($tr.length > 0) {
+				$tr.hide();
 				$tr.attr("rel", i);
 				var $tr_children = $tr.children();
 				var index = 0;
@@ -239,7 +255,6 @@
 					}
 					index = index + 1;
 				});
-				$tr.hide();
 			}
  		}
  	}
@@ -274,7 +289,7 @@
 							<button type="submit" onclick="searchGrid()">检索</button>
 						</div>
 					</div></li>
-				<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="330" mask="true" title="查询框"><span>高级检索</span></a></li>
+				<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="330" mask="false" title="查询框"><span>高级检索</span></a></li>
 			</ul>
 		</div>
 	</div>
