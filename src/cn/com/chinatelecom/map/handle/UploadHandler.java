@@ -1,18 +1,18 @@
 package cn.com.chinatelecom.map.handle;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
+import cn.com.chinatelecom.map.entity.Coordinate;
+import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.entity.Record;
 import cn.com.chinatelecom.map.utils.FileUtils;
-import cn.com.chinatelecom.map.utils.MathUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
@@ -61,16 +61,24 @@ public class UploadHandler implements IHandler {
 					return result;
 				}
 
+				List<String> addresses = new ArrayList<String>();
 				StringBuffer sb = new StringBuffer();
-				int size = MathUtils.getThreadSize(content.size());
-				ExecutorService threadPool = Executors.newFixedThreadPool(size);
 				for (String line : content) {
 					if (!line.trim().equals("")) {
 						Record record = new Record(line);
-						threadPool.execute(record);
+						addresses.add(record.getAddress());
 						sb.append(record + "<br/>");
 					}
 				}
+
+				long t1 = System.currentTimeMillis();
+				List<Coordinate> coordinates = Grid.getCoordinates(addresses);
+				long t2 = System.currentTimeMillis();
+				logger.debug(t2 - t1);
+				Grid.search(coordinates);
+				long t3 = System.currentTimeMillis();
+				logger.debug(t3 - t2);
+
 				result.put("content", sb.toString());
 				file.delete();
 				logger.info("文件上传成功: " + filename);

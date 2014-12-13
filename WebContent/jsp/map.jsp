@@ -3,6 +3,7 @@
 <%
 	String longitude = request.getParameter("longitude");
 	String latitude = request.getParameter("latitude");
+	boolean available = true;
 	Double lng = 0.0;
 	Double lat = 0.0;
 	if (longitude != null && latitude != null) {
@@ -84,7 +85,6 @@ label {
 <%
 	}
 %>
-			
 			map.centerAndZoom(center, zoom);
 			map.addControl(new BMap.OverviewMapControl());
 			map.addControl(new BMap.NavigationControl());
@@ -309,6 +309,13 @@ label {
 
 									function switchEdit(event) {
 										closeInfo(event);
+									<%
+										if (!available) {
+									%>
+											return;
+									<%
+										}
+									%>	
 										if (editable) {
 											editable = false;
 											event.target.disableEditing();
@@ -333,15 +340,15 @@ label {
 												contentType : false,
 												processData : false,
 												success : function(respText) {
-													alert('成功修改网格区域！');
-													var grid = eval(respText);
+													alert(respText);
+													/*var grid = eval(respText);
 													var points = new Array();
 													var coordinates = grids[i].p;
 													for (var j = 0; j < coordinates.length; j++) {
 														var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
 														points.push(point);
 													}
-													event.target.setPath(points);
+													event.target.setPath(points);*/
 												}
 											});
 										} else {
@@ -441,6 +448,13 @@ label {
 						
 						function switchEdit(event) {
 							closeInfo(event);
+						<%
+							if (!available) {
+						%>
+								return;
+						<%
+							}
+						%>								
 							if (editable) {
 								editable = false;
 								event.target.disableEditing();
@@ -465,15 +479,15 @@ label {
 									contentType : false,
 									processData : false,
 									success : function(respText) {
-										alert('成功修改网格区域！');
-										var grid = eval(respText);
+										alert(respText);
+										/*var grid = eval(respText);
 										var points = new Array();
 										var coordinates = grids[i].p;
 										for (var j = 0; j < coordinates.length; j++) {
 											var point = new BMap.Point(coordinates[j].o, coordinates[j].a);
 											points.push(point);
 										}
-										event.target.setPath(points);
+										event.target.setPath(points);*/
 									}
 								});
 							} else {
