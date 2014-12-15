@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -33,7 +32,6 @@ public class UploadSalesDataHandler implements IHandler {
 	/* (non-Javadoc)
 	 * @see cn.com.chinatelecom.map.handle.IHandler#handle(java.util.List)
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
@@ -44,6 +42,12 @@ public class UploadSalesDataHandler implements IHandler {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String salesDataType = "";
 		
+		if (items == null) {
+			logger.warn("没有请求数据!");
+			result.put("Warn", "没有请求数据!");
+			return result;
+		}
+		
 		for (FileItem item : items) {
 			if (item.isFormField()) {
 				String fieldName = item.getFieldName();
@@ -53,19 +57,29 @@ public class UploadSalesDataHandler implements IHandler {
 			} else {
 				if (!salesDataType.equals("")) {
 					String filename = item.getName().trim();
+					filename = StringUtils.getFileName(filename);
+					if (!StringUtils.isLegal(filename, ".xls[x]?$")) {
+						logger.error("文件格式有误: " + filename);
+						result.put("Error", "文件格式有误: " + filename);
+						return result;
+					}
 					File file = new File(Config.getInstance()
 							.getValue("uploadPath") + "/" + filename);
 					
 					try {
 						FileUtils.writeFile(item.getInputStream(), file);
 					} catch (Exception e) {
-						String log = StringUtils.getLogPrefix(Level.SEVERE);
-						System.out.println("\n" + log + "\n" + e.getClass()
-								+ "\t:\t" + e.getMessage());
+						logger.fatal("获取上传文件输入流错误: " + e.getMessage());
+						result.put("Fatal", "获取上传文件输入流错误: " + e.getMessage());
 						return result;
 					}
 					
 					List<String> lines = FileUtils.readFile(file);
+					if (null == lines) {
+						logger.error("读取文件失败: " + filename);
+						result.put("Error", "读取文件失败: " + filename);
+						return result;
+					}
 					
 					for (String line : lines) {
 						if (!line.trim().equals("")) {
@@ -191,16 +205,16 @@ public class UploadSalesDataHandler implements IHandler {
 									}
 								}
 							} catch (Exception e) {
-								String log = StringUtils.getLogPrefix(Level.SEVERE);
-								System.out.println("\n" + log + "\n" + e.getClass()
-										+ "\t:\t" + e.getMessage());
+								logger.error("文件数据解析出错: " + e.getMessage());
+								result.put("Error", "文件数据解析出错: " + e.getMessage());
+								return result;
 							}
 						}
 					}
 					
 					if (tasks.isEmpty()) {
 						file.delete();
-						result.put("info", "文件上传成功！");
+						result.put("Success", "文件上传成功！");
 					} else {
 						// 根据CPU和任务数动态分配线程池大小
 						int cpu = Runtime.getRuntime().availableProcessors();
@@ -223,7 +237,7 @@ public class UploadSalesDataHandler implements IHandler {
 							e.printStackTrace();
 						}*/
 						file.delete();
-						result.put("info", "文件上传成功！");
+						result.put("Success", "文件上传成功！");
 					}
 				}
 			}

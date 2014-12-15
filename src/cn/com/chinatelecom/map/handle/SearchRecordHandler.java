@@ -3,6 +3,8 @@
  */
 package cn.com.chinatelecom.map.handle;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,19 @@ public class SearchRecordHandler implements IHandler {
 	/* (non-Javadoc)
 	 * @see cn.com.chinatelecom.map.handle.IHandler#handle(java.util.List)
 	 */
+	
+	class SortByDateAsc implements Comparator<Record> {
+		public int compare(Record r1, Record r2) {
+			return r1.getDate().compareTo(r2.getDate());
+		}
+	}
+	
+	class SortByDateDsc implements Comparator<Record> {
+		public int compare(Record r1, Record r2) {
+			return r2.getDate().compareTo(r1.getDate());
+		}
+	}
+	
 	@Override
 	public Map<String, Object> handle(List<FileItem> items) {
 		// TODO Auto-generated method stub
@@ -69,6 +84,9 @@ public class SearchRecordHandler implements IHandler {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
 		if (recordList != null) {
+			/* Sort Record List */
+			Collections.sort(recordList, new SortByDateAsc());
+			
 			for (int i = 0; i < recordList.size(); i++) {
 				sb.append(recordList.get(i).getBasicDBObject().toString());
 				if (i < recordList.size()-1) {
