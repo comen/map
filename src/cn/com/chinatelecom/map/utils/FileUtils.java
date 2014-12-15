@@ -1,21 +1,24 @@
 package cn.com.chinatelecom.map.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.mongodb.BasicDBObject;
-
-import jxl.Cell;
-import jxl.CellType;
-import jxl.DateCell;
-import jxl.Sheet;
-import jxl.Workbook;
 
 /**
  * @author joseph
@@ -53,39 +56,82 @@ public class FileUtils {
 			logger.error("待读取文件为空！");
 			return null;
 		}
-		List<String> result = new ArrayList<String>();
-		BasicDBObject bdbo = new BasicDBObject();
-		String title;
-		if (file.getName().endsWith(".xls")) {
-			try {
-				Workbook book = Workbook.getWorkbook(file);
-				Sheet sheet = book.getSheet(0);
-				int rows = sheet.getRows();
-				int columns = sheet.getColumns();
-				List<String> titles = new ArrayList<String>();
-				for (int row = 0; row != rows; row++) {
-					for (int column = 0; column != columns; column++) {
-						Cell cell = sheet.getCell(column, row);
-						if (0 == row) {
-							titles.add(cell.getContents());
-						} else {
-							title = titles.get(column);
-							if (cell.getType() == CellType.DATE) {
-								bdbo.append(title, ((DateCell) cell).getDate());
-							} else {
-								bdbo.append(title, cell.getContents());
-							}
-						}
-					}
-					if (0 != row)
-						result.add(bdbo.toString());
-				}
-			} catch (Exception e) {
-				logger.fatal("读取文件错误: " + e.getMessage());
+
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			List<String> result = new ArrayList<String>();
+			BasicDBObject bdbo = new BasicDBObject();
+			List<String> titles = new ArrayList<String>();
+			String title;
+			Workbook wb = null;
+			if (file.getName().endsWith(".xls"))
+				wb = (Workbook) new HSSFWorkbook(fis);
+			else if (file.getName().endsWith(".xlsx"))
+				wb = (Workbook) new XSSFWorkbook(fis);
+			if (null == wb) {
+				logger.error("待读取文件非法！");
 				return null;
 			}
+			Sheet sheet = wb.getSheetAt(0);
+			int rows = sheet.getPhysicalNumberOfRows();
+			int columns = sheet.getRow(0).getPhysicalNumberOfCells();
+			for (int i = 0; i != rows; i++) {
+				Row row = sheet.getRow(i);
+				if (null == row) {
+					continue;
+				}
+				boolean flag = true;
+				for (int j = 0; j != columns; j++) {
+					if (!flag)
+						break;
+					Cell cell = row.getCell(j);
+					if (null == cell) {
+						continue;
+					}
+					int type = cell.getCellType();
+					Object object = handCell(type, cell);
+					if (0 == i) {
+						titles.add(object.toString());
+					} else {
+						title = titles.get(j);
+						bdbo.append(title, object);
+					}
+				}
+				if (0 != i && flag)
+					result.add(bdbo.toString());
+			}
+			return result;
+		} catch (Exception e) {
+			logger.fatal("读取表格文件错误: " + e.getMessage());
+			return null;
 		}
-		return result;
+	}
+
+	private static Object handCell(int type, Cell cell) {
+		if (null == cell)
+			return null;
+		switch (type) {
+		case Cell.CELL_TYPE_NUMERIC:
+			double d = cell.getNumericCellValue();
+			if (HSSFDateUtil.isCellDateFormatted(cell)) {
+				Date date = HSSFDateUtil.getJavaDate(d);
+				return date;
+			} else {
+				return d;
+			}
+		case Cell.CELL_TYPE_BLANK:
+			return "";
+		case Cell.CELL_TYPE_BOOLEAN:
+			return cell.getBooleanCellValue();
+		case Cell.CELL_TYPE_ERROR:
+			return cell.getErrorCellValue();
+		case Cell.CELL_TYPE_FORMULA:
+			return handCell(cell.getCachedFormulaResultType(), cell);
+		case Cell.CELL_TYPE_STRING:
+			return cell.getStringCellValue();
+		default:
+			return null;
+		}
 	}
 
 	public static String getFileName(String path) {

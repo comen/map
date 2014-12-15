@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
@@ -12,7 +11,6 @@ import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.common.MongoDB;
 import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.MathUtils;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -1078,9 +1076,7 @@ public class Data implements Runnable {
 		}
 		Grid grid = Grid.search(address);
 		if (grid == null) {
-			@SuppressWarnings("deprecation")
-			String log = StringUtils.getLogPrefix(Level.INFO);
-			System.out.println("\n" + log + "\n" + "Failed to find GRID for address " + address);
+			logger.warn("安装地址未落在任何网格中： " + address);
 			return;
 		} else {
 			gridCode = grid.getCode();

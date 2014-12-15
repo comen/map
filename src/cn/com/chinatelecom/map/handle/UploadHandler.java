@@ -1,7 +1,6 @@
 package cn.com.chinatelecom.map.handle;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +8,6 @@ import java.util.Map;
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
-import cn.com.chinatelecom.map.entity.Coordinate;
-import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.entity.Record;
 import cn.com.chinatelecom.map.utils.FileUtils;
 import cn.com.chinatelecom.map.utils.StringUtils;
@@ -41,7 +38,7 @@ public class UploadHandler implements IHandler {
 			} else {
 				String filename = item.getName().trim();
 				filename = StringUtils.getFileName(filename);
-				if (!StringUtils.isLegal(filename, ".xls$")) {
+				if (!StringUtils.isLegal(filename, ".xls[x]?$")) {
 					logger.error("文件格式有误: " + filename);
 					return result;
 				}
@@ -51,7 +48,7 @@ public class UploadHandler implements IHandler {
 				try {
 					FileUtils.writeFile(item.getInputStream(), file);
 				} catch (Exception e) {
-					logger.fatal("上传文件发生致命错误: " + e.getMessage());
+					logger.fatal("获取上传文件输入流错误: " + e.getMessage());
 					return result;
 				}
 
@@ -61,23 +58,14 @@ public class UploadHandler implements IHandler {
 					return result;
 				}
 
-				List<String> addresses = new ArrayList<String>();
 				StringBuffer sb = new StringBuffer();
 				for (String line : content) {
 					if (!line.trim().equals("")) {
 						Record record = new Record(line);
-						addresses.add(record.getAddress());
+						record.insert();
 						sb.append(record + "<br/>");
 					}
 				}
-
-				long t1 = System.currentTimeMillis();
-				List<Coordinate> coordinates = Grid.getCoordinates(addresses);
-				long t2 = System.currentTimeMillis();
-				logger.debug(t2 - t1);
-				Grid.search(coordinates);
-				long t3 = System.currentTimeMillis();
-				logger.debug(t3 - t2);
 
 				result.put("content", sb.toString());
 				file.delete();
