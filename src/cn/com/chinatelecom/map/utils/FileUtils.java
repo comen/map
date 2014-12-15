@@ -80,10 +80,7 @@ public class FileUtils {
 				if (null == row) {
 					continue;
 				}
-				boolean flag = true;
 				for (int j = 0; j != columns; j++) {
-					if (!flag)
-						break;
 					Cell cell = row.getCell(j);
 					if (null == cell) {
 						continue;
@@ -97,7 +94,7 @@ public class FileUtils {
 						bdbo.append(title, object);
 					}
 				}
-				if (0 != i && flag)
+				if (0 != i)
 					result.add(bdbo.toString());
 			}
 			return result;

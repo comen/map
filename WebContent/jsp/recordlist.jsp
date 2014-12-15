@@ -182,7 +182,10 @@
 			<tr>
 				<%-- <td>网格编号：<input type="text" name="gridcode" id="gridcode" value="<%=searchGridCode%>" /></td>
 				<td>变动日期：<input type="text" class="date" id="changedate" name="changedate" value="<%=searchChangeDate%>" readonly="true" /></td> --%>
-				<td><p>说明：</p><p>&nbsp;</p><p>系统只记录网格的删除、在地图中区域的变化等操作；网格变动后的环比、同比等数据不再精确，仅供大致参考。</p><p>&nbsp;</p></td>
+				<td>
+					<p>说明：（1） 系统只记录网格的删除、在地图中区域的变化等操作；网格变动后的环比、同比等数据不再精确，仅供大致参考。</p><br />
+					<p>（2）选中某条记录并删除时，将删除该网格编号在变动日期当天的所有变动记录。 </p><br />
+				</td>
 			</tr>
 		</table>
 		<!-- <div class="subBar">
