@@ -52,24 +52,28 @@ public class UploadHandler implements IHandler {
 					return result;
 				}
 
-				List<String> content = FileUtils.readFile(file);
+				long t1 = System.currentTimeMillis();
+				String content = FileUtils.readFile(file);
 				if (null == content) {
 					logger.error("读取文件失败: " + filename);
 					return result;
 				}
+				long t2 = System.currentTimeMillis();
 
-				StringBuffer sb = new StringBuffer();
-				for (String line : content) {
-					if (!line.trim().equals("")) {
-						Record record = new Record(line);
+				String[] splits = content.split("\n");
+				for (String split : splits) {
+					if (!split.trim().equals("")) {
+						Record record = new Record(split);
 						record.insert();
-						sb.append(record + "<br/>");
+						logger.debug(split);
 					}
 				}
+				long t3 = System.currentTimeMillis();
 
-				result.put("content", sb.toString());
-				file.delete();
+				logger.debug("解析excel消耗时间: " + (t2 - t1) + "ms");
+				logger.debug("读取excel消耗时间: " + (t3 - t2) + "ms");
 				logger.info("文件上传成功: " + filename);
+				file.delete();
 			}
 		}
 		return result;
