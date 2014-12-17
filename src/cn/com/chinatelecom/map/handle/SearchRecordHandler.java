@@ -85,7 +85,7 @@ public class SearchRecordHandler implements IHandler {
 		sb.append("[");
 		if (recordList != null) {
 			/* Sort Record List */
-			Collections.sort(recordList, new SortByDateAsc());
+			Collections.sort(recordList, new SortByDateDsc());
 			
 			for (int i = 0; i < recordList.size(); i++) {
 				sb.append(recordList.get(i).getBasicDBObject().toString());

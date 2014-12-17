@@ -41,6 +41,7 @@ public class UploadSalesDataHandler implements IHandler {
 	  
 		Map<String, Object> result = new HashMap<String, Object>();
 		String salesDataType = "";
+		Date calculatedDate = DateUtils.getCurrentDate();
 		
 		if (items == null) {
 			logger.warn("没有请求数据!");
@@ -87,14 +88,16 @@ public class UploadSalesDataHandler implements IHandler {
 							String gridCode = bdbo.getString(Config.getInstance().getValue("gridCodeColumn"));
 							String address = bdbo.getString(Config.getInstance().getValue("addressColumn"));
 							String suboffice = bdbo.getString(Config.getInstance().getValue("subofficeColumn"));
-							Date calculatedDate = bdbo.getDate(Config.getInstance().getValue("dateColumn"));
+							Date dateInExcel = bdbo.getDate(Config.getInstance().getValue("dateColumn"));
 							
 							if (suboffice == null || suboffice.equals("")) {
 								continue;
 							}
 							
-							if (calculatedDate == null) {
-								calculatedDate = DateUtils.getCurrentDate();
+							if (dateInExcel == null) {
+								calculatedDate = DateUtils.getFirstSecondOfDay(calculatedDate);
+							} else {
+								calculatedDate = DateUtils.getFirstSecondOfDay(dateInExcel);
 							}
 							
 							try {
@@ -103,13 +106,13 @@ public class UploadSalesDataHandler implements IHandler {
 								officeData.setCalculatedDate(calculatedDate);
 								officeData.setGridCode("0");
 								if (officeData.exist()) {
-									Data dataTmp = Data.findOne(officeData.toString());
+									Data dataTmp = Data.findOne(officeData.getBasicDBObject());
 									if (dataTmp.getValue(salesDataType) != null) {
 										dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
 									} else {
 										dataTmp.setValue(salesDataType, 1);
 									}
-									officeData.update(dataTmp.toString());
+									officeData.update(dataTmp.getBasicDBObject());
 								} else {
 									officeData.setValue(salesDataType, 1);
 									officeData.insert();
@@ -141,13 +144,13 @@ public class UploadSalesDataHandler implements IHandler {
 								}
 								if (subOfficeOK) {
 									if (subOfficeData.exist()) {
-										Data dataTmp = Data.findOne(subOfficeData.toString());
+										Data dataTmp = Data.findOne(subOfficeData.getBasicDBObject());
 										if (dataTmp.getValue(salesDataType) != null) {
 											dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
 										} else {
 											dataTmp.setValue(salesDataType, 1);
 										}
-										subOfficeData.update(dataTmp.toString());
+										subOfficeData.update(dataTmp.getBasicDBObject());
 									} else {
 										subOfficeData.setValue(salesDataType, 1);
 										subOfficeData.insert();
@@ -192,13 +195,13 @@ public class UploadSalesDataHandler implements IHandler {
 									gridData.setCalculatedDate(calculatedDate);
 									gridData.setGridCode(gridCode);
 									if (gridData.exist()) {
-										Data dataTmp = Data.findOne(gridData.toString());
+										Data dataTmp = Data.findOne(gridData.getBasicDBObject());
 										if (dataTmp.getValue(salesDataType) != null) {
 											dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
 										} else {
 											dataTmp.setValue(salesDataType, 1);
 										}
-										gridData.update(dataTmp.toString());
+										gridData.update(dataTmp.getBasicDBObject());
 									} else {
 										gridData.setValue(salesDataType, 1);
 										gridData.insert();
@@ -219,6 +222,9 @@ public class UploadSalesDataHandler implements IHandler {
 						// 根据CPU和任务数动态分配线程池大小
 						int cpu = Runtime.getRuntime().availableProcessors();
 						int size = Math.floorDiv(cpu * tasks.size(), 10) + 1;
+						if (size > 20) {
+							size = 20;
+						}
 						ExecutorService threadPool = Executors.newFixedThreadPool(size);
 						// 执行所有任务并关闭线程池
 						for (Data task : tasks) {

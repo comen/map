@@ -3,6 +3,7 @@
  */
 package cn.com.chinatelecom.map.handle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.logging.Level;
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
+import cn.com.chinatelecom.map.entity.Data;
 import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.utils.StringUtils;
 
@@ -82,7 +84,22 @@ public class EditGridHandler implements IHandler {
 				gridTmp.setName(gridName);
 				gridTmp.setManager(gridManager);
 				gridTmp.setAddress(gridAddress);
-				if (grid.delete() && gridTmp.insert()) {
+				if (gridTmp.insert() && grid.delete()) {
+					/* Delete old Data, Insert new Data */
+					Data data = new Data();
+					List<Data> oldDataList = new ArrayList<Data>();
+					data.setGridCode(originalGridCode);
+					oldDataList = Data.findList(data.getBasicDBObject());
+					if (null != oldDataList) {
+						for (Data oldData : oldDataList) {
+							Data newData = new Data(oldData.getBasicDBObject());
+							newData.setGridCode(gridCode);
+							if (newData.insert()) {
+								oldData.delete();
+							}
+						}
+					}
+					
 					sb.append("{");
 					sb.append("\"statusCode\":" + "\"200\"");
 					sb.append(",\"message\":" + "\"网格信息修改成功！\"");

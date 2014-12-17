@@ -7,7 +7,6 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import cn.com.chinatelecom.map.common.Config;
-//import java.text.DateFormat;
 
 /**
  * @author Shelwin
@@ -29,7 +28,32 @@ public class DateUtils {
 		return currentDate;
 	}
 	
-
+	public static Date getFirstSecondOfDay(Date date) {
+		if (null == date) {
+			logger.error("获取某天开始时刻的输入为空！");
+			return null;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		return cal.getTime();
+	}
+	
+	public static Date getLastSecondOfDay(Date date) {
+		if (null == date) {
+			logger.error("获取某天结束时刻的输入为空！");
+			return null;
+		}
+		Date firstSecondOfDay = getFirstSecondOfDay(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(firstSecondOfDay);
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		cal.add(Calendar.SECOND, -1);
+		return cal.getTime();
+	}
+	
 	public static Date getSpecificDate(String dateStr, String dateFormat) {
 		if (null == dateStr || null == dateFormat) {
 			logger.error("输入日期字符串或格式字符串为空！");

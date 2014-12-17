@@ -75,10 +75,10 @@ public class Record {
 				BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 				setRecord(bdbo);
 			} catch (Exception e) {
-				logger.warn("解析记录字符串错误: " + e.getMessage());
+				logger.error("解析记录字符串错误: " + e.getMessage());
 			}
 		} else {
-			logger.error("待设置记录字符串为空！");
+			logger.warn("待设置记录字符串为空！");
 		}
 	}
 
@@ -86,14 +86,14 @@ public class Record {
 		if (null != bdbo)
 			setRecord(bdbo);
 		else
-			logger.error("待设置记录数据库对象为空！");
+			logger.warn("待设置记录数据库对象为空！");
 	}
 
 	private void setRecord(BasicDBObject bdbo) {
 		if (null != bdbo && null != bdbo.getString("GRID_CODE")) {
 			code = bdbo.getString("GRID_CODE");
 		} else {
-			logger.error("待设置记录ID为空！");
+			logger.warn("待设置记录ID为空！");
 			return;
 		}
 		name = bdbo.getString("GRID_NAME");
@@ -131,7 +131,7 @@ public class Record {
 			return null;
 		return new Record(bdbo);
 	}
-
+	
 	public static List<Record> findList(String json) {
 		List<Record> rl = new ArrayList<Record>();
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);

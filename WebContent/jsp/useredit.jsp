@@ -44,7 +44,7 @@
 				continue;
 			}
 			/* Format created date */
-			var createDate = new Date(userList[i].createdate);
+			var createDate = new Date(userList[i].createdate.$date);
 			var year = createDate.getFullYear().toString();
 			var month = (createDate.getMonth() + 1).toString();
 			var day = createDate.getDate();

@@ -11,14 +11,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
 import cn.com.chinatelecom.map.utils.DateUtils;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
@@ -123,10 +121,7 @@ public class SearchUserHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					@SuppressWarnings("deprecation")
-					String log = StringUtils.getLogPrefix(Level.SEVERE);
-					System.out.println("\n" + log + "\n" + e.getClass()
-							+ "\t:\t" + e.getMessage());
+					logger.error("UnsupportedEncodingException: " + e.getMessage());
 				}
 			}
 		}
@@ -139,10 +134,26 @@ public class SearchUserHandler implements IHandler {
 			if (role != 0) {
 				user.setRole(role);
 			}
-			if (createDate != null) {
-				user.setCreateDate(createDate);
+			List<User> userListTmp = User.findList(user.toString());
+			if (userListTmp != null) {
+				for (User userTmp : userListTmp) {
+					if (createDate != null) {
+						Date userCreateDate = userTmp.getCreateDate();
+						Date firstSecondOfDay = DateUtils.getFirstSecondOfDay(createDate);
+						Date lastSecondOfDay = DateUtils.getLastSecondOfDay(createDate);
+						
+						try {
+							if (userCreateDate == null || userCreateDate.before(firstSecondOfDay) || userCreateDate.after(lastSecondOfDay)) {
+								continue;
+							}
+						} catch (NullPointerException e) {
+							logger.error("获取日期第一秒/最后一秒失败：" + e.getMessage());
+							continue;
+						}
+					}
+					userList.add(userTmp);
+				}
 			}
-			userList = User.findList(user.toString());
 		} else {
 			List<User> userListTmp = User.findList(null); // Search all users
 			if (userListTmp != null) {

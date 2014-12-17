@@ -3,12 +3,12 @@ package cn.com.chinatelecom.map.entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
+
+import org.apache.log4j.Logger;
 
 import cn.com.chinatelecom.map.common.MongoDB;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
-import com.mongodb.DBObject;
+import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 
 /**
@@ -16,6 +16,8 @@ import com.mongodb.util.JSON;
  * 
  */
 public class User {
+	
+	public static Logger logger = Logger.getLogger(User.class);
 	
 	private String userName;
 	private String password;
@@ -84,114 +86,110 @@ public class User {
 		this.department = user.department;
 		this.createDate = user.createDate;
 	}
-
+	
 	public User(String json) {
-		DBObject dbo = (DBObject) JSON.parse(json);
-		setUser(dbo);
-	}
-
-	public User(DBObject dbo) {
-		setUser(dbo);
+		if (null != json) {
+			try {
+				BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+				setUser(bdbo);
+			} catch (Exception e) {
+				logger.error("解析用户字符串错误: " + e.getMessage());
+			}
+		} else {
+			logger.warn("待设置用户字符串为空！");
+		}
 	}
 	
-	private void setUser(DBObject dbo) {
-		if (dbo.get("username") != null) {
-			userName = dbo.get("username").toString();
+	public User(BasicDBObject bdbo) {
+		if (null != bdbo)
+			setUser(bdbo);
+		else
+			logger.warn("待设置用户数据库对象为空！");
+	}
+	
+	private void setUser(BasicDBObject bdbo) {
+		if (null != bdbo && null != bdbo.getString("username")) {
+			userName = bdbo.getString("username");
 		} else {
+			logger.warn("待设置用户名为空！");
 			return;
 		}
-		if (dbo.get("password") != null) {
-			password = dbo.get("password").toString();
-		}
-		if (dbo.get("role") != null) {
+		password = bdbo.getString("password");
+		realName = bdbo.getString("realname");
+		department = bdbo.getString("department");
+		createDate = bdbo.getDate("createdate");
+		if (bdbo.get("role") != null) {
 			try {
-				role = Integer.parseInt(dbo.get("role").toString());
+				role = Integer.parseInt(bdbo.get("role").toString());
 			} catch (Exception e) {
-				@SuppressWarnings("deprecation")
-				String log = StringUtils.getLogPrefix(Level.SEVERE);
-				System.out.println("\n" + log + "\n" + e.getClass()
-						+ "\t:\t" + e.getMessage());
+				logger.error("解析用户角色信息失败：" + e.getMessage());
 			}
 		}
-		if (dbo.get("realname") != null) {
-			realName = dbo.get("realname").toString();
-		}
-		if (dbo.get("department") != null) {
-			department = dbo.get("department").toString();
-		}
-		if (dbo.get("createdate") != null) {
-			createDate = new Date((long) dbo.get("createdate"));
-		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean exist() {
-		DBObject dbo = MongoDB.getInstance().findOne("user", toString());
-		if (dbo == null) {
+		BasicDBObject bdbo = MongoDB.getInstance().findOne("user",
+				getBasicDBObject());
+		if (null == bdbo)
 			return false;
-		} else {
+		else
 			return true;
-		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean insert() {
-		return MongoDB.getInstance().insert("user", toString());
+		return MongoDB.getInstance().insert("user", getBasicDBObject());
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean delete() {
-		return MongoDB.getInstance().delete("user", toString());
+		return MongoDB.getInstance().delete("user", getBasicDBObject());
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean update(String json) {
-		return MongoDB.getInstance().update("user", toString(), json);
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		return MongoDB.getInstance().update("user", getBasicDBObject(), bdbo);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static User findOne(String json) {
-		return new User(MongoDB.getInstance().findOne("user", json));
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		bdbo = MongoDB.getInstance().findOne("user", bdbo);
+		if (null == bdbo)
+			return null;
+		return new User(bdbo);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static List<User> findList(String json) {
 		List<User> ul = new ArrayList<User>();
-		List<DBObject> dbl = MongoDB.getInstance().findList("user", json);
-		for (DBObject dbo : dbl) {
-			ul.add(new User(dbo));
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		List<BasicDBObject> bdbol = MongoDB.getInstance().findList("user",
+				bdbo);
+		if (null == bdbol || bdbol.isEmpty())
+			return null;
+		for (BasicDBObject o : bdbol) {
+			ul.add(new User(o));
 		}
-		
 		return ul;
+	}
+	
+	public BasicDBObject getBasicDBObject() {
+		BasicDBObject bdbo = new BasicDBObject();
+		if (null != userName)
+			bdbo.append("username", userName);
+		if (null != password)
+			bdbo.append("password", password);
+		if (role > 0)
+			bdbo.append("role", role);
+		if (null != realName)
+			bdbo.append("realname", realName);
+		if (null != department)
+			bdbo.append("department", department);
+		if (null != createDate)
+			bdbo.append("createdate", createDate);
+		return bdbo;
 	}
 	
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("{");
-		if (userName != null) {
-			sb.append("'username':'" + userName + "',");
-		}
-		if (password != null) {
-			sb.append("'password':'" + password + "',");
-		}
-		if (role > 0) {
-			sb.append("'role':" + role + ",");
-		}
-		if (realName != null) {
-			sb.append("'realname':'" + realName + "',");
-		}
-		if (department != null) {
-			sb.append("'department':'" + department + "',");
-		}
-		if (createDate != null) {
-			sb.append("'createdate':" + createDate.getTime());
-		}
-		if (sb.charAt(sb.length() - 1) == ',') {
-			sb.deleteCharAt(sb.length() - 1);
-		}
-		sb.append("}");
-		return sb.toString();
+		return getBasicDBObject().toString();
 	}
 
 }

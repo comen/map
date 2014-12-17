@@ -13,7 +13,6 @@ import cn.com.chinatelecom.map.utils.DateUtils;
 import cn.com.chinatelecom.map.utils.MathUtils;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 
 /**
@@ -21,6 +20,8 @@ import com.mongodb.util.JSON;
  *
  */
 public class Data implements Runnable {
+	
+	public static Logger logger = Logger.getLogger(Data.class);
 
 	private Date calculatedDate;
 	private String gridCode;
@@ -48,8 +49,6 @@ public class Data implements Runnable {
 	private String address;
 	private String salesDataType;
 
-	private static Logger logger = Logger.getLogger(Data.class);
-
 	public static String[] getNameOfMemberVariables() {
 		String[] strArray = { "calculatedDate", "gridCode", "telephoneArrive",
 				"broadbandArrive", "broadbandNew", "broadbandRemove",
@@ -61,7 +60,7 @@ public class Data implements Runnable {
 				"additional_13" };
 		return strArray;
 	}
-
+	
 	public void setValue(String nameOfMemberVariable, Object value) {
 		if (nameOfMemberVariable.equalsIgnoreCase("calculatedDate")) {
 			setCalculatedDate(new Date((long) value));
@@ -357,19 +356,30 @@ public class Data implements Runnable {
 	}
 	
 	public Data(String json) {
-		DBObject dbo = (DBObject) JSON.parse(json);
-		setData(dbo);
+		if (null != json) {
+			try {
+				BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+				setData(bdbo);
+			} catch (Exception e) {
+				logger.error("解析营销数据字符串错误: " + e.getMessage());
+			}
+		} else {
+			logger.warn("待设置营销数据字符串为空！");
+		}
 	}
 
-	public Data(DBObject dbo) {
-		setData(dbo);
+	public Data(BasicDBObject bdbo) {
+		if (null != bdbo)
+			setData(bdbo);
+		else
+			logger.warn("待设置营销数据数据库对象为空！");
 	}
 
-	private void setData(DBObject dbo) {
+	private void setData(BasicDBObject bdbo) {
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (dbo.get(namesOfMemVar[i]) != null) {
-				setValue(namesOfMemVar[i], dbo.get(namesOfMemVar[i]));
+			if (bdbo.get(namesOfMemVar[i]) != null) {
+				setValue(namesOfMemVar[i], bdbo.get(namesOfMemVar[i]));
 			}
 		}
 	}
@@ -384,35 +394,61 @@ public class Data implements Runnable {
 	}
 	
 	public boolean insert() {
-		/*BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
-		return MongoDB.getInstance().insert("data", bdbo);*/
 		return MongoDB.getInstance().insert("data", getBasicDBObject());
 	}
 	
 	public boolean delete() {
-		BasicDBObject bdbo = (BasicDBObject) JSON.parse(toString());
-		return MongoDB.getInstance().delete("data", bdbo);
+		return MongoDB.getInstance().delete("data", getBasicDBObject());
 	}
 	
+	@Deprecated
 	public boolean update(String json) {
-		BasicDBObject q = (BasicDBObject) JSON.parse(toString());
-		BasicDBObject o = (BasicDBObject) JSON.parse(json);
-		return MongoDB.getInstance().update("data", q, o);
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		return MongoDB.getInstance().update("data", getBasicDBObject(), bdbo);
 	}
 	
+	public boolean update(BasicDBObject bdbo) {
+		return MongoDB.getInstance().update("data", getBasicDBObject(), bdbo);
+	}
+	
+	@Deprecated
 	public static Data findOne(String json) {
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
-		DBObject dbo = MongoDB.getInstance().findOne("data", bdbo);
-		return new Data(dbo);
+		bdbo = MongoDB.getInstance().findOne("data", bdbo);
+		if (null == bdbo)
+			return null;
+		return new Data(bdbo);
 	}
 	
+	public static Data findOne(BasicDBObject bdbo) {
+		bdbo = MongoDB.getInstance().findOne("data", bdbo);
+		if (null == bdbo)
+			return null;
+		return new Data(bdbo);
+	}
+	
+	@Deprecated
 	public static List<Data> findList(String json) {
-		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
-		List<BasicDBObject> bdbol = MongoDB.getInstance()
-				.findList("data", bdbo);
 		List<Data> dl = new ArrayList<Data>();
-		for (DBObject dbo : bdbol) {
-			dl.add(new Data(dbo));
+		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
+		List<BasicDBObject> bdbol = MongoDB.getInstance().findList("data",
+				bdbo);
+		if (null == bdbol || bdbol.isEmpty())
+			return null;
+		for (BasicDBObject o : bdbol) {
+			dl.add(new Data(o));
+		}
+		return dl;
+	}
+	
+	public static List<Data> findList(BasicDBObject bdbo) {
+		List<Data> dl = new ArrayList<Data>();
+		List<BasicDBObject> bdbol = MongoDB.getInstance().findList("data",
+				bdbo);
+		if (null == bdbol || bdbol.isEmpty())
+			return null;
+		for (BasicDBObject o : bdbol) {
+			dl.add(new Data(o));
 		}
 		return dl;
 	}
@@ -459,7 +495,7 @@ public class Data implements Runnable {
 				sb.append(fieldDesc);
 				sb.append("：");	//冒号
 				sb.append(fieldQty);
-				sb.append("；<br />");	//分号
+				sb.append("；<br />"); //分号
 			}
 		}
 		return sb.toString();
@@ -506,7 +542,7 @@ public class Data implements Runnable {
 				sb.append(fieldDesc);
 				sb.append("：");	//冒号
 				sb.append(sumThisWeek);
-				sb.append("，&nbsp;");	//逗号
+				sb.append("，&nbsp;"); //逗号
 				sb.append("环比：");
 				sb.append(huanbiGrowthRate * 100);
 				sb.append("%；<br />");
@@ -562,7 +598,7 @@ public class Data implements Runnable {
 				sb.append(fieldDesc);
 				sb.append("：");	//冒号
 				sb.append(sumThisMonth);
-				sb.append("，&nbsp;");	//逗号
+				sb.append("，&nbsp;"); //逗号
 				
 				sb.append("环比：");
 				sb.append(huanbiGrowthRate * 100);
@@ -651,7 +687,7 @@ public class Data implements Runnable {
         Date firstDayOfWeek = DateUtils.getFirstDayOfThisWeek(calculatedDate);
         Date lastDayOfWeek = DateUtils.getLastDayOfThisWeek(calculatedDate);
 		
-		StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		sb.append("'calculatedDate':{$gte:" + firstDayOfWeek.getTime() + ",$lte:" + lastDayOfWeek.getTime() + "}");
 		sb.append(",'gridCode':'" + gridCode + "'");
@@ -662,8 +698,8 @@ public class Data implements Runnable {
 	public static List<Data> getDataOfMonth(Date calculatedDate, String gridCode) {
 		Date firstDayOfMonth = DateUtils.getFirstDayOfThisMonth(calculatedDate);
         Date lastDayOfMonth = DateUtils.getLastDayOfThisMonth(calculatedDate);
-		
-		StringBuffer sb = new StringBuffer();
+        
+        StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		sb.append("'calculatedDate':{$gte:" + firstDayOfMonth.getTime() + ",$lte:" + lastDayOfMonth.getTime() + "}");
 		sb.append(",'gridCode':'" + gridCode + "'");
@@ -931,8 +967,13 @@ public class Data implements Runnable {
 	
 	public BasicDBObject getBasicDBObject() {
 		BasicDBObject bdbo = new BasicDBObject();
-		bdbo.append("calculatedDate", calculatedDate.getTime());
-		bdbo.append("gridCode", gridCode);
+		if (calculatedDate != null) {
+			//转化成UTC时间保存至数据库
+			bdbo.append("calculatedDate", calculatedDate.getTime());
+		}
+		if (gridCode != null) {
+			bdbo.append("gridCode", gridCode);
+		}
 		if (telephoneArrive > 0) {
 			bdbo.append("telephoneArrive", telephoneArrive);
 		}
@@ -1000,72 +1041,6 @@ public class Data implements Runnable {
 	@Override
 	public String toString() {
 		return getBasicDBObject().toString();
-		/*StringBuffer sb = new StringBuffer();
-		sb.append("{");
-		sb.append("'calculatedDate':" + calculatedDate.getTime());
-		sb.append(",'gridCode':'" + gridCode + "'");
-		if (telephoneArrive > 0) {
-			sb.append(",'telephoneArrive':" + telephoneArrive);
-		}
-		if (broadbandArrive > 0) {
-			sb.append(",'broadbandArrive':" + broadbandArrive);
-		}
-		if (broadbandNew > 0) {
-			sb.append(",'broadbandNew':" + broadbandNew);
-		}
-		if (broadbandRemove > 0) {
-			sb.append(",'broadbandRemove':" + broadbandRemove);
-		}
-		if (broadbandMoveSetup > 0) {
-			sb.append(",'broadbandMoveSetup':" + broadbandMoveSetup);
-		}
-		if (broadbandMoveUnload > 0) {
-			sb.append(",'broadbandMoveUnload':" + broadbandMoveUnload);
-		}
-		if (broadbandOrderInTransit > 0) {
-			sb.append(",'broadbandOrderInTransit':" + broadbandOrderInTransit);
-		}
-		if (additional_1 > 0) {
-			sb.append(",'additional_1':" + additional_1);
-		}
-		if (additional_2 > 0) {
-			sb.append(",'additional_2':" + additional_2);
-		}
-		if (additional_3 > 0) {
-			sb.append(",'additional_3':" + additional_3);
-		}
-		if (additional_4 > 0) {
-			sb.append(",'additional_4':" + additional_4);
-		}
-		if (additional_5 > 0) {
-			sb.append(",'additional_5':" + additional_5);
-		}
-		if (additional_6 > 0) {
-			sb.append(",'additional_6':" + additional_6);
-		}
-		if (additional_7 > 0) {
-			sb.append(",'additional_7':" + additional_7);
-		}
-		if (additional_8 > 0) {
-			sb.append(",'additional_8':" + additional_8);
-		}
-		if (additional_9 > 0) {
-			sb.append(",'additional_9':" + additional_9);
-		}
-		if (additional_10 > 0) {
-			sb.append(",'additional_10':" + additional_10);
-		}
-		if (additional_11 > 0) {
-			sb.append(",'additional_11':" + additional_11);
-		}
-		if (additional_12 > 0) {
-			sb.append(",'additional_12':" + additional_12);
-		}
-		if (additional_13 > 0) {
-			sb.append(",'additional_13':" + additional_13);
-		}
-		sb.append("}");
-		return sb.toString();*/
 	}
 
 	@Override
@@ -1082,7 +1057,7 @@ public class Data implements Runnable {
 			gridCode = grid.getCode();
 		}
 		if (exist()) {
-			Data dataTmp = Data.findOne(toString());
+			Data dataTmp = Data.findOne(getBasicDBObject());
 			if (dataTmp.getValue(salesDataType) == null) {
 				dataTmp.setValue(salesDataType, 1);
 			} else {

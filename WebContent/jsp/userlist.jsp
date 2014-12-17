@@ -239,7 +239,7 @@
 					roleDesc = "未知角色";
 				}
 				/* Format created date */
-				var createDate = new Date(userList[i].createdate);
+				var createDate = new Date(userList[i].createdate.$date);
 				var year = createDate.getFullYear().toString();
 				var month = (createDate.getMonth() + 1).toString();
 				var day = createDate.getDate().toString();
@@ -319,7 +319,7 @@
 						<option value="4" <% if (searchRole.equals("4")) { out.println("selected"); } %>>普通用户</option>
 					</select>
 				</td>
-				<td>账户开通日期：<input type="text" class="date" id="createdate" name="createdate" value="<%=searchCreateDate%>" readonly="readonly" /></td>
+				<td>账户开通日期：<input type="text" class="date" id="createdate" name="createdate" maxDate="{%y}-%M-{%d}" value="<%=searchCreateDate%>" readonly="readonly" /></td>
 			</tr>
 		</table>
 		<div class="subBar">
