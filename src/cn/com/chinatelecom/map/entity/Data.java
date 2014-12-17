@@ -461,9 +461,9 @@ public class Data implements Runnable {
 		Data data = new Data();
 		data.setCalculatedDate(calculatedDate);
 		data.setGridCode(gridCode);
-		if (!data.exist()) {
+		/*if (!data.exist()) {
 			return null;
-		}
+		}*/
 		if (mode.equalsIgnoreCase("Day")) {
 			return getFieldDescAndQtyInDay(calculatedDate, gridCode);
 		} else if (mode.equalsIgnoreCase("Week")) {
@@ -487,15 +487,22 @@ public class Data implements Runnable {
 			if (fieldIsOnUse(namesOfMemVar[i])) {
 				String fieldDesc = getFieldDesc(namesOfMemVar[i]);
 				int fieldQty = 0;
-				try {
-					fieldQty = Integer.parseInt(data.getValue(namesOfMemVar[i]).toString());
-				} catch (Exception e) {
-					logger.fatal("按日解析数据错误: " + e.getMessage());
+				if (data == null) {
+					sb.append(fieldDesc);
+					sb.append("：");	//冒号
+					sb.append(0);
+					sb.append("；<br />"); //分号
+				} else {
+					try {
+						fieldQty = Integer.parseInt(data.getValue(namesOfMemVar[i]).toString());
+					} catch (Exception e) {
+						logger.error("按日解析数据错误: " + e.getMessage());
+					}
+					sb.append(fieldDesc);
+					sb.append("：");	//冒号
+					sb.append(fieldQty);
+					sb.append("；<br />"); //分号
 				}
-				sb.append(fieldDesc);
-				sb.append("：");	//冒号
-				sb.append(fieldQty);
-				sb.append("；<br />"); //分号
 			}
 		}
 		return sb.toString();
@@ -527,14 +534,18 @@ public class Data implements Runnable {
 			} else {
 				/* Calculate Huanbi growth rate comparing this week with last week */
 				int sumThisWeek = 0;
-				for (int j = 0; j < dataListThisWeek.size(); j++) {
-					Data data = dataListThisWeek.get(j);
-					sumThisWeek = sumThisWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListThisWeek != null) {
+					for (int j = 0; j < dataListThisWeek.size(); j++) {
+						Data data = dataListThisWeek.get(j);
+						sumThisWeek = sumThisWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				int sumLastWeek = 0;
-				for (int j = 0; j < dataListLastWeek.size(); j++) {
-					Data data = dataListLastWeek.get(j);
-					sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListLastWeek != null) {
+					for (int j = 0; j < dataListLastWeek.size(); j++) {
+						Data data = dataListLastWeek.get(j);
+						sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek);
 				
@@ -577,19 +588,25 @@ public class Data implements Runnable {
 			} else {
 				/* Calculate Huanbi (& Tongbi) growth rate comparing this month with last month (& same month in last year) */
 				int sumThisMonth = 0;
-				for (int j = 0; j < dataListThisMonth.size(); j++) {
-					Data data = dataListThisMonth.get(j);
-					sumThisMonth = sumThisMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListThisMonth != null) {
+					for (int j = 0; j < dataListThisMonth.size(); j++) {
+						Data data = dataListThisMonth.get(j);
+						sumThisMonth = sumThisMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				int sumLastMonth = 0;
-				for (int j = 0; j < dataListLastMonth.size(); j++) {
-					Data data = dataListLastMonth.get(j);
-					sumLastMonth = sumLastMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListLastMonth != null) {
+					for (int j = 0; j < dataListLastMonth.size(); j++) {
+						Data data = dataListLastMonth.get(j);
+						sumLastMonth = sumLastMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				int sumThisMonthLastYear = 0;
-				for (int j = 0; j < dataListThisMonthLastYear.size(); j++) {
-					Data data = dataListThisMonthLastYear.get(j);
-					sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListThisMonthLastYear != null) {
+					for (int j = 0; j < dataListThisMonthLastYear.size(); j++) {
+						Data data = dataListThisMonthLastYear.get(j);
+						sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth);
 				double tongbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear);
@@ -818,14 +835,18 @@ public class Data implements Runnable {
 			} else {
 				/* Calculate Huanbi growth rate comparing this week with last week */
 				int sumThisWeek = 0;
-				for (int j = 0; j < dataListThisWeek.size(); j++) {
-					Data data = dataListThisWeek.get(j);
-					sumThisWeek = sumThisWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListThisWeek != null) {
+					for (int j = 0; j < dataListThisWeek.size(); j++) {
+						Data data = dataListThisWeek.get(j);
+						sumThisWeek = sumThisWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				int sumLastWeek = 0;
-				for (int j = 0; j < dataListLastWeek.size(); j++) {
-					Data data = dataListLastWeek.get(j);
-					sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListLastWeek != null) {
+					for (int j = 0; j < dataListLastWeek.size(); j++) {
+						Data data = dataListLastWeek.get(j);
+						sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek);
 				/* Compare Huanbi growth rate with threshold */
@@ -894,19 +915,25 @@ public class Data implements Runnable {
 			} else {
 				/* Calculate Huanbi (& Tongbi) growth rate comparing this month with last month (& same month in last year) */
 				int sumThisMonth = 0;
-				for (int j = 0; j < dataListThisMonth.size(); j++) {
-					Data data = dataListThisMonth.get(j);
-					sumThisMonth = sumThisMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListThisMonth != null) {
+					for (int j = 0; j < dataListThisMonth.size(); j++) {
+						Data data = dataListThisMonth.get(j);
+						sumThisMonth = sumThisMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				int sumLastMonth = 0;
-				for (int j = 0; j < dataListLastMonth.size(); j++) {
-					Data data = dataListLastMonth.get(j);
-					sumLastMonth = sumLastMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListLastMonth != null) {
+					for (int j = 0; j < dataListLastMonth.size(); j++) {
+						Data data = dataListLastMonth.get(j);
+						sumLastMonth = sumLastMonth + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				int sumThisMonthLastYear = 0;
-				for (int j = 0; j < dataListThisMonthLastYear.size(); j++) {
-					Data data = dataListThisMonthLastYear.get(j);
-					sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+				if (dataListThisMonthLastYear != null) {
+					for (int j = 0; j < dataListThisMonthLastYear.size(); j++) {
+						Data data = dataListThisMonthLastYear.get(j);
+						sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
+					}
 				}
 				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth);
 				double tongbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear);
