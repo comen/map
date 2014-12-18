@@ -75,13 +75,17 @@ public class UploadSalesDataHandler implements IHandler {
 						return result;
 					}
 					
-					List<String> lines = FileUtils.readFile(file);
-					if (null == lines) {
+					long t1 = System.currentTimeMillis();
+					String content = FileUtils.readFile(file);
+					long t2 = System.currentTimeMillis();
+					logger.debug("解析excel消耗时间: " + (t2 - t1) + "ms");
+					
+					if (null == content) {
 						logger.error("读取文件失败: " + filename);
 						result.put("Error", "读取文件失败: " + filename);
 						return result;
 					}
-					
+					String[] lines = content.split("\n");
 					for (String line : lines) {
 						if (!line.trim().equals("")) {
 							BasicDBObject bdbo = (BasicDBObject) JSON.parse(line);
@@ -214,6 +218,9 @@ public class UploadSalesDataHandler implements IHandler {
 							}
 						}
 					}
+					
+					long t3 = System.currentTimeMillis();
+					logger.debug("读取excel消耗时间: " + (t3 - t2) + "ms");
 					
 					if (tasks.isEmpty()) {
 						file.delete();

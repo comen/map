@@ -75,7 +75,7 @@ public class Record {
 				BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 				setRecord(bdbo);
 			} catch (Exception e) {
-				logger.error("解析记录字符串错误: " + e.getMessage());
+				logger.fatal("解析记录字符串错误: " + e.getMessage());
 			}
 		} else {
 			logger.warn("待设置记录字符串为空！");
