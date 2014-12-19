@@ -67,6 +67,10 @@ public class Grid {
 	public void setCoordinates(List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
+	
+	public Grid() {
+		
+	}
 
 	public Grid(String json) {
 		if (null == json) {
@@ -88,14 +92,14 @@ public class Grid {
 		if (null != bdbo)
 			setGrid(bdbo);
 		else
-			logger.error("待设置网格数据库对象为空！");
+			logger.warn("待设置网格数据库对象为空！");
 	}
 
 	private void setGrid(BasicDBObject bdbo) {
 		if (null != bdbo && null != bdbo.get("GRID_CODE")) {
 			code = bdbo.getString("GRID_CODE");
 		} else {
-			logger.error("待设置网格ID为空！");
+			logger.warn("待设置网格ID为空！");
 			return;
 		}
 		name = bdbo.getString("GRID_NAME");
@@ -290,7 +294,10 @@ public class Grid {
 	}
 
 	public BasicDBObject getBasicDBObject() {
-		BasicDBObject bdbo = new BasicDBObject("GRID_CODE", code);
+		BasicDBObject bdbo = new BasicDBObject();
+		if (null != code) {
+			bdbo.append("GRID_CODE", code);
+		}
 		if (null != name)
 			bdbo.append("GRID_NAME", name);
 		if (null != manager)

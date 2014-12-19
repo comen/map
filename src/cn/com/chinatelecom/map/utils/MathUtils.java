@@ -36,10 +36,13 @@ public class MathUtils {
 	}
 
 	public static double calcuGrowthRate(int near, int far) {
-		if (0 == far)
+		if (far == 0) {
 			return 0.00;
-		double rate = (near - far) / far;
-		return getTitude(rate, 2);
+		}
+		double nearInDouble = (double) near;
+		double farInDouble = (double) far;
+		double rate = (nearInDouble - farInDouble) / farInDouble;
+		return getTitude(rate, 4);
 	}
 
 }

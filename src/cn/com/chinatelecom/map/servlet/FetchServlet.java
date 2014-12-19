@@ -16,7 +16,7 @@ import cn.com.chinatelecom.map.process.IProcessor;
 /**
  * Servlet implementation class FetchServlet
  */
-@WebServlet(description = "Fetch grid", urlPatterns = { "/fetch" })
+@WebServlet(description = "Fetch grid", urlPatterns = { "/jsp/fetch" })
 public class FetchServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

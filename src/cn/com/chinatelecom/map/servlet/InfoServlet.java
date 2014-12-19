@@ -16,7 +16,7 @@ import cn.com.chinatelecom.map.process.IProcessor;
 /**
  * Servlet implementation class InfoServlet
  */
-@WebServlet(description = "Get grid info", urlPatterns = { "/info" })
+@WebServlet(description = "Get grid info", urlPatterns = { "/jsp/info" })
 public class InfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private IProcessor processor;

@@ -27,7 +27,33 @@ public class DateUtils {
 		}
 		return currentDate;
 	}
-
+	
+	public static Date getFirstSecondOfDay(Date date) {
+		if (null == date) {
+			logger.error("获取某天开始时刻的输入为空！");
+			return null;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		return cal.getTime();
+	}
+	
+	public static Date getLastSecondOfDay(Date date) {
+		if (null == date) {
+			logger.error("获取某天结束时刻的输入为空！");
+			return null;
+		}
+		Date firstSecondOfDay = getFirstSecondOfDay(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(firstSecondOfDay);
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		cal.add(Calendar.SECOND, -1);
+		return cal.getTime();
+	}
+	
 	public static Date getSpecificDate(String dateStr, String dateFormat) {
 		if (null == dateStr || null == dateFormat) {
 			logger.error("输入日期字符串或格式字符串为空！");
@@ -61,6 +87,7 @@ public class DateUtils {
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		cal.setTime(date);
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+
 		Date firstDayOfThisWeek = cal.getTime();
 		return firstDayOfThisWeek;
 	}
@@ -74,6 +101,7 @@ public class DateUtils {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisWeek);
 		cal.add(Calendar.DATE, -1);
+
 		Date firstDayOfLastWeek = getFirstDayOfThisWeek(cal.getTime());
 		return firstDayOfLastWeek;
 	}
@@ -100,6 +128,7 @@ public class DateUtils {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisWeek);
 		cal.add(Calendar.DATE, -1);
+
 		Date lastDayOfLastWeek = cal.getTime();
 		return lastDayOfLastWeek;
 	}
@@ -125,6 +154,7 @@ public class DateUtils {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisMonth);
 		cal.add(Calendar.DATE, -1);
+		
 		Date firstDayOfLastMonth = getFirstDayOfThisMonth(cal.getTime());
 		return firstDayOfLastMonth;
 	}
@@ -153,6 +183,7 @@ public class DateUtils {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(firstDayOfThisMonth);
 		cal.add(Calendar.DATE, -1);
+
 		Date lastDayOfLastMonth = cal.getTime();
 		return lastDayOfLastMonth;
 	}

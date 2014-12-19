@@ -14,7 +14,7 @@ import cn.com.chinatelecom.map.common.Repository;
 import cn.com.chinatelecom.map.handle.IHandler;
 
 /**
- * @author joseph
+ * @author Shelwin
  *
  */
 public class DataProcessor implements IProcessor {
@@ -30,7 +30,7 @@ public class DataProcessor implements IProcessor {
 	@Override
 	public void process(HttpServletRequest request, IHandler handler,
 			HttpServletResponse response) throws ServletException, IOException {
-
+		
 		Map<String, Object> result = handler.handle(Repository.getInstance()
 				.parse(request));
 		if (null == result) {
@@ -43,6 +43,7 @@ public class DataProcessor implements IProcessor {
 		PrintWriter out = response.getWriter();
 		for (Entry<String, Object> eso : result.entrySet()) {
 			out.println(eso.getValue());
+			System.out.println(eso.getValue().toString());
 		}
 		out.flush();
 		out.close();

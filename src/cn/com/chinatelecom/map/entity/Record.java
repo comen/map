@@ -64,6 +64,10 @@ public class Record {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	public Record() {
+		
+	}
 
 	public Record(String json) {
 		if (null == json) {
@@ -85,14 +89,14 @@ public class Record {
 		if (null != bdbo)
 			setRecord(bdbo);
 		else
-			logger.error("待设置记录数据库对象为空！");
+			logger.warn("待设置记录数据库对象为空！");
 	}
 
 	private void setRecord(BasicDBObject bdbo) {
 		if (null != bdbo && null != bdbo.getString("GRID_CODE")) {
 			code = bdbo.getString("GRID_CODE");
 		} else {
-			logger.error("待设置记录ID为空！");
+			logger.warn("待设置记录ID为空！");
 			return;
 		}
 		name = bdbo.getString("GRID_NAME");
@@ -162,7 +166,7 @@ public class Record {
 			return null;
 		return new Record(bdbo);
 	}
-
+	
 	public static List<Record> findList(String json) {
 		List<Record> rl = new ArrayList<Record>();
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
@@ -177,7 +181,9 @@ public class Record {
 	}
 
 	public BasicDBObject getBasicDBObject() {
-		BasicDBObject bdbo = new BasicDBObject("GRID_CODE", code);
+		BasicDBObject bdbo = new BasicDBObject();
+		if (null != code)
+			bdbo.append("GRID_CODE", code);
 		if (null != name)
 			bdbo.append("GRID_NAME", name);
 		if (null != manager)
