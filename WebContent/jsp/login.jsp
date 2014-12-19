@@ -49,14 +49,14 @@
 				<img src="../dwz/themes/default/images/login_logo.gif" />
 			</h1>
 			<div class="login_headerContent">
-				<div class="navList">
+<!-- 				<div class="navList">
 					<ul>
-						<!-- <li><a href="#">设为首页</a></li> -->
+						<li><a href="#">设为首页</a></li>
 						<li><a href="javascript:;" onclick="window.external.AddFavorite(location.href,document.title)">加入收藏</a></li>
 						<li><a href="http://bbs.dwzjs.com">反馈</a></li>
 						<li><a href="../dwz/doc/dwz-user-guide.pdf" target="_blank">帮助</a></li>
 					</ul>
-				</div>
+				</div> -->
 				<h2 class="login_title">
 					<img src="../dwz/themes/default/images/login_title.jpg" />
 				</h2>
