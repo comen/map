@@ -105,7 +105,7 @@ public class FileUtils {
 				OpenXML4JException, IOException {
 			super(null);
 			this.fs = fs;
-			this.includeSheetNames = true;
+			this.includeSheetNames = false;
 			this.formulasNotResults = false;
 		}
 
@@ -215,7 +215,7 @@ public class FileUtils {
 				OpenXML4JException, IOException {
 			super(null);
 			this.container = container;
-			this.includeSheetNames = true;
+			this.includeSheetNames = false;
 			this.formulasNotResults = false;
 		}
 
