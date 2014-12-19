@@ -193,6 +193,23 @@ $(function(){
 					</div>
 					<%
 						}
+						if (role == 1 || role == 3) {
+					%>
+					<div class="accordionHeader">
+						<h2>
+							<span>Folder</span>营销数据管理
+						</h2>
+					</div>
+					<div class="accordionContent">
+						<ul class="tree treeFolder">
+							<li><a href="salesdataupload.jsp" target="navTab"
+								rel="salesdataupload">营销数据上传</a></li>
+							<li><a href="salesdatafields.jsp" target="navTab"
+								rel="salesdatafields">营销字段管理</a></li>
+						</ul>
+					</div>
+					<%
+						}
 						if (role == 1 || role == 2) {
 					%>
 					<div class="accordionHeader">
@@ -218,25 +235,6 @@ $(function(){
 							<li><a href="recordlist.jsp?firstload=true" target="navTab"rel="recordlist">查询</a></li>
 						</ul>
 					</div>
-					<%
-						if (role == 1 || role == 3) {
-					%>
-					<div class="accordionHeader">
-						<h2>
-							<span>Folder</span>营销数据管理
-						</h2>
-					</div>
-					<div class="accordionContent">
-						<ul class="tree treeFolder">
-							<li><a href="salesdataupload.jsp" target="navTab"
-								rel="salesdataupload">营销数据上传</a></li>
-							<li><a href="salesdatafields.jsp" target="navTab"
-								rel="salesdatafields">营销字段管理</a></li>
-						</ul>
-					</div>
-					<%
-						}
-					%>
 				</div>
 			</div>
 		</div>

@@ -221,7 +221,7 @@ public class UploadSalesDataHandler implements IHandler {
 					
 					long t3 = System.currentTimeMillis();
 					logger.debug("读取excel消耗时间: " + (t3 - t2) + "ms");
-					
+					System.out.println(file);
 					if (tasks.isEmpty()) {
 						file.delete();
 						result.put("Success", "文件上传成功！");

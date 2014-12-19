@@ -51,7 +51,8 @@
 			<div class="login_headerContent">
 				<div class="navList">
 					<ul>
-						<li><a href="#">设为首页</a></li>
+						<!-- <li><a href="#">设为首页</a></li> -->
+						<li><a href="javascript:;" onclick="window.external.AddFavorite(location.href,document.title)">加入收藏</a></li>
 						<li><a href="http://bbs.dwzjs.com">反馈</a></li>
 						<li><a href="../dwz/doc/dwz-user-guide.pdf" target="_blank">帮助</a></li>
 					</ul>
@@ -98,14 +99,13 @@
 				</ul>
 				<div class="login_inner">
 					<p>系统管理员：为其他用户开通系统账号，设置用户角色，及其他角色的所有权限。</p>
-					<p>网格数据管理员：新装/修改/删除网格编号、网格名称、网格经理、网格对应地图地址，在显示地图上查看数据。</p>
-					<p>营销数据管理员：上传营销数据，增加/调整/删除显示数据字段，设置警示阈值，在显示地图上查看数据。</p>
-					<p>普通用户：在显示地图上查看数据。</p>
+					<p>网格数据管理员：新装/修改/删除网格编号、网格名称、网格经理、网格对应地图地址；在显示地图上查看数据；查看网格编辑记录。</p>
+					<p>营销数据管理员：上传营销数据，增加/调整/删除显示数据字段，设置警示阈值，在显示地图上查看数据；查看网格编辑记录。</p>
+					<p>普通用户：在显示地图上查看数据；查看网格编辑记录。</p>
 				</div>
 			</div>
 		</div>
-		<div id="login_footer">Copyright &copy; 2014 上海电信北区局
-			沪ICP备05019125号-10</div>
+		<div id="login_footer">Copyright &copy; 2014 上海电信北区局</div>
 	</div>
 </body>
 </html>

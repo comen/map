@@ -203,9 +203,15 @@
 </div>
 <div class="pageContent">
 	<div class="panelBar">
+		<%
+			if (role == 1 || role == 2) {
+		%>
 		<ul class="toolBar">
-			<li><a id="deleteRecord" class="delete" href="deleteRecord?rid={sid_record}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
+			<li><a id="deleteRecord" class="delete" href="deleteRecord?rid={sid_record}" disabled="disabled" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 		</ul>
+		<%
+			}
+		%>
 	</div>
 	<table class="table" width="100%" layoutH="138">
 		<thead>
