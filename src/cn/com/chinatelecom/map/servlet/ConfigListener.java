@@ -38,7 +38,7 @@ public final class ConfigListener implements ServletContextListener {
 	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
 	 */
 	public void contextInitialized(ServletContextEvent arg0) {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
 		try {
 			PropertyConfigurator.configure(getClass().getResourceAsStream(
 					properties));
