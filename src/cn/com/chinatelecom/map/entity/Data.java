@@ -394,20 +394,36 @@ public class Data implements Runnable {
 	}
 	
 	public boolean insert() {
+		if (calculatedDate == null || gridCode == null) {
+			logger.error("营销数据ID为空！");
+			return false;
+		}
 		return MongoDB.getInstance().insert("data", getBasicDBObject());
 	}
 	
 	public boolean delete() {
+		if (calculatedDate == null || gridCode == null) {
+			logger.error("营销数据ID为空！");
+			return false;
+		}
 		return MongoDB.getInstance().delete("data", getBasicDBObject());
 	}
 	
 	@Deprecated
 	public boolean update(String json) {
+		if (calculatedDate == null || gridCode == null) {
+			logger.error("营销数据ID为空！");
+			return false;
+		}
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 		return MongoDB.getInstance().update("data", getBasicDBObject(), bdbo);
 	}
 	
 	public boolean update(BasicDBObject bdbo) {
+		if (calculatedDate == null || gridCode == null) {
+			logger.error("营销数据ID为空！");
+			return false;
+		}
 		return MongoDB.getInstance().update("data", getBasicDBObject(), bdbo);
 	}
 	
@@ -1090,7 +1106,7 @@ public class Data implements Runnable {
 			} else {
 				dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
 			}
-			update(dataTmp.toString());
+			update(dataTmp.getBasicDBObject());
 		} else {
 			setValue(salesDataType, 1);
 			insert();

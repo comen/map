@@ -75,10 +75,11 @@ public class UploadSalesDataHandler implements IHandler {
 						return result;
 					}
 					
-					long t1 = System.currentTimeMillis();
+					//long t1 = System.currentTimeMillis();
 					String content = FileUtils.readFile(file);
-					long t2 = System.currentTimeMillis();
-					logger.debug("解析excel消耗时间: " + (t2 - t1) + "ms");
+					file.delete();
+					//long t2 = System.currentTimeMillis();
+					//logger.debug("解析excel消耗时间: " + (t2 - t1) + "ms");
 					
 					if (null == content) {
 						logger.error("读取文件失败: " + filename);
@@ -219,11 +220,9 @@ public class UploadSalesDataHandler implements IHandler {
 						}
 					}
 					
-					long t3 = System.currentTimeMillis();
-					logger.debug("读取excel消耗时间: " + (t3 - t2) + "ms");
-					System.out.println(file);
+					//long t3 = System.currentTimeMillis();
+					//logger.debug("读取excel消耗时间: " + (t3 - t2) + "ms");
 					if (tasks.isEmpty()) {
-						file.delete();
 						result.put("Success", "文件上传成功！");
 					} else {
 						// 根据CPU和任务数动态分配线程池大小
@@ -249,7 +248,6 @@ public class UploadSalesDataHandler implements IHandler {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}*/
-						file.delete();
 						result.put("Success", "文件上传成功！");
 					}
 				}

@@ -6,13 +6,11 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Grid;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
@@ -55,10 +53,7 @@ public class AddGridHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					@SuppressWarnings("deprecation")
-					String log = StringUtils.getLogPrefix(Level.SEVERE);
-					System.out.println("\n" + log + "\n" + e.getClass()
-							+ "\t:\t" + e.getMessage());
+					logger.error("获取新增网格数据失败：" + e.getMessage());
 				}
 			}
 		}

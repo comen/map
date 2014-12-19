@@ -137,14 +137,26 @@ public class User {
 	}
 	
 	public boolean insert() {
+		if (userName == null) {
+			logger.error("用户ID为空！");
+			return false;
+		}
 		return MongoDB.getInstance().insert("user", getBasicDBObject());
 	}
 	
 	public boolean delete() {
+		if (userName == null) {
+			logger.error("用户ID为空！");
+			return false;
+		}
 		return MongoDB.getInstance().delete("user", getBasicDBObject());
 	}
 	
 	public boolean update(String json) {
+		if (userName == null) {
+			logger.error("用户ID为空！");
+			return false;
+		}
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 		return MongoDB.getInstance().update("user", getBasicDBObject(), bdbo);
 	}

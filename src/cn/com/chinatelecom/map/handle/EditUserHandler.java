@@ -6,13 +6,11 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
 import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.User;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
@@ -48,10 +46,7 @@ public class EditUserHandler implements IHandler {
 						try {
 							role = Integer.parseInt(string);
 						} catch (Exception e) {
-							@SuppressWarnings("deprecation")
-							String log = StringUtils.getLogPrefix(Level.SEVERE);
-							System.out.println("\n" + log + "\n" + e.getClass()
-									+ "\t:\t" + e.getMessage());
+							logger.error("获取用户编辑数据失败：" + e.getMessage());
 						}
 						break;
 					case "realname":

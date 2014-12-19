@@ -116,9 +116,11 @@ public class FileUtils {
 				List<String> titles = new ArrayList<String>();
 				StringBuffer text = new StringBuffer();
 				BasicDBObject bdbo = new BasicDBObject();
-				int number = wb.getNumberOfSheets();
-				for (int index = 0; index != number; index++) {
-					Sheet sheet = wb.getSheetAt(index);
+				//int number = wb.getNumberOfSheets();
+				int number = wb.getActiveSheetIndex();
+				//for (int index = 0; index != number; index++) {
+					//Sheet sheet = wb.getSheetAt(index);
+					Sheet sheet = wb.getSheetAt(number);
 					if (includeSheetNames)
 						text.append(sheet.getSheetName() + "\n");
 					int rows = sheet.getPhysicalNumberOfRows();
@@ -143,7 +145,7 @@ public class FileUtils {
 						if (0 != i)
 							text.append(bdbo.toString() + "\n");
 					}
-				}
+				//}
 				return text.toString();
 			} catch (Exception e) {
 				logger.fatal("读取表格文件错误: " + e.getMessage());

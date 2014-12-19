@@ -6,7 +6,6 @@ package cn.com.chinatelecom.map.handle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -14,7 +13,6 @@ import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Grid;
 import cn.com.chinatelecom.map.entity.Record;
 import cn.com.chinatelecom.map.utils.DateUtils;
-import cn.com.chinatelecom.map.utils.StringUtils;
 
 /**
  * @author Shelwin
@@ -45,10 +43,7 @@ public class DeleteGridHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					@SuppressWarnings("deprecation")
-					String log = StringUtils.getLogPrefix(Level.SEVERE);
-					System.out.println("\n" + log + "\n" + e.getClass()
-							+ "\t:\t" + e.getMessage());
+					logger.error("获取网格删除数据失败：" + e.getMessage());
 				}
 			}
 		}

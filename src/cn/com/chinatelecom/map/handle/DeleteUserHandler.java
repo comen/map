@@ -41,7 +41,7 @@ public class DeleteUserHandler implements IHandler {
 						break;
 					}
 				} catch (java.io.UnsupportedEncodingException e) {
-					logger.error("UnsupportedEncodingException: " + e.getMessage());
+					logger.error("获取用户删除数据失败：" + e.getMessage());
 				}
 			}
 		}

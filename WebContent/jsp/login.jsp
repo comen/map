@@ -2,7 +2,7 @@
 	pageEncoding="utf-8"%>
 
 <%
-	String loginState = "F"; 	
+	String loginState = "F";
 	String userName = "";
 	int role = 0;
 	String errMsg = "";
