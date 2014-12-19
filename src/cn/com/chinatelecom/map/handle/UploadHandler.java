@@ -72,7 +72,6 @@ public class UploadHandler implements IHandler {
 
 				logger.debug("解析excel消耗时间: " + (t2 - t1) + "ms");
 				logger.debug("读取excel消耗时间: " + (t3 - t2) + "ms");
-				logger.info("文件上传成功: " + filename);
 				file.delete();
 			}
 		}
