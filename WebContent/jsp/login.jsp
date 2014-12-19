@@ -94,8 +94,8 @@
 			</div>
 			<div class="login_main">
 				<ul class="helpList">
-					<li><a href="#">忘记密码怎么办？</a></li>
-					<li><a href="#">为什么登录失败？</a></li>
+					<li><a href="#" onclick="alert('找系统管理员帮忙...')">忘记密码怎么办？</a></li>
+					<li><a href="#" onclick="alert('小编正在疯狂编辑中...')">系统使用帮助</a></li>
 				</ul>
 				<div class="login_inner">
 					<p>系统管理员：为其他用户开通系统账号，设置用户角色，及其他角色的所有权限。</p>
