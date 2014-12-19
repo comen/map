@@ -69,16 +69,19 @@ public class Grid {
 	}
 
 	public Grid(String json) {
-		if (null != json) {
-			try {
-				BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
-				setGrid(bdbo);
-			} catch (Exception e) {
-				logger.warn("解析网格字符串错误: " + e.getMessage());
-			}
-		} else {
+		if (null == json) {
 			logger.error("待设置网格字符串为空！");
+			return;
 		}
+
+		BasicDBObject bdbo = null;
+		try {
+			bdbo = (BasicDBObject) JSON.parse(json);
+		} catch (Exception e) {
+			logger.warn("解析网格字符串错误: " + e.getMessage());
+			return;
+		}
+		setGrid(bdbo);
 	}
 
 	public Grid(BasicDBObject bdbo) {
@@ -111,6 +114,10 @@ public class Grid {
 	}
 
 	public boolean exist() {
+		if (null == code) {
+			logger.error("网格ID为空！");
+			return false;
+		}
 		BasicDBObject bdbo = MongoDB.getInstance().findOne("grid",
 				getBasicDBObject());
 		if (null == bdbo)
@@ -120,14 +127,26 @@ public class Grid {
 	}
 
 	public boolean insert() {
+		if (null == code) {
+			logger.error("网格ID为空！");
+			return false;
+		}
 		return MongoDB.getInstance().insert("grid", getBasicDBObject());
 	}
 
 	public boolean delete() {
+		if (null == code) {
+			logger.error("网格ID为空！");
+			return false;
+		}
 		return MongoDB.getInstance().delete("grid", getBasicDBObject());
 	}
 
 	public boolean update(String json) {
+		if (null == code) {
+			logger.error("网格ID为空！");
+			return false;
+		}
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 		return MongoDB.getInstance().update("grid", getBasicDBObject(), bdbo);
 	}

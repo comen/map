@@ -93,6 +93,8 @@ public class FileUtils {
 
 	private static class MapXLSExtractor extends POIXMLTextExtractor {
 		private NPOIFSFileSystem fs;
+		private boolean includeSheetNames;
+		private boolean formulasNotResults;
 
 		public MapXLSExtractor(File file) throws XmlException,
 				OpenXML4JException, IOException {
@@ -103,6 +105,8 @@ public class FileUtils {
 				OpenXML4JException, IOException {
 			super(null);
 			this.fs = fs;
+			this.includeSheetNames = true;
+			this.formulasNotResults = false;
 		}
 
 		public String getText() {
@@ -112,28 +116,33 @@ public class FileUtils {
 				List<String> titles = new ArrayList<String>();
 				StringBuffer text = new StringBuffer();
 				BasicDBObject bdbo = new BasicDBObject();
-				Sheet sheet = wb.getSheetAt(0);
-				int rows = sheet.getPhysicalNumberOfRows();
-				int columns = sheet.getRow(0).getPhysicalNumberOfCells();
-				for (int i = 0; i != rows; i++) {
-					Row row = sheet.getRow(i);
-					if (null == row)
-						continue;
-					for (int j = 0; j != columns; j++) {
-						Cell cell = row.getCell(j);
-						if (null == cell)
+				int number = wb.getNumberOfSheets();
+				for (int index = 0; index != number; index++) {
+					Sheet sheet = wb.getSheetAt(index);
+					if (includeSheetNames)
+						text.append(sheet.getSheetName() + "\n");
+					int rows = sheet.getPhysicalNumberOfRows();
+					int columns = sheet.getRow(0).getPhysicalNumberOfCells();
+					for (int i = 0; i != rows; i++) {
+						Row row = sheet.getRow(i);
+						if (null == row)
 							continue;
-						int type = cell.getCellType();
-						Object object = handCell(type, cell);
-						if (0 == i) {
-							titles.add(object.toString());
-						} else {
-							title = titles.get(j);
-							bdbo.append(title, object);
+						for (int j = 0; j != columns; j++) {
+							Cell cell = row.getCell(j);
+							if (null == cell)
+								continue;
+							int type = cell.getCellType();
+							Object object = handCell(type, cell);
+							if (0 == i) {
+								titles.add(object.toString());
+							} else {
+								title = titles.get(j);
+								bdbo.append(title, object);
+							}
 						}
+						if (0 != i)
+							text.append(bdbo.toString() + "\n");
 					}
-					if (0 != i)
-						text.append(bdbo.toString() + '\n');
 				}
 				return text.toString();
 			} catch (Exception e) {
@@ -161,7 +170,10 @@ public class FileUtils {
 			case Cell.CELL_TYPE_ERROR:
 				return cell.getErrorCellValue();
 			case Cell.CELL_TYPE_FORMULA:
-				return handCell(cell.getCachedFormulaResultType(), cell);
+				if (formulasNotResults)
+					return cell.getCellFormula();
+				else
+					return handCell(cell.getCachedFormulaResultType(), cell);
 			case Cell.CELL_TYPE_STRING:
 				return cell.getStringCellValue();
 			default:
@@ -179,12 +191,12 @@ public class FileUtils {
 		/**
 		 * Should sheet names be included? Default is true
 		 */
-		private boolean includeSheetNames = true;
+		private boolean includeSheetNames;
 		/**
 		 * Should we return the formula itself, and not the result it produces?
 		 * Default is false
 		 */
-		private boolean formulasNotResults = false;
+		private boolean formulasNotResults;
 
 		/**
 		 * These are the different kinds of cells we support. We keep track of
@@ -203,6 +215,8 @@ public class FileUtils {
 				OpenXML4JException, IOException {
 			super(null);
 			this.container = container;
+			this.includeSheetNames = true;
+			this.formulasNotResults = false;
 		}
 
 		/**
@@ -217,18 +231,16 @@ public class FileUtils {
 				XSSFReader.SheetIterator iterator = (XSSFReader.SheetIterator) xssfReader
 						.getSheetsData();
 				StringBuffer text = new StringBuffer();
+				ContentHandler handler = new MapSheetHandler(styles, tables,
+						text);
 				while (iterator.hasNext()) {
 					InputStream stream = iterator.next();
-					if (includeSheetNames) {
-						text.append(iterator.getSheetName());
-						text.append('\n');
-					}
+					if (includeSheetNames)
+						text.append(iterator.getSheetName() + "\n");
 					InputSource source = new InputSource(stream);
 					SAXParserFactory factory = SAXParserFactory.newInstance();
 					SAXParser parser = factory.newSAXParser();
 					XMLReader reader = parser.getXMLReader();
-					ContentHandler handler = new MapSheetHandler(styles,
-							tables, text);
 					reader.setContentHandler(handler);
 					reader.parse(source);
 					stream.close();
@@ -377,11 +389,10 @@ public class FileUtils {
 						content = "ERROR:" + value.toString();
 						break;
 					case FORMULA:
-						if (formulasNotResults) {
+						if (formulasNotResults)
 							content = formula.toString();
-						} else {
+						else
 							content = value.toString();
-						}
 						break;
 					case INLINE_STRING:
 						XSSFRichTextString rtsi = new XSSFRichTextString(
@@ -431,7 +442,7 @@ public class FileUtils {
 					if (firstRow)
 						firstRow = false;
 					else
-						output.append(bdbo.toString() + '\n');
+						output.append(bdbo.toString() + "\n");
 				}
 			}
 
@@ -441,20 +452,17 @@ public class FileUtils {
 			 */
 			public void characters(char[] ch, int start, int length)
 					throws SAXException {
-				if (vIsOpen) {
+				if (vIsOpen)
 					value.append(ch, start, length);
-				}
-				if (fIsOpen) {
+				if (fIsOpen)
 					formula.append(ch, start, length);
-				}
 			}
 
 			private boolean isCellDateFormatted(double value,
 					short formatIndex, String formatString) {
 				boolean isDate = false;
-				if (DateUtil.isValidExcelDate(value)) {
+				if (DateUtil.isValidExcelDate(value))
 					isDate = DateUtil.isADateFormat(formatIndex, formatString);
-				}
 				return isDate;
 			}
 		}
