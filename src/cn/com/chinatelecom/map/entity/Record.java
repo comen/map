@@ -70,16 +70,19 @@ public class Record {
 	}
 
 	public Record(String json) {
-		if (null != json) {
-			try {
-				BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
-				setRecord(bdbo);
-			} catch (Exception e) {
-				logger.fatal("解析记录字符串错误: " + e.getMessage());
-			}
-		} else {
-			logger.warn("待设置记录字符串为空！");
+		if (null == json) {
+			logger.error("待设置记录字符串为空！");
+			return;
 		}
+
+		BasicDBObject bdbo = null;
+		try {
+			bdbo = (BasicDBObject) JSON.parse(json);
+		} catch (Exception e) {
+			logger.fatal("解析记录字符串错误: " + e.getMessage());
+			return;
+		}
+		setRecord(bdbo);
 	}
 
 	public Record(BasicDBObject bdbo) {
@@ -103,6 +106,14 @@ public class Record {
 	}
 
 	public boolean exist() {
+		if (null == code) {
+			logger.error("记录ID为空！");
+			return false;
+		}
+		if (null == date) {
+			logger.error("记录日期为空！");
+			return false;
+		}
 		BasicDBObject bdbo = MongoDB.getInstance().findOne("record",
 				getBasicDBObject());
 		if (null == bdbo)
@@ -112,14 +123,38 @@ public class Record {
 	}
 
 	public boolean insert() {
+		if (null == code) {
+			logger.error("记录ID为空！");
+			return false;
+		}
+		if (null == date) {
+			logger.error("记录日期为空！");
+			return false;
+		}
 		return MongoDB.getInstance().insert("record", getBasicDBObject());
 	}
 
 	public boolean delete() {
+		if (null == code) {
+			logger.error("记录ID为空！");
+			return false;
+		}
+		if (null == date) {
+			logger.error("记录日期为空！");
+			return false;
+		}
 		return MongoDB.getInstance().delete("record", getBasicDBObject());
 	}
 
 	public boolean update(String json) {
+		if (null == code) {
+			logger.error("记录ID为空！");
+			return false;
+		}
+		if (null == date) {
+			logger.error("记录日期为空！");
+			return false;
+		}
 		BasicDBObject bdbo = (BasicDBObject) JSON.parse(json);
 		return MongoDB.getInstance().update("record", getBasicDBObject(), bdbo);
 	}
