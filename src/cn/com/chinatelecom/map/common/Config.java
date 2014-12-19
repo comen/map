@@ -1,6 +1,7 @@
 package cn.com.chinatelecom.map.common;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
@@ -19,7 +20,8 @@ public class Config {
 	private Config() {
 		try {
 			properties = new Properties();
-			properties.load(getClass().getResourceAsStream("/conf.properties"));
+			//properties.load(getClass().getResourceAsStream("/conf.properties"));
+			properties.load(new FileInputStream(new File("C:/eclipse-workspace/Map/src/conf.properties")));
 		} catch (Exception e) {
 			logger.fatal("读取配置文件错误: " + e.getMessage());
 		}
