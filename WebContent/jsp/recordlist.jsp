@@ -223,7 +223,7 @@
 				<th align="center" width="100">变动日期</th>
 			</tr>
 		</thead>
-		<tbody id="gridList">
+		<tbody id="recordList">
 			<tr id="record_0" target="sid_record" rel="0" onclick="addDateToURLParam(this)">
 				<td></td>
 				<td></td>
