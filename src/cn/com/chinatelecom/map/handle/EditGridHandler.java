@@ -74,44 +74,56 @@ public class EditGridHandler implements IHandler {
 		if (gridCodeChanged) {
 			grid.setCode(originalGridCode);
 			if(grid.exist()) {
-				Grid gridTmp = Grid.findOne(grid.toString());
+				Grid gridTmp = new Grid();
 				gridTmp.setCode(gridCode);
-				gridTmp.setName(gridName);
-				gridTmp.setManager(gridManager);
-				gridTmp.setAddress(gridAddress);
-				if (gridTmp.insert() && grid.delete()) {
-					/* Delete old Data, Insert new Data */
-					Data data = new Data();
-					List<Data> oldDataList = new ArrayList<Data>();
-					data.setGridCode(originalGridCode);
-					oldDataList = Data.findList(data.getBasicDBObject());
-					if (null != oldDataList) {
-						for (Data oldData : oldDataList) {
-							Data newData = new Data(oldData.getBasicDBObject());
-							newData.setGridCode(gridCode);
-							if (newData.insert()) {
-								oldData.delete();
-							}
-						}
-					}
-					
+				if (gridTmp.exist()) {
 					sb.append("{");
-					sb.append("\"statusCode\":" + "\"200\"");
-					sb.append(",\"message\":" + "\"网格信息修改成功！\"");
+					sb.append("\"statusCode\":" + "\"300\"");
+					sb.append(",\"message\":" + "\"网格 " + gridCode + " 已存在！\"");
 					sb.append(",\"navTabId\":" + "\"\"");
 					sb.append(",\"rel\":" + "\"\"");
 					sb.append(",\"callbackType\":" + "\"\"");
 					sb.append(",\"forwardUrl\":" + "\"\"");
 					sb.append("}");
 				} else {
-					sb.append("{");
-					sb.append("\"statusCode\":" + "\"300\"");
-					sb.append(",\"message\":" + "\"网格信息修改失败，请重新操作！\"");
-					sb.append(",\"navTabId\":" + "\"\"");
-					sb.append(",\"rel\":" + "\"\"");
-					sb.append(",\"callbackType\":" + "\"\"");
-					sb.append(",\"forwardUrl\":" + "\"\"");
-					sb.append("}");
+					gridTmp = Grid.findOne(grid.toString());
+					gridTmp.setCode(gridCode);
+					gridTmp.setName(gridName);
+					gridTmp.setManager(gridManager);
+					gridTmp.setAddress(gridAddress);
+					if (gridTmp.insert() && grid.delete()) {
+						/* Insert new sales data for new grid && Delete old sales data for old grid */
+						Data data = new Data();
+						List<Data> oldDataList = new ArrayList<Data>();
+						data.setGridCode(originalGridCode);
+						oldDataList = Data.findList(data.getBasicDBObject());
+						if (null != oldDataList) {
+							for (Data oldData : oldDataList) {
+								Data newData = new Data(oldData.getBasicDBObject());
+								newData.setGridCode(gridCode);
+								if (newData.insert()) {
+									oldData.delete();
+								}
+							}
+						}
+						sb.append("{");
+						sb.append("\"statusCode\":" + "\"200\"");
+						sb.append(",\"message\":" + "\"网格信息修改成功！\"");
+						sb.append(",\"navTabId\":" + "\"\"");
+						sb.append(",\"rel\":" + "\"\"");
+						sb.append(",\"callbackType\":" + "\"\"");
+						sb.append(",\"forwardUrl\":" + "\"\"");
+						sb.append("}");
+					} else {
+						sb.append("{");
+						sb.append("\"statusCode\":" + "\"300\"");
+						sb.append(",\"message\":" + "\"网格信息修改失败，请重新操作！\"");
+						sb.append(",\"navTabId\":" + "\"\"");
+						sb.append(",\"rel\":" + "\"\"");
+						sb.append(",\"callbackType\":" + "\"\"");
+						sb.append(",\"forwardUrl\":" + "\"\"");
+						sb.append("}");
+					}
 				}
 			} else {
 				sb.append("{");

@@ -125,7 +125,7 @@ $(function(){
 		debug:false,	// 调试模式 【true|false】
 		callback:function(){
 			initEnv();
-			$("#themeList").theme({themeBase:"themes"}); // themeBase 相对于index页面的主题base路径
+			$("#themeList").theme({themeBase:"../dwz/themes"}); // themeBase 相对于index页面的主题base路径
 			//$("#sidebar .toggleCollapse div").trigger("click");
 		}
 	});
@@ -139,23 +139,25 @@ $(function(){
 			<div class="headerNav">
 				<!-- <a class="logo" href="http://j-ui.com">标志</a> -->
 				<img src="../dwz/themes/default/images/logo.png" />
+				<h2>上海分公司北区局用户数据信息化系统</h2>
 				<ul class="nav">
-					<li><span style="color: #ddd"><%=roleText%></span><span
-						style="color: red">&nbsp;<%=userName%>&nbsp;
-					</span><span style="color: #ddd">, 欢迎你！</span></a></li>
+					<li><a style="text-decoration:none"><%=roleText%></a>
+						<span style="color: red">&nbsp;<%=userName%>&nbsp;</span>
+						<a style="text-decoration:none">, 欢迎你！</a>
+					</li>
 					<li><a href="changepwd.jsp" target="dialog" width="550"
 						height="250">修改密码</a></li>
 					<li><a href="login.jsp?status=logout">退出</a></li>
 				</ul>
-				<!-- 
-				<ul class="themeList" id="themeList">
-					<li theme="default"><div class="selected">蓝色</div></li>
-					<li theme="green"><div>绿色</div></li>
-					<li theme="purple"><div>紫色</div></li>
-					<li theme="silver"><div>银色</div></li>
-					<li theme="azure"><div>天蓝</div></li>
-				</ul>
-				 -->
+				
+				<!-- <ul class="themeList" id="themeList">
+					<li theme="default" class="default"><div class="selected">蓝色</div></li>
+					<li theme="green" class="green"><div>绿色</div></li>
+					<li theme="purple" class="purple"><div>紫色</div></li>
+					<li theme="silver" class="silver"><div>银色</div></li>
+					<li theme="azure" class="azure"><div>天蓝</div></li>
+				</ul> -->
+				 
 			</div>
 
 			<!-- navMenu -->
