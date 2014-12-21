@@ -49,7 +49,7 @@
 				<img src="../dwz/themes/default/images/login_logo.gif" />
 			</h1>
 			<div class="login_headerContent">
-<!-- 				<div class="navList">
+ 				<!-- <div class="navList">
 					<ul>
 						<li><a href="#">设为首页</a></li>
 						<li><a href="javascript:;" onclick="window.external.AddFavorite(location.href,document.title)">加入收藏</a></li>
@@ -95,7 +95,8 @@
 			<div class="login_main">
 				<ul class="helpList">
 					<li><a href="#" onclick="alert('找系统管理员帮忙...')">忘记密码怎么办？</a></li>
-					<li><a href="#" onclick="alert('小编正在疯狂编辑中...')">系统使用帮助</a></li>
+					<!-- <li><a href="#" onclick="alert('小编正在疯狂编辑中...')">系统使用帮助</a></li> -->
+					<li><a href="help.jsp" target="_blank">系统使用帮助</a></li>
 				</ul>
 				<div class="login_inner">
 					<p>系统管理员：为其他用户开通系统账号，设置用户角色，及其他角色的所有权限。</p>
