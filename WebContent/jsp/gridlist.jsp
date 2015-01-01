@@ -279,10 +279,25 @@
 		<table class="searchContent">
 			<tr>
 				<td>网格编号：<input type="text" name="gridcode" id="gridcode" value="<%=searchGridCode%>" /></td>
+			</tr>
+			<tr>
 				<td>说明：编辑网格的地图区域时，第一次右键点击地图表示进入编辑状态，再次右键点击地图表示保存编辑后的数据，期间拖动地图或刷新页面表示撤销编辑。</td>
+				<td>
+					<div class="subBar">
+						<ul style="position:absolute;right:5px">
+							<li><div class="buttonActive">
+									<div class="buttonContent">
+										<button type="submit" onclick="searchGrid()">检索</button>
+									</div>
+								</div>
+							</li>
+							<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="330" mask="false" title="查询框"><span>高级检索</span></a></li>
+						</ul>
+					</div>
+				</td>
 			</tr>
 		</table>
-		<div class="subBar">
+		<!-- <div class="subBar">
 			<ul>
 				<li><div class="buttonActive">
 						<div class="buttonContent">
@@ -291,7 +306,7 @@
 					</div></li>
 				<li><a class="button" href="gridadvsearch.jsp" target="dialog" height="330" mask="false" title="查询框"><span>高级检索</span></a></li>
 			</ul>
-		</div>
+		</div> -->
 	</div>
 </div>
 <div class="pageContent">

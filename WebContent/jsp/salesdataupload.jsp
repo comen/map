@@ -90,7 +90,7 @@
 			fileSizeLimit:'30MB',
 			swf:'../dwz/uploadify/scripts/uploadify.swf',
 			uploader:'uploadSalesData',
-			successTimeout: 30,
+			successTimeout: 2,
 			progressData:'percentage',
 			queueID:'fileQueue',
 			buttonImage:'../dwz/uploadify/img/add.jpg',
@@ -122,9 +122,11 @@
 		<br />
 		<p>2. “<span style="color:red">网格编号</span>”或“<span style="color:red">安装地址</span>”至少存在一列；当“网格编号”存在时系统将根据编号匹配其所属的网格（执行效率高），“网格编号”不存在时根据“安装地址”查找其所属网格（执行效率低）；</p>
 		<br />
-		<p>3. “<span style="color:red">完工时间</span>”列可选；当“完工时间”存在时，系统将以该时间作为营销数据的完工时间，否则将以上传当天的日期作为营销数据的完工时间；</p>
+		<p>3. “<span style="color:red">完工日期</span>”列可选；当“完工日期”存在时，系统将以该日期作为营销数据的完工日期，否则将以上传当天的日期作为营销数据的完工日期；</p>
 		<br />
-		<p>4. 上传文件中每一列必须带有列名，否则文件将会读取失败（提示：可以使用 Ctrl+Shift+L 查看所有有数据的列）。</p>
+		<p>4. 上传文件中每一列必须带有列名，否则文件将会读取失败（提示：可以使用 Ctrl+Shift+L 查看所有有数据的列）；</p>
+		<br />
+		<p>5. 文件最大应限制为30MB。</p>
 	</div>
 
 </div>

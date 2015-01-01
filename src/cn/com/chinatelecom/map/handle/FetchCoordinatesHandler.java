@@ -58,11 +58,13 @@ public class FetchCoordinatesHandler implements IHandler {
 				address = "上海市" + address;
 			}
 			Coordinate coordinate = Grid.getCoordinate(address);
-			sb.append("{\"longitude\":");
-			sb.append(MathUtils.getTitude(coordinate.getLongitude(), 5));
-			sb.append(",\"latitude\":");
-			sb.append(MathUtils.getTitude(coordinate.getLatitude(), 5));
-			sb.append("}");
+			if (null != coordinate) {
+				sb.append("{\"longitude\":");
+				sb.append(MathUtils.getTitude(coordinate.getLongitude(), 5));
+				sb.append(",\"latitude\":");
+				sb.append(MathUtils.getTitude(coordinate.getLatitude(), 5));
+				sb.append("}");
+			}
 		}
 		sb.append("]");
 		

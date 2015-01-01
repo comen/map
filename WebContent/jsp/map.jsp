@@ -61,7 +61,6 @@ label {
 <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=Nl0iBjuHWhOPT8FbUkOzcIm6"></script>
-<!-- <script type="text/javascript" src="//api.map.baidu.com/api?v=1.5&SvTvb6HBqRByIoT4WGYC4zAW"></script> -->
 <script>
 	$(function() {
 		$("#date").datepicker();

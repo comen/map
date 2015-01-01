@@ -249,16 +249,24 @@ public class Grid {
 		BasicDBObject bdbo = null;
 		try {
 			bdbo = (BasicDBObject) JSON.parse(json);
-			if (null != bdbo && null != bdbo.getString("result")) {
-				json = bdbo.getString("result");
-				bdbo = (BasicDBObject) JSON.parse(json);
-				if (null != bdbo.getString("location")) {
-					json = bdbo.getString("location");
+			if (null != bdbo) {
+				if (null != bdbo.getString("status")) {
+					if (!bdbo.getString("status").equals("0")) {
+						logger.fatal("根据网格地址(" + address + ")获取坐标失败: " + bdbo.getString("message"));
+						return null;
+					}
+				}
+				if (null != bdbo.getString("result")) {
+					json = bdbo.getString("result");
 					bdbo = (BasicDBObject) JSON.parse(json);
-					Double longitude = bdbo.getDouble("lng");
-					Double latitude = bdbo.getDouble("lat");
-					Coordinate coordinate = new Coordinate(latitude, longitude);
-					return coordinate;
+					if (null != bdbo.getString("location")) {
+						json = bdbo.getString("location");
+						bdbo = (BasicDBObject) JSON.parse(json);
+						Double longitude = bdbo.getDouble("lng");
+						Double latitude = bdbo.getDouble("lat");
+						Coordinate coordinate = new Coordinate(latitude, longitude);
+						return coordinate;
+					}
 				}
 			}
 		} catch (Exception e) {

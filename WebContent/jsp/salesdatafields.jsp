@@ -62,9 +62,19 @@
 						break;
 					case 4:
 						$(this).find("input").val(fieldList[i].huanbiThreshold);
+						if (fieldList[i].onlyDay > 0) {
+							$(this).find("input").attr("disabled", true);
+						} else {
+							$(this).find("input").attr("disabled", false);
+						}
 						break;
 					case 5:
 						$(this).find("input").val(fieldList[i].tongbiThreshold);
+						if (fieldList[i].onlyDay > 0) {
+							$(this).find("input").attr("disabled", true);
+						} else {
+							$(this).find("input").attr("disabled", false);
+						}
 						break;
 					case 6:
 						if (fieldList[i].category > 0) {
@@ -102,6 +112,7 @@
 		formData.append("salesDataType", $tr.attr("rel"));
 		
 		var index = 0;
+		var onlyDay = false;
 		var $tr_children = $tr.children();
 		$tr_children.each(function() {
 			switch (index) {
@@ -110,8 +121,10 @@
 				break;
 			case 2:
 				if ($(this).find('input').attr("checked") == "checked") {
+					onlyDay = true;
 					formData.append("onlyDay", "1");
 				} else {
+					onlyDay = false;
 					formData.append("onlyDay", "-1");
 				}
 				break;
@@ -119,10 +132,18 @@
 				formData.append("jueduizhiThreshold", $(this).find('input').val());
 				break;
 			case 4:
-				formData.append("huanbiThreshold", $(this).find('input').val());
+				if (onlyDay) {
+					formData.append("huanbiThreshold", "*");
+				} else {
+					formData.append("huanbiThreshold", $(this).find('input').val());
+				}
 				break;
 			case 5:
-				formData.append("tongbiThreshold", $(this).find('input').val());
+				if (onlyDay) {
+					formData.append("tongbiThreshold", "*");
+				} else {
+					formData.append("tongbiThreshold", $(this).find('input').val());
+				}
 				break;
 			case 6:
 				formData.append("category", $(this).find('select').val());
@@ -153,7 +174,7 @@
 	<p>&nbsp;</p>
 	<p>（2）若不需要超出阈值时突出显示的请在阈值处输入“*”；</p>
 	<p>&nbsp;</p>
-	<p>（3）“xx到达数”等只按日统计的数据请勾选“只按日显示”，不勾选“只按日显示”按日/周/月均可显示；当勾选“只按日显示”时，“类别”一列将无效；</p>
+	<p>（3）“xx到达数”等只按日统计的数据请勾选“只按日显示”，不勾选“只按日显示”按日/周/月均可显示；当勾选“只按日显示”时，“环比阈值”、“同比阈值”、“类别”等列将无效；</p>
 	<p>&nbsp;</p>
 	<p>（4）“宽带新装”和“宽带移机（装）”等需设置为增值类，“宽带拆机”和“宽带移机（拆）”等需设置为减值类；</p>
 	<p>&nbsp;</p>

@@ -39,6 +39,7 @@
 <title>中国电信上海分公司北区局用户数据信息化系统</title>
 <link href="../dwz/themes/css/login.css" rel="stylesheet"
 	type="text/css" />
+<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
 <script src="../js/Utility.js" type="text/javascript"></script>
 </head>
 
@@ -100,13 +101,18 @@
 				</ul>
 				<div class="login_inner">
 					<p>系统管理员：为其他用户开通系统账号，设置用户角色，及其他角色的所有权限。</p>
-					<p>网格数据管理员：新装/修改/删除网格编号、网格名称、网格经理、网格对应地图地址；在显示地图上查看数据；查看网格编辑记录。</p>
+					<p>网格数据管理员：新增/修改/删除网格编号、网格名称、网格经理、网格对应地图地址；在显示地图上查看数据；查看网格编辑记录。</p>
 					<p>营销数据管理员：上传营销数据，增加/调整/删除显示数据字段，设置警示阈值，在显示地图上查看数据；查看网格编辑记录。</p>
 					<p>普通用户：在显示地图上查看数据；查看网格编辑记录。</p>
 				</div>
 			</div>
 		</div>
-		<div id="login_footer">Copyright &copy; 2014 上海电信北区局</div>
+		<div id="login_footer"></div>
+		<script type="text/javascript">
+			var today = new Date();
+			var year = "" + today.getFullYear();
+			$("#login_footer").text("Copyright © 2014-" + year + " 上海电信北区局");
+		</script>
 	</div>
 </body>
 </html>

@@ -113,8 +113,6 @@
 -->
 <script src="../dwz/js/dwz.regional.zh.js" type="text/javascript"></script>
 
-<script src="../js/Utility.js" type="text/javascript"></script>
-
 <script type="text/javascript">
 $(function(){
 	DWZ.init("../dwz/dwz.frag.xml", {
@@ -262,7 +260,8 @@ $(function(){
 				<div class="navTab-panel tabsPageContent layoutBox">
 					<div class="page unitBox">
 						<div class="accountInfo">
-							<p>说明：北区局为顶级数据，显示整个北区局的用户数据；地图放大一层，可以看到各分局的用户数据；继续放大，则是各网格的用户数据。</p>
+							<br />说明：(1) 北区局为顶级数据，显示整个北区局的用户数据；地图放大一层，可以看到各分局的用户数据；继续放大，则是各网格的用户数据。<br />
+							<br />(2) [区局/分局级] 环比=(本周数据-上周数据)/上周数据*100% or (本月数据-上月数据)/上月数据*100%，同比=(本月数据-去年同期数据)/去年同期数据*100%；[网格级] 环比=本周数据-上周数据 or 本月数据-上月数据，同比=本月数据-去年同期数据。
 						</div>
 						<div class="pageFormContent" layoutH="80">
 							<iframe src="map.jsp" style="width:100%;height:100%;" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
@@ -272,6 +271,11 @@ $(function(){
 			</div>
 		</div>
 	</div>
-	<div id="footer">Copyright &copy; 2014 上海电信北区局</div>
+	<div id="footer"></div>
+	<script type="text/javascript">
+		var today = new Date();
+		var year = "" + today.getFullYear();
+		$("#footer").text("Copyright © 2014-" + year + " 上海电信北区局");
+	</script>
 </body>
 </html>

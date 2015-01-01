@@ -563,16 +563,29 @@ public class Data implements Runnable {
 						sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
 					}
 				}
-				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek);
+				int huanbiGrowth = MathUtils.calcuGrowth(sumThisWeek, sumLastWeek);
 				
 				String fieldDesc = getFieldDesc(namesOfMemVar[i]);
 				sb.append(fieldDesc);
 				sb.append("：");	//冒号
 				sb.append(sumThisWeek);
 				sb.append("，&nbsp;"); //逗号
+				
 				sb.append("环比：");
-				sb.append(huanbiGrowthRate * 100);
-				sb.append("%；<br />");
+				if (gridCode.length() < 2) { //区局、分局级
+					if (sumLastWeek != 0) {
+						double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek) * 100, 2); //百分比形式
+						sb.append(huanbiGrowthRate);
+						sb.append("%；<br />");
+					} else {
+						sb.append("无");
+						sb.append("%；<br />");
+					}
+				} else { //网格级
+					sb.append(huanbiGrowth);
+					sb.append("<br />");
+				}
+				
 			}
 		}
 		return sb.toString();
@@ -624,8 +637,8 @@ public class Data implements Runnable {
 						sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
 					}
 				}
-				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth);
-				double tongbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear);
+				int huanbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumLastMonth);
+				int tongbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumThisMonthLastYear);
 				
 				String fieldDesc = getFieldDesc(namesOfMemVar[i]);
 				sb.append(fieldDesc);
@@ -634,12 +647,35 @@ public class Data implements Runnable {
 				sb.append("，&nbsp;"); //逗号
 				
 				sb.append("环比：");
-				sb.append(huanbiGrowthRate * 100);
-				sb.append("%，&nbsp;");
+				if (gridCode.length() < 2) { //区局、分局级
+					if (sumLastMonth != 0) {
+						double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth) * 100, 2); //百分比形式
+						sb.append(huanbiGrowthRate);
+						sb.append("%，&nbsp;");
+					} else {
+						sb.append("无");
+						sb.append("%，&nbsp;");
+					}
+				} else { //网格级
+					sb.append(huanbiGrowth);
+					sb.append("，&nbsp;");
+				}
 				
 				sb.append("同比：");
-				sb.append(tongbiGrowthRate * 100);
-				sb.append("%；<br />");
+				if (gridCode.length() < 2) { //区局、分局级
+					if (sumThisMonthLastYear != 0) {
+						double tongbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear) * 100, 2); //百分比形式
+						sb.append(tongbiGrowthRate);
+						sb.append("%；<br />");
+					} else {
+						sb.append("无");
+						sb.append("%；<br />");
+					}
+				} else { //网格级
+					sb.append(tongbiGrowth);
+					sb.append("<br />");
+				}
+				
 			}
 		}
 		return sb.toString();
@@ -779,11 +815,11 @@ public class Data implements Runnable {
 			
 			int value = Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
+			String jueduizhiThreshold = field.get("jueduizhiThreshold").toString();
 			if (onlyDay > 0) { // field should be only displayed in DAY
-				String jueduizhiThreshold = field.get("jueduizhiThreshold").toString();
 				try {
-					double toDouble = Double.parseDouble(jueduizhiThreshold);
-					if ( Double.parseDouble(Integer.toString(value)) > toDouble) {
+					double jueduizhiThresholdInDouble = Double.parseDouble(jueduizhiThreshold);
+					if (Double.parseDouble(Integer.toString(value)) > jueduizhiThresholdInDouble) {
 						green++;
 					} else {
 						normal++;
@@ -792,18 +828,17 @@ public class Data implements Runnable {
 					normal++;
 				}
 			} else {
-				String jueduizhiThreshold = field.get("jueduizhiThreshold").toString();
 				try {
-					double toDouble = Double.parseDouble(jueduizhiThreshold);
+					double jueduizhiThresholdInDouble = Double.parseDouble(jueduizhiThreshold);
 					int category = Integer.parseInt(field.get("category").toString());
 					if (category > 0) { // good
-						if (Double.parseDouble(Integer.toString(value)) > toDouble) {
+						if (Double.parseDouble(Integer.toString(value)) > jueduizhiThresholdInDouble) {
 							green++;
 						} else {
 							normal++;
 						}
 					} else { // bad
-						if (Double.parseDouble(Integer.toString(value)) > toDouble) {
+						if (Double.parseDouble(Integer.toString(value)) > jueduizhiThresholdInDouble) {
 							red++;
 						} else {
 							normal++;
@@ -864,30 +899,35 @@ public class Data implements Runnable {
 						sumLastWeek = sumLastWeek + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
 					}
 				}
-				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek);
-				/* Compare Huanbi growth rate with threshold */
-				int category = Integer.parseInt(field.get("category").toString());
-				String huanbiThreshold = field.get("huanbiThreshold").toString();
-				try {
-					double toDouble = Double.parseDouble(huanbiThreshold);
-					if (category > 0) {	// good
-						if (huanbiGrowthRate > toDouble) {
-							green++;
-						} else if (huanbiGrowthRate < toDouble) {
-							red++;
-						} else {
-							normal++;
+				
+				if (sumLastWeek != 0) {
+					double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek) * 100, 2); //百分比形式
+					/* Compare Huanbi growth rate with threshold */
+					int category = Integer.parseInt(field.get("category").toString());
+					String huanbiThreshold = field.get("huanbiThreshold").toString();
+					try {
+						double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
+						if (category > 0) {	// good
+							if (huanbiGrowthRate > huanbiThresholdInDouble) {
+								green++;
+							} else if (huanbiGrowthRate < huanbiThresholdInDouble) {
+								red++;
+							} else {
+								normal++;
+							}
+						} else { // bad
+							if (huanbiGrowthRate > 0 || Math.abs(huanbiGrowthRate) < huanbiThresholdInDouble) {
+								red++;
+							} else if (Math.abs(huanbiGrowthRate) > huanbiThresholdInDouble) {
+								green++;
+							} else {
+								normal++;
+							}
 						}
-					} else { // bad
-						if (Math.abs(huanbiGrowthRate) > toDouble) {
-							red++;
-						} else if (Math.abs(huanbiGrowthRate) < toDouble) {
-							green++;
-						} else {
-							normal++;
-						}
+					} catch (Exception e) { // huanbiThreshold = "*"
+						normal++;
 					}
-				} catch (Exception e) { // huanbiThreshold = "*"
+				} else {
 					normal++;
 				}
 			}
@@ -951,49 +991,69 @@ public class Data implements Runnable {
 						sumThisMonthLastYear = sumThisMonthLastYear + Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
 					}
 				}
-				double huanbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth);
-				double tongbiGrowthRate = MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear);
+				
 				/* Compare Huanbi (& Tongbi) growth rate with threshold */
 				int category = Integer.parseInt(field.get("category").toString());
-				String huanbiThreshold = field.get("huanbiThreshold").toString();
-				try {
-					double toDouble = Double.parseDouble(huanbiThreshold);
-					if (category > 0) { // good
-						/* Huanbi */
-						if (huanbiGrowthRate > toDouble) {
-							green++;
-						} else if (huanbiGrowthRate < toDouble) {
-							red++;
-						} else {
-							normal++;
+				/* Huanbi */
+				if (sumLastMonth != 0) {
+					double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth) * 100, 2); //百分比形式
+					String huanbiThreshold = field.get("huanbiThreshold").toString();
+					try {
+						double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
+						if (category > 0) { // good
+							/* Huanbi */
+							if (huanbiGrowthRate > huanbiThresholdInDouble) {
+								green++;
+							} else if (huanbiGrowthRate < huanbiThresholdInDouble) {
+								red++;
+							} else {
+								normal++;
+							}
+						} else { // bad
+							/* Huanbi */
+							if (huanbiGrowthRate > 0 || Math.abs(huanbiGrowthRate) < huanbiThresholdInDouble) {
+								red++;
+							} else if (Math.abs(huanbiGrowthRate) > huanbiThresholdInDouble) {
+								green++;
+							} else {
+								normal++;
+							}
 						}
-						/* Tongbi */
-						if (tongbiGrowthRate > toDouble) {
-							green++;
-						} else if (tongbiGrowthRate < toDouble) {
-							red++;
-						} else {
-							normal++;
-						}
-					} else { // bad
-						/* Huanbi */
-						if (Math.abs(huanbiGrowthRate) > toDouble) {
-							red++;
-						} else if (Math.abs(huanbiGrowthRate) < toDouble) {
-							green++;
-						} else {
-							normal++;
-						}
-						/* Tongbi */
-						if (Math.abs(tongbiGrowthRate) > toDouble) {
-							red++;
-						} else if (Math.abs(tongbiGrowthRate) < toDouble) {
-							green++;
-						} else {
-							normal++;
-						}
+					} catch (Exception e) { // huanbiThreshold = "*"
+						normal++;
 					}
-				} catch (Exception e) { // huanbiThreshold = "*"
+				} else {
+					normal++;
+				}
+				/* Tongbi */
+				if (sumThisMonthLastYear != 0) {
+					double tongbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear) * 100, 2); //百分比形式
+					String tongbiThreshold = field.get("tongbiThreshold").toString();
+					try {
+						double tongbiThresholdInDouble = Double.parseDouble(tongbiThreshold);
+						if (category > 0) { // good
+							/* Tongbi */
+							if (tongbiGrowthRate > tongbiThresholdInDouble) {
+								green++;
+							} else if (tongbiGrowthRate < tongbiThresholdInDouble) {
+								red++;
+							} else {
+								normal++;
+							}
+						} else { // bad
+							/* Tongbi */
+							if (tongbiGrowthRate > 0 || Math.abs(tongbiGrowthRate) < tongbiThresholdInDouble) {
+								red++;
+							} else if (Math.abs(tongbiGrowthRate) > tongbiThresholdInDouble) {
+								green++;
+							} else {
+								normal++;
+							}
+						}
+					} catch (Exception e) { // tongbiThreshold = "*"
+						normal++;
+					}
+				} else {
 					normal++;
 				}
 			}

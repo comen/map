@@ -42,7 +42,12 @@ public class MathUtils {
 		double nearInDouble = (double) near;
 		double farInDouble = (double) far;
 		double rate = (nearInDouble - farInDouble) / farInDouble;
-		return getTitude(rate, 4);
+		return rate;
+	}
+	
+	public static int calcuGrowth(int near, int far) {
+		int growth = near - far;
+		return growth;
 	}
 
 }
