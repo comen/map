@@ -329,7 +329,7 @@
 							<button type="submit" onclick="searchUser()">检索</button>
 						</div>
 					</div></li>
-				<li><a class="button" href="useradvsearch.jsp" target="dialog" height="330" mask="false" title="查询框"><span>高级检索</span></a></li>
+				<li><a class="button" href="useradvsearch.jsp" target="dialog" rel="userAdvancedSearch" height="330" mask="false" title="浏览用户-高级搜索"><span>高级检索</span></a></li>
 			</ul>
 		</div>
 	</div>
@@ -344,7 +344,7 @@
 				target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li class="line">line</li>
 			<li><a class="edit" href="useredit.jsp?uid={sid_user}"
-				target="dialog" height="360"><span>修改</span></a></li>
+				target="dialog" rel="editUser" mask="true" title="修改用户" height="360"><span>修改</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="720" layoutH="138">

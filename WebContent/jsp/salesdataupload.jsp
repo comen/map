@@ -115,7 +115,7 @@
 		onclick="$('#file_upload').uploadify('cancel', '*');" />
 	
 	<div>
-		<br /><br /><br /><br /><br /><br /><br /><br />
+		<br /><br /><br /><br /><br /><br />
 		<h2>Excel文件要求：</h2>
 		<br />
 		<p>1. “<span style="color:red">行政分局</span>”列必需；</p>
