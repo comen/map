@@ -291,7 +291,7 @@
 									</div>
 								</div>
 							</li>
-							<li><a class="button" href="gridadvsearch.jsp" target="dialog" rel="gridAdvancedSearch" height="330" mask="false" title="浏览网格-高级搜索"><span>高级检索</span></a></li>
+							<li><a class="button" href="gridadvsearch.jsp" target="dialog" rel="gridadvsearch" height="330" mask="false" title="浏览网格-高级搜索"><span>高级检索</span></a></li>
 						</ul>
 					</div>
 				</td>
@@ -312,14 +312,14 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="gridadd.jsp" target="dialog" title="添加网格"
+			<li><a class="add" href="gridadd.jsp" target="dialog" rel="gridadd" mask="true" title="添加网格"
 				height="300"><span>添加</span></a></li>
 			<li class="line">line</li>
 			<li><a class="delete" href="deleteGrid?gid={sid_grid}"
 				target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li class="line">line</li>
 			<li><a class="edit" href="gridedit.jsp?gid={sid_grid}"
-				target="dialog" rel="editGrid" title="修改网格" mask="true" height="300"><span>修改</span></a></li>
+				target="dialog" rel="gridedit" title="修改网格" mask="true" height="300"><span>修改</span></a></li>
 			<!--
 			<li class="line">line</li>
 			<li><a class="icon" href="./dwz/demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li>

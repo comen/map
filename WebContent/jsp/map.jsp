@@ -70,9 +70,9 @@ label {
 <body>
 	<div id="menu">
 		<label>选择数据显示方式：</label>
-		<input type="radio" name="mode" id ="day" value="day" checked="checked" />按天显示
-		<input type="radio" name="mode" id ="week" value="week" />按周显示
-		<input type="radio" name="mode" id ="month" value="month" />按月显示
+		<input type="radio" name="mode" id="day" value="day" checked="checked" />按天显示
+		<input type="radio" name="mode" id="week" value="week" />按周显示
+		<input type="radio" name="mode" id="month" value="month" />按月显示
 		<label for="date">选择数据日期: </label>
 		<input type="text" id="date" id="date" readonly="readonly">
 		<input type="button" onclick="fetch()" value="重新获取数据">

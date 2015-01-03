@@ -37,6 +37,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>中国电信上海分公司北区局用户数据信息化系统</title>
+<link type="image/x-icon" rel="shortcut icon" href="../favicon.ico" />
 <link href="../dwz/themes/css/login.css" rel="stylesheet"
 	type="text/css" />
 <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>

@@ -49,7 +49,7 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>中国电信上海分公司北区局用户数据信息化系统</title>
-
+<link type="image/x-icon" rel="shortcut icon" href="../favicon.ico" />
 <link href="../dwz/themes/default/style.css" rel="stylesheet"
 	type="text/css" media="screen" />
 <link href="../dwz/themes/css/core.css" rel="stylesheet" type="text/css"
@@ -64,7 +64,6 @@
 <!--[if lte IE 9]>
 <script src="../dwz/js/speedup.js" type="text/javascript"></script>
 <![endif]-->
-
 <script src="../dwz/js/jquery-1.7.2.js" type="text/javascript"></script>
 <script src="../dwz/js/jquery.cookie.js" type="text/javascript"></script>
 <script src="../dwz/js/jquery.validate.js" type="text/javascript"></script>
@@ -143,8 +142,8 @@ $(function(){
 						<span style="color: red">&nbsp;<%=userName%>&nbsp;</span>
 						<a style="text-decoration:none">, 欢迎你！</a>
 					</li>
-					<li><a href="changepwd.jsp" target="dialog" width="550"
-						height="250">修改密码</a></li>
+					<li><a href="changepwd.jsp" target="dialog" rel="changepwd" mask="true" 
+						width="550" height="250">修改密码</a></li>
 					<li><a href="login.jsp?status=logout">退出</a></li>
 				</ul>
 				
@@ -204,6 +203,8 @@ $(function(){
 						<ul class="tree treeFolder">
 							<li><a href="salesdataupload.jsp" target="navTab"
 								rel="salesdataupload">营销数据上传</a></li>
+							<li><a href="salesdatadelete.jsp" target="navTab"
+								rel="salesdatadelete">营销数据删除</a></li>
 							<li><a href="salesdatafields.jsp" target="navTab"
 								rel="salesdatafields">营销字段管理</a></li>
 						</ul>

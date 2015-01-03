@@ -55,7 +55,7 @@ public class GetSalesDataFieldsHandler implements IHandler {
 			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
 				continue;
 			}
-			if (status > 0) { //Field is on use
+			if (status > 0) { //Field is in use
 				if (Data.fieldIsOnUse(namesOfMemVar[i])) {
 					sb.append("{\"field\":\"" + namesOfMemVar[i] + "\",");
 					sb.append("\"description\":\"" + Data.getFieldDesc(namesOfMemVar[i]) + "\",");
@@ -66,7 +66,7 @@ public class GetSalesDataFieldsHandler implements IHandler {
 					sb.append("\"status\":" + Data.getStatus(namesOfMemVar[i]) + ",");
 					sb.append("\"category\":" + Data.getCategory(namesOfMemVar[i]) + "},");
 				}
-			} else if (status < 0) { //Field isn't on use
+			} else if (status < 0) { //Field isn't in use
 				if (!Data.fieldIsOnUse(namesOfMemVar[i])) {
 					sb.append("{\"field\":\"" + namesOfMemVar[i] + "\",");
 					sb.append("\"description\":\"" + Data.getFieldDesc(namesOfMemVar[i]) + "\",");
@@ -77,7 +77,7 @@ public class GetSalesDataFieldsHandler implements IHandler {
 					sb.append("\"status\":" + Data.getStatus(namesOfMemVar[i]) + ",");
 					sb.append("\"category\":" + Data.getCategory(namesOfMemVar[i]) + "},");
 				}
-			} else { // Both on use and not not use
+			} else { // Both in use and not in use
 				sb.append("{\"field\":\"" + namesOfMemVar[i] + "\",");
 				sb.append("\"description\":\"" + Data.getFieldDesc(namesOfMemVar[i]) + "\",");
 				sb.append("\"onlyDay\":" + Data.getOnlyDay(namesOfMemVar[i]) + ",");

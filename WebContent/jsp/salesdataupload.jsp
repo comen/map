@@ -37,14 +37,15 @@
 </style>
 
 <script type="text/javascript">
-	function setFormData(obj) {
-		$("#file_upload").uploadify("settings", "formData", { 'salesDataType': obj.value }); 
+	function setFormData(value) {
+		$("#file_upload").uploadify("settings", "formData", { 'salesDataType': value });
 	}
 	function doUpload() {
 		if ($("#salesDataType").val() == "请选择") {
 			alert('请选择您要上传的营销数据类型！');
 		} else {
 			if (confirm('请务必保证营销数据类型与上传文件中的数据一致！\n\n您确定要上传吗？') == true) {
+				setFormData($("#salesDataType").val());
 				$('#file_upload').uploadify('upload', '*');
 			}
 		}
@@ -57,11 +58,10 @@
 	function getFields() {
 		var formData = new FormData();
 		formData.append("status", 1);
-
+		
 		$.ajax({
 			url: "getSalesDataFields",
 			type: "POST",
-			timeout: 600000,
 			data: formData,
 			processData: false,  // 告诉jQuery不要去处理发送的数据
 			contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
@@ -84,7 +84,7 @@
 <h2 class="contentTitle">通过Excel上传营销数据</h2>
 
 <div class="pageContent" style="margin: 0 10px" layoutH="50">
-
+	
 	<input id="file_upload" type="file" name="image"
 		uploaderOption="{
 			fileSizeLimit:'30MB',
@@ -101,14 +101,13 @@
 			auto:false,
 			multi:true
 		}" />
-
-	<select id="salesDataType" onchange="setFormData(this)">
+	
+	<select id="salesDataType" onchange="setFormData(this.value)">
 		<option value="请选择">请选择</option>
 	</select>
 	<p>&nbsp;</p>
-	<!-- <span class="inputInfo">仅支持 Microsoft Excel 97-2003 Worksheet(.xls)</span> -->
 	<div id="fileQueue" class="fileQueue"></div>
-
+	
 	<input type="image" src="../dwz/uploadify/img/upload.jpg"
 		onclick="doUpload()" />
 	<input type="image" src="../dwz/uploadify/img/cancel.jpg"
@@ -128,6 +127,6 @@
 		<br />
 		<p>5. 文件最大应限制为30MB。</p>
 	</div>
-
+	
 </div>
 
