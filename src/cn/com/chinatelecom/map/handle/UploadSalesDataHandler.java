@@ -42,6 +42,7 @@ public class UploadSalesDataHandler implements IHandler {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String salesDataType = "";
 		Date calculatedDate = DateUtils.getCurrentDate();
+		Date uploadDate = DateUtils.getCurrentDate();
 		
 		if (items == null) {
 			logger.warn("没有请求数据!");
@@ -104,6 +105,7 @@ public class UploadSalesDataHandler implements IHandler {
 							} else {
 								calculatedDate = DateUtils.getFirstSecondOfDay(dateInExcel);
 							}
+							uploadDate = DateUtils.getFirstSecondOfDay(uploadDate);
 							
 							try {
 								/* Accumulate for Office */
@@ -119,6 +121,7 @@ public class UploadSalesDataHandler implements IHandler {
 									}
 									officeData.update(dataTmp.getBasicDBObject());
 								} else {
+									officeData.setUploadDate(uploadDate);
 									officeData.setValue(salesDataType, 1);
 									officeData.insert();
 								}
@@ -157,6 +160,7 @@ public class UploadSalesDataHandler implements IHandler {
 										}
 										subOfficeData.update(dataTmp.getBasicDBObject());
 									} else {
+										subOfficeData.setUploadDate(uploadDate);
 										subOfficeData.setValue(salesDataType, 1);
 										subOfficeData.insert();
 									}
@@ -172,6 +176,7 @@ public class UploadSalesDataHandler implements IHandler {
 												}*/
 												Data gridData = new Data();
 												gridData.setCalculatedDate(calculatedDate);
+												gridData.setUploadDate(uploadDate);
 												gridData.setAddress(address);
 												gridData.setSalesDataType(salesDataType);
 												/* Added to multi-threads processing list */
@@ -188,6 +193,7 @@ public class UploadSalesDataHandler implements IHandler {
 											}*/
 											Data gridData = new Data();
 											gridData.setCalculatedDate(calculatedDate);
+											gridData.setUploadDate(uploadDate);
 											gridData.setAddress(address);
 											gridData.setSalesDataType(salesDataType);
 											/* Added to multi-threads processing list */
@@ -208,6 +214,7 @@ public class UploadSalesDataHandler implements IHandler {
 										}
 										gridData.update(dataTmp.getBasicDBObject());
 									} else {
+										gridData.setUploadDate(uploadDate);
 										gridData.setValue(salesDataType, 1);
 										gridData.insert();
 									}

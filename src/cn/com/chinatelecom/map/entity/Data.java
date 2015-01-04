@@ -45,6 +45,7 @@ public class Data implements Runnable {
 	private int additional_11;
 	private int additional_12;
 	private int additional_13;
+	private Date uploadDate;
 	
 	private String address;
 	private String salesDataType;
@@ -57,7 +58,7 @@ public class Data implements Runnable {
 				"additional_3", "additional_4", "additional_5", "additional_6",
 				"additional_7", "additional_8", "additional_9",
 				"additional_10", "additional_11", "additional_12",
-				"additional_13" };
+				"additional_13", "uploadDate" };
 		return strArray;
 	}
 	
@@ -106,6 +107,8 @@ public class Data implements Runnable {
 			setAdditional_12((int) value);
 		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_13")) {
 			setAdditional_13((int) value);
+		} else if (nameOfMemberVariable.equalsIgnoreCase("uploadDate")) {
+			setUploadDate(new Date((long) value));
 		}
 	}
 
@@ -154,6 +157,8 @@ public class Data implements Runnable {
 			return getAdditional_12();
 		} else if (nameOfMemberVariable.equalsIgnoreCase("additional_13")) {
 			return getAdditional_13();
+		} else if (nameOfMemberVariable.equalsIgnoreCase("uploadDate")) {
+			return getUploadDate();
 		} else {
 			return null;
 		}
@@ -245,6 +250,10 @@ public class Data implements Runnable {
 	
 	public void setAdditional_13(int additional_13) {
 		this.additional_13 = additional_13;
+	}
+	
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
 	}
 	
 	public void setAddress(String address) {
@@ -341,6 +350,10 @@ public class Data implements Runnable {
 	
 	public int getAdditional_13() {
 		return additional_13;
+	}
+	
+	public Date getUploadDate() {
+		return uploadDate;
 	}
 	
 	public String getAddress() {
@@ -497,7 +510,7 @@ public class Data implements Runnable {
 		
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode") || namesOfMemVar[i].equalsIgnoreCase("uploadDate")) {
 				continue;
 			}
 			if (fieldIsOnUse(namesOfMemVar[i])) {
@@ -533,7 +546,7 @@ public class Data implements Runnable {
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode") || namesOfMemVar[i].equalsIgnoreCase("uploadDate")) {
 				continue;
 			}
 			@SuppressWarnings("unchecked")
@@ -601,7 +614,7 @@ public class Data implements Runnable {
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode") || namesOfMemVar[i].equalsIgnoreCase("uploadDate")) {
 				continue;
 			}
 			@SuppressWarnings("unchecked")
@@ -803,7 +816,7 @@ public class Data implements Runnable {
 		int normal = 0;
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode") || namesOfMemVar[i].equalsIgnoreCase("uploadDate")) {
 				continue;
 			}
 			@SuppressWarnings("unchecked")
@@ -870,7 +883,7 @@ public class Data implements Runnable {
 		int normal = 0;
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode") || namesOfMemVar[i].equalsIgnoreCase("uploadDate")) {
 				continue;
 			}
 			@SuppressWarnings("unchecked")
@@ -954,7 +967,7 @@ public class Data implements Runnable {
 		int normal = 0;
 		
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode") || namesOfMemVar[i].equalsIgnoreCase("uploadDate")) {
 				continue;
 			}
 			@SuppressWarnings("unchecked")
@@ -1137,6 +1150,10 @@ public class Data implements Runnable {
 		if (additional_13 > 0) {
 			bdbo.append("additional_13", additional_13);
 		}
+		if (uploadDate != null) {
+			//转化成UTC时间保存至数据库
+			bdbo.append("uploadDate", uploadDate.getTime());
+		}
 		
 		return bdbo;
 	}
@@ -1159,8 +1176,11 @@ public class Data implements Runnable {
 		} else {
 			gridCode = grid.getCode();
 		}
-		if (exist()) {
-			Data dataTmp = Data.findOne(getBasicDBObject());
+		Data data = new Data();
+		data.setCalculatedDate(calculatedDate);
+		data.setGridCode(gridCode);
+		if (data.exist()) {
+			Data dataTmp = Data.findOne(data.getBasicDBObject());
 			if (dataTmp.getValue(salesDataType) == null) {
 				dataTmp.setValue(salesDataType, 1);
 			} else {

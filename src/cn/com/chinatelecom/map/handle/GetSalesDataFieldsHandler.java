@@ -52,7 +52,7 @@ public class GetSalesDataFieldsHandler implements IHandler {
 		sb.append("[");
 		String[] namesOfMemVar = Data.getNameOfMemberVariables();
 		for (int i = 0; i < namesOfMemVar.length; i++) {
-			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode")) {
+			if (namesOfMemVar[i].equalsIgnoreCase("calculatedDate") || namesOfMemVar[i].equalsIgnoreCase("gridCode") || namesOfMemVar[i].equalsIgnoreCase("uploadDate")) {
 				continue;
 			}
 			if (status > 0) { //Field is in use

@@ -29,7 +29,8 @@ public class DeleteSalesDataHandler implements IHandler {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<Data> dataList = new ArrayList<Data>();
-		Date date = null;
+		Date selectedDate = null;
+		String dateType = "";
 		String salesData = "";
 		String[] salesDataArray = null;
 		String message = "";
@@ -39,10 +40,12 @@ public class DeleteSalesDataHandler implements IHandler {
 				String fieldName = item.getFieldName();
 				try {
 					String string = item.getString(Config.getInstance().getValue("charset").toString());
-					
 					switch(fieldName) {
-					case "date":
-						date = DateUtils.getSpecificDate(string, "yyyy-MM-dd");
+					case "dateType":
+						dateType = string;
+						break;
+					case "selectedDate":
+						selectedDate = DateUtils.getSpecificDate(string, "yyyy-MM-dd");
 						break;
 					case "salesData":
 						salesData = string;
@@ -55,12 +58,16 @@ public class DeleteSalesDataHandler implements IHandler {
 			}
 		}
 		
-		if (date == null || salesDataArray == null) {
+		if (dateType == "" || selectedDate == null || salesDataArray == null) {
 			message = "[错误] 数据解析操作异常，请重新操作！";
 		} else {
 			Data data = new Data();
 			Data dataTmp = new Data();
-			data.setCalculatedDate(date);
+			if (dateType.equalsIgnoreCase("uploadDate")) {
+				data.setUploadDate(selectedDate);
+			} else { // dateType.equalsIgnoreCase("completeDate")
+				data.setCalculatedDate(selectedDate);
+			}
 			dataList = Data.findList(data.getBasicDBObject());
 			if (dataList != null) {
 				for (Data eachData : dataList) {
