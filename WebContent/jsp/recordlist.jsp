@@ -9,8 +9,8 @@
 	String pageNum = request.getParameter("pageNum");
 	String totalCount = request.getParameter("totalCount");
 	String pageNumShown = request.getParameter("pageNumShown");
-	String searchGridCode = request.getParameter("searchGridCode");
-	String searchChangeDate = request.getParameter("searchChangeDate");
+	String r_searchGridCode = request.getParameter("r_searchGridCode");
+	String r_searchChangeDate = request.getParameter("r_searchChangeDate");
 	
 	if (firstLoad == null) {
 		firstLoad = false;
@@ -24,22 +24,22 @@
 	if (pageNumShown == null) {
 		pageNumShown = "";
 	}
-	if (searchGridCode == null) {
-		searchGridCode = "";
+	if (r_searchGridCode == null) {
+		r_searchGridCode = "";
 	}
-	if (searchChangeDate == null) {
-		searchChangeDate = "";
+	if (r_searchChangeDate == null) {
+		r_searchChangeDate = "";
 	}
 %>
 
 <script type="text/javascript">
 
-	getRecordList("<%=searchGridCode%>","<%=searchChangeDate%>");
+	getRecordList("<%=r_searchGridCode%>","<%=r_searchChangeDate%>");
 
 	function searchRecord() {
 		$("#recordPageNum").val("1");
-		$("#searchGridCode").val($("#gridcode").val());
-		$("#searchChangeDate").val($("#changedate").val());
+		$("#r_searchGridCode").val($("#r_gridcode").val());
+		$("#r_searchChangeDate").val($("#r_changedate").val());
 		var params = $("recordPagerForm").serializeArray();
 		navTab.reload("recordlist.jsp?firstload=true", {data: params, callback: null});
 		return;
@@ -172,16 +172,16 @@
 	<input type="hidden" id="recordPageNum" name="pageNum" value="<%=pageNum%>" />
 	<input type="hidden" id="recordTotalCount" name="totalCount" value="<%=totalCount%>" />
 	<input type="hidden" id="recordPageNumShown" name="pageNumShown" value="<%=pageNumShown%>" />
-	<input type="hidden" id="searchGridCode" name="searchGridCode" value="<%=searchGridCode%>" />
-	<input type="hidden" id="searchChangeDate" name="searchChangeDate" value="<%=searchChangeDate%>" />
+	<input type="hidden" id="r_searchGridCode" name="r_searchGridCode" value="<%=r_searchGridCode%>" />
+	<input type="hidden" id="r_searchChangeDate" name="r_searchChangeDate" value="<%=r_searchChangeDate%>" />
 </form>
 
 <div class="pageHeader">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
-				<%-- <td>网格编号：<input type="text" name="gridcode" id="gridcode" value="<%=searchGridCode%>" /></td>
-				<td>变动日期：<input type="text" class="date" id="changedate" name="changedate" value="<%=searchChangeDate%>" readonly="true" /></td> --%>
+				<%-- <td>网格编号：<input type="text" name="r_gridcode" id="r_gridcode" value="<%=r_searchGridCode%>" /></td>
+				<td>变动日期：<input type="text" class="date" id="r_changedate" name="r_changedate" value="<%=r_searchChangeDate%>" readonly="true" /></td> --%>
 				<td>
 					<p>说明：（1） 系统只记录网格的删除、在地图中区域的变化等操作；网格变动后的环比、同比等数据不再精确，仅供大致参考。</p><br />
 					<p>（2）选中某条记录并删除时，将删除该网格编号在变动日期当天的所有变动记录。 </p><br />

@@ -119,6 +119,7 @@ public class UploadSalesDataHandler implements IHandler {
 									} else {
 										dataTmp.setValue(salesDataType, 1);
 									}
+									dataTmp.setUploadDate(uploadDate);
 									officeData.update(dataTmp.getBasicDBObject());
 								} else {
 									officeData.setUploadDate(uploadDate);
@@ -158,6 +159,7 @@ public class UploadSalesDataHandler implements IHandler {
 										} else {
 											dataTmp.setValue(salesDataType, 1);
 										}
+										dataTmp.setUploadDate(uploadDate);
 										subOfficeData.update(dataTmp.getBasicDBObject());
 									} else {
 										subOfficeData.setUploadDate(uploadDate);
@@ -212,6 +214,7 @@ public class UploadSalesDataHandler implements IHandler {
 										} else {
 											dataTmp.setValue(salesDataType, 1);
 										}
+										dataTmp.setUploadDate(uploadDate);
 										gridData.update(dataTmp.getBasicDBObject());
 									} else {
 										gridData.setUploadDate(uploadDate);

@@ -5,16 +5,16 @@ package cn.com.chinatelecom.map.handle;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
+//import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.fileupload.FileItem;
 
-import cn.com.chinatelecom.map.common.Config;
+//import cn.com.chinatelecom.map.common.Config;
 import cn.com.chinatelecom.map.entity.Record;
-import cn.com.chinatelecom.map.utils.DateUtils;
+//import cn.com.chinatelecom.map.utils.DateUtils;
 
 /**
  * @author Shelwin
@@ -43,7 +43,7 @@ public class SearchRecordHandler implements IHandler {
 		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
 		Record record = new Record();
-		String gridCode = "";
+		/*String gridCode = "";
 		Date changeDate = null;
 		
 		for (FileItem item : items) {
@@ -73,7 +73,7 @@ public class SearchRecordHandler implements IHandler {
 		}
 		if (changeDate != null) {
 			record.setDate(changeDate);
-		}
+		}*/
 		
 		List<Record> recordList = Record.findList(record.getBasicDBObject().toString());
 		StringBuffer sb = new StringBuffer();

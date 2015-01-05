@@ -188,8 +188,8 @@
 				<th align="center" width="200">营销数据字段</th>
 				<th align="center" width="100">只按日显示</th>
 				<th align="center" width="100">绝对值阈值</th>
-				<th align="center" width="100">环比阈值（%）</th>
-				<th align="center" width="100">同比阈值（%） </th>
+				<th align="center" width="100">环比阈值</th>
+				<th align="center" width="100">同比阈值 </th>
 				<th align="center" width="100">类别</th>
 				<th align="center" width="100">状态</th>
 			</tr>

@@ -826,6 +826,11 @@ public class Data implements Runnable {
 				continue;
 			}
 			
+			if (gridCode.length() < 2) { //区局、分局级不突出显示
+				normal++;
+				continue;
+			}
+			
 			int value = Integer.parseInt(getValueOfMemberVariables(data, namesOfMemVar[i]).toString());
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			String jueduizhiThreshold = field.get("jueduizhiThreshold").toString();
@@ -893,6 +898,12 @@ public class Data implements Runnable {
 			if (status < 0) { // field not in use
 				continue;
 			}
+			
+			if (gridCode.length() < 2) { //区局、分局级不突出显示
+				normal++;
+				continue;
+			}
+			
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			if (onlyDay > 0) { // field should be only displayed in DAY
 				continue;
@@ -914,24 +925,25 @@ public class Data implements Runnable {
 				}
 				
 				if (sumLastWeek != 0) {
-					double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek) * 100, 2); //百分比形式
+					//double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek) * 100, 2); //百分比形式
+					double huanbiGrowth = MathUtils.calcuGrowth(sumThisWeek, sumLastWeek);
 					/* Compare Huanbi growth rate with threshold */
 					int category = Integer.parseInt(field.get("category").toString());
 					String huanbiThreshold = field.get("huanbiThreshold").toString();
 					try {
 						double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
 						if (category > 0) {	// good
-							if (huanbiGrowthRate > huanbiThresholdInDouble) {
+							if (huanbiGrowth > huanbiThresholdInDouble) {
 								green++;
-							} else if (huanbiGrowthRate < huanbiThresholdInDouble) {
+							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
 								red++;
 							} else {
 								normal++;
 							}
 						} else { // bad
-							if (huanbiGrowthRate > 0 || Math.abs(huanbiGrowthRate) < huanbiThresholdInDouble) {
+							if (huanbiGrowth > huanbiThresholdInDouble) {
 								red++;
-							} else if (Math.abs(huanbiGrowthRate) > huanbiThresholdInDouble) {
+							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
 								green++;
 							} else {
 								normal++;
@@ -977,6 +989,11 @@ public class Data implements Runnable {
 			if (status < 0) { // field not in use
 				continue;
 			}
+			
+			if (gridCode.length() < 2) { //区局、分局级不突出显示
+				normal++;
+				continue;
+			}
 
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			if (onlyDay > 0) { // field should be only displayed in DAY
@@ -1009,24 +1026,25 @@ public class Data implements Runnable {
 				int category = Integer.parseInt(field.get("category").toString());
 				/* Huanbi */
 				if (sumLastMonth != 0) {
-					double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth) * 100, 2); //百分比形式
+					//double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth) * 100, 2); //百分比形式
+					double huanbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumLastMonth);
 					String huanbiThreshold = field.get("huanbiThreshold").toString();
 					try {
 						double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
 						if (category > 0) { // good
 							/* Huanbi */
-							if (huanbiGrowthRate > huanbiThresholdInDouble) {
+							if (huanbiGrowth > huanbiThresholdInDouble) {
 								green++;
-							} else if (huanbiGrowthRate < huanbiThresholdInDouble) {
+							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
 								red++;
 							} else {
 								normal++;
 							}
 						} else { // bad
 							/* Huanbi */
-							if (huanbiGrowthRate > 0 || Math.abs(huanbiGrowthRate) < huanbiThresholdInDouble) {
+							if (huanbiGrowth > huanbiThresholdInDouble) {
 								red++;
-							} else if (Math.abs(huanbiGrowthRate) > huanbiThresholdInDouble) {
+							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
 								green++;
 							} else {
 								normal++;
@@ -1040,24 +1058,25 @@ public class Data implements Runnable {
 				}
 				/* Tongbi */
 				if (sumThisMonthLastYear != 0) {
-					double tongbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear) * 100, 2); //百分比形式
+					//double tongbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear) * 100, 2); //百分比形式
+					double tongbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumThisMonthLastYear);
 					String tongbiThreshold = field.get("tongbiThreshold").toString();
 					try {
 						double tongbiThresholdInDouble = Double.parseDouble(tongbiThreshold);
 						if (category > 0) { // good
 							/* Tongbi */
-							if (tongbiGrowthRate > tongbiThresholdInDouble) {
+							if (tongbiGrowth > tongbiThresholdInDouble) {
 								green++;
-							} else if (tongbiGrowthRate < tongbiThresholdInDouble) {
+							} else if (tongbiGrowth < (0 - tongbiThresholdInDouble)) {
 								red++;
 							} else {
 								normal++;
 							}
 						} else { // bad
 							/* Tongbi */
-							if (tongbiGrowthRate > 0 || Math.abs(tongbiGrowthRate) < tongbiThresholdInDouble) {
+							if (tongbiGrowth > tongbiThresholdInDouble) {
 								red++;
-							} else if (Math.abs(tongbiGrowthRate) > tongbiThresholdInDouble) {
+							} else if (tongbiGrowth < (0 - tongbiThresholdInDouble)) {
 								green++;
 							} else {
 								normal++;
@@ -1186,7 +1205,8 @@ public class Data implements Runnable {
 			} else {
 				dataTmp.setValue(salesDataType, Integer.parseInt(dataTmp.getValue(salesDataType).toString()) + 1);
 			}
-			update(dataTmp.getBasicDBObject());
+			dataTmp.setUploadDate(uploadDate);
+			data.update(dataTmp.getBasicDBObject());
 		} else {
 			setValue(salesDataType, 1);
 			insert();
