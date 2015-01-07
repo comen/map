@@ -252,7 +252,7 @@ public class Grid {
 			if (null != bdbo) {
 				if (null != bdbo.getString("status")) {
 					if (!bdbo.getString("status").equals("0")) {
-						logger.fatal("根据网格地址(" + address + ")获取坐标失败: " + bdbo.getString("message"));
+						logger.fatal("根据网格地址(" + address + ")获取坐标失败: 百度地图GeoCoder请求status返回值非零 - " + bdbo.getString("msg"));
 						return null;
 					}
 				}
@@ -270,7 +270,7 @@ public class Grid {
 				}
 			}
 		} catch (Exception e) {
-			logger.fatal("根据网格地址(" + address + ")获取坐标失败: " + e.getMessage());
+			logger.fatal("根据网格地址(" + address + ")获取坐标失败: 数据解析错误 - " + e.getMessage());
 		}
 		return null;
 	}

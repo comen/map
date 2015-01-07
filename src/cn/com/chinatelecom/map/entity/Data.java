@@ -994,7 +994,7 @@ public class Data implements Runnable {
 				normal++;
 				continue;
 			}
-
+			
 			int onlyDay = Integer.parseInt(field.get("onlyDay").toString());
 			if (onlyDay > 0) { // field should be only displayed in DAY
 				continue;

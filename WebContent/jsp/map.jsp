@@ -180,6 +180,7 @@ label {
 						var code = grids[i].c;
 						var points = new Array();
 						switch (zoom) {
+						case 12:
 						case 13:
 						case 14:
 						case 15:

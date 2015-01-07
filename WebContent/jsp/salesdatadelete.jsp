@@ -56,7 +56,7 @@
 		
 		/* 营销数据日期 */
 		if ($("#selecteddate").val() == "") {
-			alert("请选择营销数据完工日期！");
+			alert("请选择日期！");
 			return;
 		} else {
 			formData.append("selectedDate", $("#selecteddate").val());
@@ -116,7 +116,7 @@
 	<label><input type="radio" value="uploadDate" name="r1" checked="checked" />上传日期</label>
 	<label><input type="radio" value="completeDate" name="r1" />完工日期</label>
 	<br /><br />
-	<label>2. 请选择营销数据完工日期：</label>
+	<label>2. 请选择日期：</label>
 	<input type="text" class="date" id="selecteddate" name="selecteddate" readonly="readonly" />
 	<br /><br />
 	<label>3. 请选择营销数据类型：</label>
