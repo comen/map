@@ -95,7 +95,7 @@ public class FetchHandler implements IHandler {
 				switch (code) {
 				case "0":
 					amount++;
-					sb.append(grid.toFetch(color) + ",");
+					sb.append(grid.toFetch(null) + ",");
 					break;
 				case "1":
 				case "2":
@@ -112,6 +112,7 @@ public class FetchHandler implements IHandler {
 						break;
 					amount++;
 					sb.append(grid.toFetch(color) + ",");
+					break;
 				}
 			}
 			break;
@@ -128,7 +129,7 @@ public class FetchHandler implements IHandler {
 				case "3":
 				case "4":
 					amount++;
-					sb.append(grid.toFetch(color) + ",");
+					sb.append(grid.toFetch(null) + ",");
 					break;
 				default:
 					if (!bounds.contains(grid))
@@ -140,6 +141,7 @@ public class FetchHandler implements IHandler {
 						break;
 					amount++;
 					sb.append(grid.toFetch(color) + ",");
+					break;
 				}
 			}
 			break;
