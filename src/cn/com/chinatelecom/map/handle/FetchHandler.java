@@ -170,6 +170,7 @@ public class FetchHandler implements IHandler {
 						break;
 					amount++;
 					sb.append(grid.toFetch(color) + ",");
+					break;
 				}
 			}
 			break;

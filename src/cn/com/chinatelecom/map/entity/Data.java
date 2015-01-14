@@ -793,9 +793,7 @@ public class Data implements Runnable {
 		Data data = new Data();
 		data.setCalculatedDate(calculatedDate);
 		data.setGridCode(gridCode);
-		if (!data.exist()) {
-			return null;
-		}
+		
 		if (mode.equalsIgnoreCase("Day")) {
 			return getFieldSpecialDisplayInDay(calculatedDate, gridCode);
 		} else if (mode.equalsIgnoreCase("Week")) {
@@ -809,6 +807,9 @@ public class Data implements Runnable {
 	
 	public static String getFieldSpecialDisplayInDay(Date calculatedDate, String gridCode) {
 		Data data = getDataOfDay(calculatedDate, gridCode);
+		if (data == null) {
+			return null;
+		}
 		Config config = Config.getInstance();
 		String[] namesOfMemVar = getNameOfMemberVariables();
 		int red = 0;
@@ -924,35 +925,30 @@ public class Data implements Runnable {
 					}
 				}
 				
-				if (sumLastWeek != 0) {
-					//double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisWeek, sumLastWeek) * 100, 2); //百分比形式
-					double huanbiGrowth = MathUtils.calcuGrowth(sumThisWeek, sumLastWeek);
-					/* Compare Huanbi growth rate with threshold */
-					int category = Integer.parseInt(field.get("category").toString());
-					String huanbiThreshold = field.get("huanbiThreshold").toString();
-					try {
-						double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
-						if (category > 0) {	// good
-							if (huanbiGrowth > huanbiThresholdInDouble) {
-								green++;
-							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
-								red++;
-							} else {
-								normal++;
-							}
-						} else { // bad
-							if (huanbiGrowth > huanbiThresholdInDouble) {
-								red++;
-							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
-								green++;
-							} else {
-								normal++;
-							}
+				double huanbiGrowth = MathUtils.calcuGrowth(sumThisWeek, sumLastWeek);
+				/* Compare Huanbi growth rate with threshold */
+				int category = Integer.parseInt(field.get("category").toString());
+				String huanbiThreshold = field.get("huanbiThreshold").toString();
+				try {
+					double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
+					if (category > 0) {	// good
+						if (huanbiGrowth > huanbiThresholdInDouble) {
+							green++;
+						} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
+							red++;
+						} else {
+							normal++;
 						}
-					} catch (Exception e) { // huanbiThreshold = "*"
-						normal++;
+					} else { // bad
+						if (huanbiGrowth > huanbiThresholdInDouble) {
+							red++;
+						} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
+							green++;
+						} else {
+							normal++;
+						}
 					}
-				} else {
+				} catch (Exception e) { // huanbiThreshold = "*"
 					normal++;
 				}
 			}
@@ -1022,70 +1018,62 @@ public class Data implements Runnable {
 					}
 				}
 				
-				/* Compare Huanbi (& Tongbi) growth rate with threshold */
+				/* Compare Huanbi (& Tongbi) growth with threshold */
 				int category = Integer.parseInt(field.get("category").toString());
+				
 				/* Huanbi */
-				if (sumLastMonth != 0) {
-					//double huanbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumLastMonth) * 100, 2); //百分比形式
-					double huanbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumLastMonth);
-					String huanbiThreshold = field.get("huanbiThreshold").toString();
-					try {
-						double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
-						if (category > 0) { // good
-							/* Huanbi */
-							if (huanbiGrowth > huanbiThresholdInDouble) {
-								green++;
-							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
-								red++;
-							} else {
-								normal++;
-							}
-						} else { // bad
-							/* Huanbi */
-							if (huanbiGrowth > huanbiThresholdInDouble) {
-								red++;
-							} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
-								green++;
-							} else {
-								normal++;
-							}
+				double huanbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumLastMonth);
+				String huanbiThreshold = field.get("huanbiThreshold").toString();
+				try {
+					double huanbiThresholdInDouble = Double.parseDouble(huanbiThreshold);
+					if (category > 0) { // good
+						/* Huanbi */
+						if (huanbiGrowth > huanbiThresholdInDouble) {
+							green++;
+						} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
+							red++;
+						} else {
+							normal++;
 						}
-					} catch (Exception e) { // huanbiThreshold = "*"
-						normal++;
+					} else { // bad
+						/* Huanbi */
+						if (huanbiGrowth > huanbiThresholdInDouble) {
+							red++;
+						} else if (huanbiGrowth < (0 - huanbiThresholdInDouble)) {
+							green++;
+						} else {
+							normal++;
+						}
 					}
-				} else {
+				} catch (Exception e) { // huanbiThreshold = "*"
 					normal++;
 				}
+				
 				/* Tongbi */
-				if (sumThisMonthLastYear != 0) {
-					//double tongbiGrowthRate = MathUtils.getTitude(MathUtils.calcuGrowthRate(sumThisMonth, sumThisMonthLastYear) * 100, 2); //百分比形式
-					double tongbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumThisMonthLastYear);
-					String tongbiThreshold = field.get("tongbiThreshold").toString();
-					try {
-						double tongbiThresholdInDouble = Double.parseDouble(tongbiThreshold);
-						if (category > 0) { // good
-							/* Tongbi */
-							if (tongbiGrowth > tongbiThresholdInDouble) {
-								green++;
-							} else if (tongbiGrowth < (0 - tongbiThresholdInDouble)) {
-								red++;
-							} else {
-								normal++;
-							}
-						} else { // bad
-							/* Tongbi */
-							if (tongbiGrowth > tongbiThresholdInDouble) {
-								red++;
-							} else if (tongbiGrowth < (0 - tongbiThresholdInDouble)) {
-								green++;
-							} else {
-								normal++;
-							}
+				double tongbiGrowth = MathUtils.calcuGrowth(sumThisMonth, sumThisMonthLastYear);
+				String tongbiThreshold = field.get("tongbiThreshold").toString();
+				try {
+					double tongbiThresholdInDouble = Double.parseDouble(tongbiThreshold);
+					if (category > 0) { // good
+						/* Tongbi */
+						if (tongbiGrowth > tongbiThresholdInDouble) {
+							green++;
+						} else if (tongbiGrowth < (0 - tongbiThresholdInDouble)) {
+							red++;
+						} else {
+							normal++;
 						}
-					} catch (Exception e) { // tongbiThreshold = "*"
-						normal++;
+					} else { // bad
+						/* Tongbi */
+						if (tongbiGrowth > tongbiThresholdInDouble) {
+							red++;
+						} else if (tongbiGrowth < (0 - tongbiThresholdInDouble)) {
+							green++;
+						} else {
+							normal++;
+						}
 					}
-				} else {
+				} catch (Exception e) { // tongbiThreshold = "*"
 					normal++;
 				}
 			}
